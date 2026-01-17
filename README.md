@@ -2,6 +2,10 @@
 
 **A roguelike typing RPG for the terminal — defeat enemies through the rhythm of your keystrokes.**
 
+<p align="center">
+  <img src="demo.gif" alt="TypingQuest Demo" width="800">
+</p>
+
 [![Rust](https://img.shields.io/badge/Rust-1.70+-DEA584?style=flat&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-0.3.0-blue?style=flat)](CHANGELOG.md)
