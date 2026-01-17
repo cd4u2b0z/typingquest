@@ -140,6 +140,12 @@ impl GameState {
         }
         self.current_enemy = None;
         self.combat_state = None;
+            
+            // Mark current room as cleared and increment counter
+            if let Some(dungeon) = &mut self.dungeon {
+                dungeon.current_room.cleared = true;
+                dungeon.rooms_cleared += 1;
+            }
         self.scene = Scene::Dungeon;
     }
 
@@ -151,6 +157,12 @@ impl GameState {
     pub fn end_event(&mut self) {
         self.current_event = None;
         self.scene = Scene::Dungeon;
+        
+        // Mark event room as cleared and increment counter
+        if let Some(dungeon) = &mut self.dungeon {
+            dungeon.current_room.cleared = true;
+            dungeon.rooms_cleared += 1;
+        }
     }
 
     pub fn enter_shop(&mut self) {
