@@ -118,9 +118,9 @@ fn handle_input(game: &mut GameState, key: KeyCode) -> InputResult {
         return handle_help_input(game, key);
     }
     
-    // Global help toggle (? or H)
+    // Global help toggle (? or h)
     match key {
-        KeyCode::Char('?') | KeyCode::Char('H') => {
+        KeyCode::Char('?') | KeyCode::Char('h') => {
             game.help_system.toggle();
             return InputResult::Continue;
         }
@@ -146,7 +146,7 @@ fn handle_input(game: &mut GameState, key: KeyCode) -> InputResult {
 fn handle_help_input(game: &mut GameState, key: KeyCode) -> InputResult {
     match key {
         // Close help
-        KeyCode::Esc | KeyCode::Char('?') | KeyCode::Char('H') => {
+        KeyCode::Esc | KeyCode::Char('?') | KeyCode::Char('h') => {
             game.help_system.hide();
         }
         // Tab navigation

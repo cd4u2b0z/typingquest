@@ -308,6 +308,12 @@ fn render_bottom_bar(f: &mut Frame, state: &GameState) {
 }
 
 fn render_title(f: &mut Frame, state: &GameState) {
+    let area = f.area();
+    
+    // Reserve bottom line for key hints
+    let main_area = Rect::new(area.x, area.y, area.width, area.height.saturating_sub(2));
+    let hint_area = Rect::new(area.x, area.height.saturating_sub(2), area.width, 2);
+    
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
@@ -316,7 +322,7 @@ fn render_title(f: &mut Frame, state: &GameState) {
             Constraint::Length(3),
             Constraint::Min(5),
         ])
-        .split(f.area());
+        .split(main_area);
 
     // ASCII art title
     let title_art = r#"
@@ -358,9 +364,28 @@ fn render_title(f: &mut Frame, state: &GameState) {
     let menu_widget = List::new(menu)
         .block(Block::default().borders(Borders::ALL).title(" Menu "));
     f.render_widget(menu_widget, chunks[2]);
+    
+    // Key hints at bottom
+    let hints = Paragraph::new(Line::from(vec![
+        Span::styled(" [j/k] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Navigate  "),
+        Span::styled("[Enter] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Select  "),
+        Span::styled("[h] ", Style::default().fg(Color::Cyan)),
+        Span::raw("Help  "),
+        Span::styled("[q] ", Style::default().fg(Color::Red)),
+        Span::raw("Quit"),
+    ]))
+    .alignment(Alignment::Center)
+    .style(Style::default().bg(Color::Rgb(30, 30, 30)));
+    f.render_widget(hints, hint_area);
 }
 
 fn render_class_select(f: &mut Frame, state: &GameState) {
+    let area = f.area();
+    let main_area = Rect::new(area.x, area.y, area.width, area.height.saturating_sub(2));
+    let hint_area = Rect::new(area.x, area.height.saturating_sub(2), area.width, 2);
+    
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
@@ -369,7 +394,7 @@ fn render_class_select(f: &mut Frame, state: &GameState) {
             Constraint::Min(10),
             Constraint::Length(3),
         ])
-        .split(f.area());
+        .split(main_area);
 
     let title = Paragraph::new("Choose Your Class")
         .style(Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD))
@@ -403,23 +428,42 @@ fn render_class_select(f: &mut Frame, state: &GameState) {
         .block(Block::default().borders(Borders::ALL).title(" Classes "));
     f.render_widget(class_list, chunks[1]);
 
-    let help = Paragraph::new("↑/↓ to select, Enter to confirm, Esc to go back")
-        .style(Style::default().fg(Color::DarkGray))
+    let tip = Paragraph::new("Each class has unique abilities and playstyles")
+        .style(Style::default().fg(Color::DarkGray).add_modifier(Modifier::ITALIC))
         .alignment(Alignment::Center);
-    f.render_widget(help, chunks[2]);
+    f.render_widget(tip, chunks[2]);
+    
+    // Key hints at bottom
+    let hints = Paragraph::new(Line::from(vec![
+        Span::styled(" [j/k] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Navigate  "),
+        Span::styled("[Enter] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Select  "),
+        Span::styled("[Esc] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Back  "),
+        Span::styled("[h] ", Style::default().fg(Color::Cyan)),
+        Span::raw("Help"),
+    ]))
+    .alignment(Alignment::Center)
+    .style(Style::default().bg(Color::Rgb(30, 30, 30)));
+    f.render_widget(hints, hint_area);
 }
 
 fn render_dungeon(f: &mut Frame, state: &GameState) {
+    let area = f.area();
+    let main_area = Rect::new(area.x, area.y, area.width, area.height.saturating_sub(2));
+    let hint_area = Rect::new(area.x, area.height.saturating_sub(2), area.width, 2);
+    
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
         .constraints([
             Constraint::Length(3),
             Constraint::Length(5),
-            Constraint::Min(10),
-            Constraint::Length(5),
+            Constraint::Min(8),
+            Constraint::Length(3),
         ])
-        .split(f.area());
+        .split(main_area);
 
     // Header with floor info
     let floor = state.get_current_floor();
@@ -459,12 +503,33 @@ fn render_dungeon(f: &mut Frame, state: &GameState) {
         f.render_widget(room, chunks[2]);
     }
 
-    // Actions
-    let actions = Paragraph::new("[E] Explore  [I] Inventory  [S] Stats  [R] Rest (if available)  [Q] Quit")
-        .style(Style::default().fg(Color::DarkGray))
+    // Message log
+    let messages: Vec<Line> = state.message_log.iter()
+        .rev()
+        .take(2)
+        .map(|m| Line::from(Span::styled(m.clone(), Style::default().fg(Color::DarkGray))))
+        .collect();
+    let log = Paragraph::new(messages)
         .alignment(Alignment::Center)
-        .block(Block::default().borders(Borders::ALL).title(" Actions "));
-    f.render_widget(actions, chunks[3]);
+        .block(Block::default().borders(Borders::ALL).title(" Log "));
+    f.render_widget(log, chunks[3]);
+
+    // Key hints at bottom
+    let hints = Paragraph::new(Line::from(vec![
+        Span::styled(" [e] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Explore  "),
+        Span::styled("[i] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Inventory  "),
+        Span::styled("[s] ", Style::default().fg(Color::Yellow)),
+        Span::raw("Stats  "),
+        Span::styled("[h] ", Style::default().fg(Color::Cyan)),
+        Span::raw("Help  "),
+        Span::styled("[q] ", Style::default().fg(Color::Red)),
+        Span::raw("Quit"),
+    ]))
+    .alignment(Alignment::Center)
+    .style(Style::default().bg(Color::Rgb(30, 30, 30)));
+    f.render_widget(hints, hint_area);
 }
 
 fn render_combat(f: &mut Frame, state: &GameState) {
@@ -582,10 +647,19 @@ fn render_combat(f: &mut Frame, state: &GameState) {
             .block(Block::default().borders(Borders::ALL).title(" Battle Log "));
         f.render_widget(log, chunks[4]);
 
-        // Help
-        let help = Paragraph::new("[Esc] Flee")
-            .style(Style::default().fg(Color::DarkGray))
-            .alignment(Alignment::Center);
+        // Help - key hints for combat
+        let help = Paragraph::new(Line::from(vec![
+            Span::styled(" [a-z] ", Style::default().fg(Color::Yellow)),
+            Span::raw("Type  "),
+            Span::styled("[Backspace] ", Style::default().fg(Color::Yellow)),
+            Span::raw("Fix  "),
+            Span::styled("[Esc] ", Style::default().fg(Color::Red)),
+            Span::raw("Flee  "),
+            Span::styled("[h] ", Style::default().fg(Color::Cyan)),
+            Span::raw("Help"),
+        ]))
+        .alignment(Alignment::Center)
+        .style(Style::default().bg(Color::Rgb(30, 30, 30)));
         f.render_widget(help, chunks[5]);
     }
 }
