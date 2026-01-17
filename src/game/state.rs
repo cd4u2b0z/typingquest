@@ -149,6 +149,7 @@ impl GameState {
                 let enemy_name = enemy.name.clone();
                 let xp_reward = enemy.xp_reward as u64;
                 let gold_reward = enemy.gold_reward as u64;
+                let is_boss = enemy.is_boss;
                 
                 self.add_message(&format!("Defeated {}!", enemy_name));
                 
@@ -157,6 +158,22 @@ impl GameState {
                     player.gold += gold_reward;
                 }
                 self.total_enemies_defeated += 1;
+                
+                // Mark boss as defeated for this floor
+                if is_boss {
+                    if let Some(dungeon) = &mut self.dungeon {
+                        dungeon.boss_defeated = true;
+                        
+                        // Final boss on floor 10 = victory!
+                        if dungeon.current_floor >= 10 {
+                            self.current_enemy = None;
+                            self.combat_state = None;
+                            self.scene = Scene::Victory;
+                            self.runs_completed += 1;
+                            return;
+                        }
+                    }
+                }
             }
         }
         self.current_enemy = None;

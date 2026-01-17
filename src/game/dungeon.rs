@@ -15,6 +15,8 @@ pub struct Dungeon {
     pub rooms_per_floor: i32,
     pub current_room: Room,
     pub floor_complete: bool,
+    /// Whether the boss has been defeated this floor (floors 5, 10)
+    pub boss_defeated: bool,
     /// Current zone based on floor depth
     pub zone_name: String,
     /// Pending zone entry message to display
@@ -61,6 +63,7 @@ impl Dungeon {
                 ),
             },
             floor_complete: false,
+            boss_defeated: false,
             zone_name: zone.name().to_string(),
             zone_message: None,
             pending_lore: None,
@@ -70,8 +73,11 @@ impl Dungeon {
     pub fn generate_next_room(&mut self) -> Room {
         let mut rng = rand::thread_rng();
         
-        // Check for boss room
-        if self.rooms_cleared >= self.rooms_per_floor - 1 && self.current_floor % 5 == 0 {
+        // Check for boss room (only once per floor, floors 5 and 10)
+        if self.rooms_cleared >= self.rooms_per_floor - 1 
+            && self.current_floor % 5 == 0 
+            && !self.boss_defeated 
+        {
             return Room {
                 room_type: RoomType::Boss,
                 cleared: false,
@@ -79,8 +85,8 @@ impl Dungeon {
             };
         }
         
-        // Check for floor complete
-        if self.rooms_cleared >= self.rooms_per_floor {
+        // Check for floor complete (or final victory on floor 10)
+        if self.rooms_cleared >= self.rooms_per_floor || (self.boss_defeated && self.current_floor >= 10) {
             self.floor_complete = true;
             let zone = FloorZone::from_floor(self.current_floor as u32);
             return Room {
@@ -190,6 +196,7 @@ impl Dungeon {
         self.current_floor += 1;
         self.rooms_cleared = 0;
         self.floor_complete = false;
+        self.boss_defeated = false;
         
         // Check for zone transition
         let zone = FloorZone::from_floor(self.current_floor as u32);
