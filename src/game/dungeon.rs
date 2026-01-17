@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use rand::Rng;
 use super::enemy::Enemy;
 use super::items::Item;
+use super::world_integration::{FloorZone, get_ambient_message, get_zone_entry_message, get_floor_lore};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Dungeon {
@@ -14,6 +15,12 @@ pub struct Dungeon {
     pub rooms_per_floor: i32,
     pub current_room: Room,
     pub floor_complete: bool,
+    /// Current zone based on floor depth
+    pub zone_name: String,
+    /// Pending zone entry message to display
+    pub zone_message: Option<String>,
+    /// Pending lore discovery
+    pub pending_lore: Option<(String, String)>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -37,18 +44,26 @@ pub enum RoomType {
 
 impl Dungeon {
     pub fn new() -> Self {
+        let zone = FloorZone::from_floor(1);
         Self {
-            name: "The Infinite Keyboard".to_string(),
+            name: "The Infinite Archives".to_string(),
             current_floor: 1,
-            max_floor: 10,
+            max_floor: 100, // Infinite-ish
             rooms_cleared: 0,
             rooms_per_floor: 4,
             current_room: Room {
                 room_type: RoomType::Start,
                 cleared: true,
-                description: "You stand at the entrance of the dungeon...".to_string(),
+                description: format!(
+                    "You stand at the entrance of {}...\n\n{}",
+                    zone.name(),
+                    zone.description()
+                ),
             },
             floor_complete: false,
+            zone_name: zone.name().to_string(),
+            zone_message: None,
+            pending_lore: None,
         }
     }
 
@@ -67,12 +82,20 @@ impl Dungeon {
         // Check for floor complete
         if self.rooms_cleared >= self.rooms_per_floor {
             self.floor_complete = true;
+            let zone = FloorZone::from_floor(self.current_floor as u32);
             return Room {
                 room_type: RoomType::Rest,
                 cleared: false,
-                description: "A stairway leads deeper into the dungeon...".to_string(),
+                description: format!(
+                    "A stairway leads deeper into the {}...\n\n{}",
+                    zone.name(),
+                    get_ambient_message(self.current_floor as u32)
+                ),
             };
         }
+        
+        // Check for lore discovery (15% chance per room)
+        self.pending_lore = get_floor_lore(self.current_floor as u32);
         
         // Random room type
         let roll: f32 = rng.gen();
@@ -167,13 +190,37 @@ impl Dungeon {
         self.current_floor += 1;
         self.rooms_cleared = 0;
         self.floor_complete = false;
+        
+        // Check for zone transition
+        let zone = FloorZone::from_floor(self.current_floor as u32);
+        let zone_changed = self.zone_name != zone.name();
+        self.zone_name = zone.name().to_string();
+        
+        // Set zone message if we entered a new zone
+        if zone_changed {
+            self.zone_message = get_zone_entry_message(self.current_floor as u32);
+        }
+        
+        let description = if zone_changed {
+            format!(
+                "Floor {} — {}\n\n{}",
+                self.current_floor,
+                zone.name(),
+                get_ambient_message(self.current_floor as u32)
+            )
+        } else {
+            format!(
+                "Floor {} — {}\n\n{}",
+                self.current_floor,
+                zone.name(),
+                get_ambient_message(self.current_floor as u32)
+            )
+        };
+        
         self.current_room = Room {
             room_type: RoomType::Start,
             cleared: true,
-            description: format!("Floor {} - The {} Zone", 
-                self.current_floor, 
-                self.get_floor_name()
-            ),
+            description,
         };
     }
 

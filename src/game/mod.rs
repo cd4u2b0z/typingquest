@@ -52,3 +52,4 @@ pub mod typing_feel;
 pub mod meta_progression;
 pub mod help_system;
 pub mod tutorial;
+pub mod world_integration;

@@ -21,7 +21,7 @@ use ratatui::{backend::CrosstermBackend, Terminal};
 use game::state::{GameState, Scene};
 use game::player::{Player, Class};
 use game::enemy::Enemy;
-use game::events::GameEvent;
+use game::world_integration::{get_floor_milestone, generate_zone_event, FloorZone};
 use game::dungeon::RoomType;
 use game::combat::CombatPhase;
 
@@ -148,6 +148,8 @@ fn handle_input(game: &mut GameState, key: KeyCode) -> InputResult {
         Scene::GameOver => handle_game_over_input(game, key),
         Scene::Victory => handle_victory_input(game, key),
         Scene::Tutorial => handle_tutorial_input(game, key),
+        Scene::Lore => handle_lore_input(game, key),
+        Scene::Milestone => handle_milestone_input(game, key),
     }
 }
 
@@ -249,6 +251,31 @@ fn handle_class_select_input(game: &mut GameState, key: KeyCode) -> InputResult 
 fn handle_dungeon_input(game: &mut GameState, key: KeyCode) -> InputResult {
     match key {
         KeyCode::Char('e') | KeyCode::Enter => {
+            // First check for pending lore discovery from previous room
+            if let Some(dungeon) = &game.dungeon {
+                if let Some(lore) = dungeon.pending_lore.clone() {
+                    if let Some(d) = &mut game.dungeon {
+                        d.pending_lore = None;
+                    }
+                    game.current_lore = Some(lore);
+                    game.scene = Scene::Lore;
+                    return InputResult::Continue;
+                }
+            }
+            
+            // Check for milestone events at special floors
+            let floor = game.get_current_floor();
+            if let Some(milestone) = get_floor_milestone(floor as u32) {
+                // Only show milestone once per floor (on first room)
+                if let Some(dungeon) = &game.dungeon {
+                    if dungeon.rooms_cleared == 0 && dungeon.current_room.room_type == RoomType::Start {
+                        game.current_milestone = Some(milestone.description);
+                        game.scene = Scene::Milestone;
+                        return InputResult::Continue;
+                    }
+                }
+            }
+            
             // Explore - go to next room
             if let Some(dungeon) = &mut game.dungeon {
                 let room = dungeon.generate_next_room();
@@ -288,7 +315,10 @@ fn handle_dungeon_input(game: &mut GameState, key: KeyCode) -> InputResult {
                         game.enter_rest();
                     }
                     RoomType::Event => {
-                        let event = GameEvent::random();
+                        // Use zone-specific events for more variety
+                        let floor = game.get_current_floor();
+                        let zone = FloorZone::from_floor(floor as u32);
+                        let event = generate_zone_event(zone);
                         game.start_event(event);
                     }
                 }
@@ -597,6 +627,28 @@ fn handle_victory_input(game: &mut GameState, key: KeyCode) -> InputResult {
         }
         KeyCode::Char('q') | KeyCode::Esc => {
             return InputResult::Quit;
+        }
+        _ => {}
+    }
+    InputResult::Continue
+}
+
+/// Handle lore discovery popup - any key dismisses
+fn handle_lore_input(game: &mut GameState, _key: KeyCode) -> InputResult {
+    // Save the lore to discovered list
+    if let Some(lore) = game.current_lore.take() {
+        game.discovered_lore.push(lore);
+    }
+    game.scene = Scene::Dungeon;
+    InputResult::Continue
+}
+
+/// Handle milestone event - Enter to continue
+fn handle_milestone_input(game: &mut GameState, key: KeyCode) -> InputResult {
+    match key {
+        KeyCode::Enter => {
+            game.current_milestone = None;
+            game.scene = Scene::Dungeon;
         }
         _ => {}
     }

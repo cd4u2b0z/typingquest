@@ -11,6 +11,7 @@ use crate::game::state::{GameState, Scene};
 use crate::game::combat::CombatPhase;
 use crate::game::help_system::{HelpSystem, HelpTab, TipPriority};
 use crate::ui::theme::{Palette, Icons, Styles, hp_color, combo_color, wpm_color, accuracy_color};
+use crate::ui::lore_render::{render_lore_discovery, render_milestone};
 
 pub fn render(f: &mut Frame, state: &GameState) {
     // Render the main scene
@@ -27,6 +28,8 @@ pub fn render(f: &mut Frame, state: &GameState) {
         Scene::GameOver => render_game_over(f, state),
         Scene::Victory => render_victory(f, state),
         Scene::Tutorial => render_tutorial(f, state),
+        Scene::Lore => render_lore_discovery(f, state),
+        Scene::Milestone => render_milestone(f, state),
     }
     
     // Render help overlay on top if visible
@@ -483,12 +486,15 @@ fn render_dungeon(f: &mut Frame, state: &GameState) {
         ])
         .split(main_area);
 
-    // Header with floor info
+    // Header with floor info and zone name
     let floor = state.get_current_floor();
-    let header = Paragraph::new(format!("Floor {} - The Depths of QWERTY", floor))
+    let zone_name = state.dungeon.as_ref()
+        .map(|d| d.zone_name.clone())
+        .unwrap_or_else(|| "Unknown".to_string());
+    let header = Paragraph::new(format!("Floor {} — {}", floor, zone_name))
         .style(Styles::title())
         .alignment(Alignment::Center)
-        .block(Block::default().borders(Borders::ALL));
+        .block(Block::default().borders(Borders::ALL).border_style(Style::default().fg(Palette::PRIMARY)));
     f.render_widget(header, chunks[0]);
 
     // Player stats

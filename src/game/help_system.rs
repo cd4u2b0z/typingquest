@@ -50,6 +50,8 @@ impl From<Scene> for HelpContext {
             Scene::GameOver => HelpContext::GameOver,
             Scene::Victory => HelpContext::Victory,
             Scene::Tutorial => HelpContext::Tutorial,
+            Scene::Lore => HelpContext::Event, // Lore is similar to events
+            Scene::Milestone => HelpContext::Event, // Milestones are similar to events
         }
     }
 }

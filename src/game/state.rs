@@ -29,6 +29,10 @@ pub enum Scene {
     Stats,
     GameOver,
     Victory,
+    /// Lore discovery popup
+    Lore,
+    /// Milestone/story event
+    Milestone,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -62,6 +66,12 @@ pub struct GameState {
     pub tutorial_state: TutorialState,
     pub tutorial_progress: TutorialProgress,
     pub typing_feel: TypingFeel,
+    /// Current lore discovery being viewed
+    pub current_lore: Option<(String, String)>,
+    /// Current milestone event being displayed  
+    pub current_milestone: Option<String>,
+    /// Discovered lore fragments (for journal)
+    pub discovered_lore: Vec<(String, String)>,
 }
 
 impl Default for GameState {
@@ -93,6 +103,9 @@ impl GameState {
             tutorial_state: TutorialState::new(),
             tutorial_progress: TutorialProgress::load(),
             typing_feel: TypingFeel::new(),
+            current_lore: None,
+            current_milestone: None,
+            discovered_lore: Vec::new(),
         }
     }
 
