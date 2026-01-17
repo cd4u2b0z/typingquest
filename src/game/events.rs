@@ -1,6 +1,7 @@
 //! Random events - Undertale-style encounters!
 
 use serde::{Deserialize, Serialize};
+use super::narrative::Faction;
 use rand::seq::SliceRandom;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -28,6 +29,8 @@ pub enum EventOutcome {
     GainItem,
     Nothing,
     Combat,
+    /// Gain or lose reputation with a faction
+    FactionRep(Faction, i32),
 }
 
 impl GameEvent {

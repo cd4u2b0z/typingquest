@@ -671,19 +671,31 @@ fn render_combat(f: &mut Frame, state: &GameState) {
             .block(Block::default().borders(Borders::ALL).title(Span::styled(" 󰵅 Battle Log ", Style::default().fg(Palette::INFO))));
         f.render_widget(log, chunks[4]);
 
-        // Help - key hints for combat
-        let help = Paragraph::new(Line::from(vec![
-            Span::styled(" [a-z] ", Styles::keybind()),
-            Span::raw("Type  "),
-            Span::styled("[Backspace] ", Styles::keybind()),
-            Span::raw("Fix  "),
-            Span::styled("[Esc] ", Style::default().fg(Palette::DANGER)),
-            Span::raw("Flee  "),
-            Span::styled("[?] ", Style::default().fg(Color::Cyan)),
-            Span::raw("Help"),
-        ]))
-        .alignment(Alignment::Center)
-        .style(Style::default().bg(Palette::BG_PANEL));
+        // Help - key hints for combat (context-sensitive)
+        let help_spans = if combat.spell_mode {
+            vec![
+                Span::styled(" [1-9] ", Styles::keybind()),
+                Span::raw("Cast Spell  "),
+                Span::styled("[Tab] ", Style::default().fg(Color::Cyan)),
+                Span::raw("Cancel  "),
+                Span::styled("[Esc] ", Style::default().fg(Palette::DANGER)),
+                Span::raw("Flee"),
+            ]
+        } else {
+            vec![
+                Span::styled(" [a-z] ", Styles::keybind()),
+                Span::raw("Type  "),
+                Span::styled("[Tab] ", Style::default().fg(Color::Magenta)),
+                Span::raw("󰊠 Spells  "),
+                Span::styled("[Backspace] ", Styles::keybind()),
+                Span::raw("Fix  "),
+                Span::styled("[Esc] ", Style::default().fg(Palette::DANGER)),
+                Span::raw("Flee"),
+            ]
+        };
+        let help = Paragraph::new(Line::from(help_spans))
+            .alignment(Alignment::Center)
+            .style(Style::default().bg(Palette::BG_PANEL));
         f.render_widget(help, chunks[5]);
         
         // Render typing feel overlay
@@ -904,7 +916,8 @@ fn render_stats(f: &mut Frame, state: &GameState) {
         .margin(2)
         .constraints([
             Constraint::Length(3),
-            Constraint::Min(15),
+            Constraint::Min(12),
+            Constraint::Length(8),  // Faction standings
             Constraint::Length(3),
         ])
         .split(f.area());
@@ -955,10 +968,35 @@ fn render_stats(f: &mut Frame, state: &GameState) {
         f.render_widget(stats, chunks[1]);
     }
 
+    // Faction standings
+    let factions = &state.faction_relations;
+    let faction_text = format!(
+        "󰜃 Faction Standings 󰜃\n\n  󰂡 Scribes: {}  󰬲 Mechanists: {}  󰌪 Naturalists: {}\n  󰬡 Shadow Writers: {}  󰏮 Archivists: {}",
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::Scribes).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::Mechanists).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::Naturalists).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::ShadowWriters).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::Archivists).copied().unwrap_or(0)),
+    );
+    let faction_widget = Paragraph::new(faction_text)
+        .style(Style::default().fg(Color::Cyan))
+        .alignment(Alignment::Center)
+        .block(Block::default().borders(Borders::ALL));
+    f.render_widget(faction_widget, chunks[2]);
+    
     let help = Paragraph::new("Press any key to return")
         .style(Styles::dim())
         .alignment(Alignment::Center);
-    f.render_widget(help, chunks[2]);
+    f.render_widget(help, chunks[3]);
+}
+
+/// Format a faction standing as a colored string
+fn format_standing(standing: i32) -> String {
+    if standing >= 50 { format!("󰄬 {}", standing) }
+    else if standing >= 25 { format!("󰆓 {}", standing) }
+    else if standing > -25 { format!("{}", standing) }
+    else if standing > -50 { format!("󰆗 {}", standing) }
+    else { format!("󰀧 {}", standing) }
 }
 
 fn render_game_over(f: &mut Frame, state: &GameState) {
@@ -994,13 +1032,15 @@ fn render_game_over(f: &mut Frame, state: &GameState) {
 
     let stats = if let Some(player) = &state.player {
         format!(
-            "󰯈 You reached Floor {} as a Level {} {}\n\n󰓥 Enemies defeated: {}\n󰌌 Words typed: {}\n󰓅 Best WPM: {:.1}\n\n\"The keyboard awaits your return...\"",
+            "󰯈 You reached Floor {} as a Level {} {}\n\n󰓥 Enemies defeated: {}\n󰌌 Words typed: {}\n󰓅 Best WPM: {:.1}\n\n󰙤 Ink Earned: {} (Total: {})\n\n\"The keyboard awaits your return...\"",
             state.get_current_floor(),
             player.level,
             player.class.name(),
             state.total_enemies_defeated,
             state.total_words_typed,
-            state.best_wpm
+            state.best_wpm,
+            state.meta_progress.current_ink,
+            state.meta_progress.total_ink
         )
     } else {
         "󰯈 Your journey has ended...".to_string()

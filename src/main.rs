@@ -340,6 +340,29 @@ fn handle_dungeon_input(game: &mut GameState, key: KeyCode) -> InputResult {
 fn handle_combat_input(game: &mut GameState, key: KeyCode) -> InputResult {
     if let Some(combat) = &mut game.combat_state {
         match key {
+            // Tab toggles spell mode
+            KeyCode::Tab => {
+                combat.toggle_spell_mode();
+                if combat.spell_mode {
+                    game.add_message("󰊠 SPELL MODE - Press 1-9 to select a spell, Tab to cancel");
+                } else {
+                    game.add_message("Normal attack mode");
+                }
+            }
+            // Number keys select spells when in spell mode
+            KeyCode::Char(n) if combat.spell_mode && n.is_ascii_digit() && n != '0' => {
+                let spell_idx = (n as u8 - b'1') as usize;
+                if let Some(player) = &game.player {
+                    if spell_idx < player.known_spells.len() {
+                        let spell = player.known_spells[spell_idx].clone();
+                        if let Some(combat) = &mut game.combat_state {
+                            combat.select_spell(&spell);
+                        }
+                    } else {
+                        game.add_message("No spell in that slot!");
+                    }
+                }
+            }
             KeyCode::Esc => {
                 // Flee attempt
                 if combat.try_flee() {
@@ -359,18 +382,58 @@ fn handle_combat_input(game: &mut GameState, key: KeyCode) -> InputResult {
                 }
             }
             KeyCode::Char(c) => {
+                // Track state before typing for typing_feel updates
+                let word_before = combat.current_word.clone();
+                let typed_len_before = combat.typed_input.len();
+                let word_was_complete = combat.typed_input == combat.current_word;
+                
                 // Typing input
                 combat.on_char_typed(c);
                 
+                // Update typing feel system
+                let typed_len_after = combat.typed_input.len();
+                if typed_len_after > typed_len_before {
+                    // A character was accepted
+                    let char_index = typed_len_after - 1;
+                    let expected = word_before.chars().nth(char_index).unwrap_or(' ');
+                    let is_correct = c == expected;
+                    game.typing_feel.on_keystroke(is_correct, char_index, expected, c);
+                }
+                
                 // Check if word completed
-                if combat.typed_input == combat.current_word {
+                if combat.typed_input == combat.current_word && !word_was_complete {
                     game.total_words_typed += 1;
                     
-                    // The combat system handles word completion internally
+                    // Update typing feel with word completion
+                    let time_taken = combat.time_limit - combat.time_remaining;
+                    game.typing_feel.on_word_complete(&word_before, &combat.typed_input, time_taken);
+                    
+                    // Sync combo from typing_feel back to combat for display
+                    combat.combo = game.typing_feel.combo;
+                    if combat.combo > combat.max_combo {
+                        combat.max_combo = combat.combo;
+                    }
+                    
+                    // Handle spell casting if in spell mode
+                    if combat.spell_mode {
+                        if let Some(incantation) = &combat.spell_incantation.clone() {
+                            // Find the spell that matches
+                            if let Some(player) = &mut game.player {
+                                if let Some(spell) = player.known_spells.iter().find(|s| &s.incantation == incantation).cloned() {
+                                    if let Some(combat) = &mut game.combat_state {
+                                        combat.cast_spell(&spell, player);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
                     // Check if enemy defeated
-                    if combat.enemy.current_hp <= 0 {
-                        game.end_combat(true);
-                        game.check_victory();
+                    if let Some(combat) = &game.combat_state {
+                        if combat.enemy.current_hp <= 0 {
+                            game.end_combat(true);
+                            game.check_victory();
+                        }
                     }
                 }
             }
@@ -539,6 +602,17 @@ fn apply_event_outcome(game: &mut GameState, outcome: game::events::EventOutcome
                 let floor = game.get_current_floor();
                 let enemy = Enemy::random_for_floor(floor);
                 game.start_combat(enemy);
+            }
+            EventOutcome::FactionRep(faction, amount) => {
+                game.faction_relations.modify_standing(faction, amount);
+                let status = game.faction_relations.status(&faction);
+                if amount > 0 {
+                    game.add_message(&format!("󰜃 {} reputation with {:?}: {:?}", 
+                        if amount >= 10 { "Major gain" } else { "Gained" }, faction, status));
+                } else {
+                    game.add_message(&format!("󰜃 {} reputation with {:?}: {:?}", 
+                        if amount <= -10 { "Major loss" } else { "Lost" }, faction, status));
+                }
             }
         }
     }

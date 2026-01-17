@@ -12,6 +12,8 @@ use crate::game::{
     help_system::{HelpSystem, HintManager},
     tutorial::{TutorialState, TutorialProgress},
     typing_feel::TypingFeel,
+    faction_system::FactionRelations,
+    meta_progression::MetaProgress,
 };
 use crate::data::GameData;
 
@@ -72,6 +74,10 @@ pub struct GameState {
     pub current_milestone: Option<String>,
     /// Discovered lore fragments (for journal)
     pub discovered_lore: Vec<(String, String)>,
+    /// Faction standings and relationships
+    pub faction_relations: FactionRelations,
+    /// Persistent meta-progression (survives death)
+    pub meta_progress: MetaProgress,
 }
 
 impl Default for GameState {
@@ -106,6 +112,8 @@ impl GameState {
             current_lore: None,
             current_milestone: None,
             discovered_lore: Vec::new(),
+            faction_relations: FactionRelations::new(),
+            meta_progress: MetaProgress::default(),
         }
     }
 
@@ -180,10 +188,25 @@ impl GameState {
     pub fn end_rest(&mut self) {
         self.scene = Scene::Dungeon;
         
+        // Check if floor is complete BEFORE incrementing (we're at the stairway)
+        let should_advance = self.dungeon.as_ref().map(|d| d.floor_complete).unwrap_or(false);
+        
         // Mark rest room as cleared and increment counter
         if let Some(dungeon) = &mut self.dungeon {
             dungeon.current_room.cleared = true;
             dungeon.rooms_cleared += 1;
+            
+            // If floor was complete, advance to next floor
+            if should_advance {
+                dungeon.advance_floor();
+            }
+        }
+        
+        // Show floor advancement message after dungeon borrow ends
+        if should_advance {
+            if let Some(dungeon) = &self.dungeon {
+                self.add_message(&format!("Descended to floor {}!", dungeon.current_floor));
+            }
         }
     }
 
@@ -240,6 +263,15 @@ impl GameState {
     pub fn check_game_over(&mut self) -> bool {
         if let Some(player) = &self.player {
             if player.hp <= 0 {
+                // Award Ink based on progress
+                let floor = self.get_current_floor() as u64;
+                let ink_earned = floor * 10 + (self.total_enemies_defeated as u64 * 2) 
+                    + (self.total_words_typed as u64);
+                self.meta_progress.current_ink += ink_earned;
+                self.meta_progress.total_ink += ink_earned;
+                self.meta_progress.runs_attempted += 1;
+                self.add_message(&format!("󰙤 Earned {} Ink from this run", ink_earned));
+                
                 self.scene = Scene::GameOver;
                 return true;
             }

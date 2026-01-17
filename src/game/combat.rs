@@ -29,6 +29,12 @@ pub struct CombatState {
     pub game_data: Arc<GameData>,
     pub difficulty: u32,
     pub use_sentences: bool,
+    /// Whether player is in spell casting mode
+    pub spell_mode: bool,
+    /// Currently selected spell index
+    pub selected_spell: Option<usize>,
+    /// The spell incantation to type (when in spell mode)
+    pub spell_incantation: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -94,6 +100,9 @@ impl CombatState {
             game_data,
             difficulty,
             use_sentences,
+            spell_mode: false,
+            selected_spell: None,
+            spell_incantation: None,
         }
     }
 
@@ -290,8 +299,9 @@ impl CombatState {
         // Accuracy multiplier: 1.0 at 100%, 0.5 at 50%
         let accuracy_mult = 0.5 + (accuracy * 0.5);
         
-        // Combo bonus: +5% per combo level
-        let combo_mult = 1.0 + (self.combo as f32 * 0.05);
+        // Combo bonus: +10% per combo level (matches typing_feel system)
+        // Max 3x damage at 20 combo
+        let combo_mult = 1.0 + (self.combo as f32 * 0.1).min(2.0);
         
         let damage = (base_damage + wpm_bonus) as f32 * accuracy_mult * combo_mult;
         damage.round() as i32
@@ -425,5 +435,86 @@ pub fn get_word_pool(difficulty: i32) -> Vec<String> {
             "refactoring", "repository", "serialization", "synchronous",
             "typescript", "validation", "virtualization", "webpack",
         ].into_iter().map(String::from).collect(),
+    }
+}
+
+// Spell casting extensions for CombatState
+impl CombatState {
+    /// Toggle spell casting mode
+    pub fn toggle_spell_mode(&mut self) {
+        self.spell_mode = !self.spell_mode;
+        if !self.spell_mode {
+            self.selected_spell = None;
+            self.spell_incantation = None;
+        }
+        self.typed_input.clear();
+    }
+
+    /// Select a spell by index and prepare to cast it
+    pub fn select_spell(&mut self, spell: &super::spells::Spell) {
+        self.spell_mode = true;
+        self.spell_incantation = Some(spell.incantation.clone());
+        self.current_word = spell.incantation.clone();
+        self.typed_input.clear();
+        self.time_remaining = spell.cast_time;
+        self.time_limit = spell.cast_time;
+        self.battle_log.push(format!("Casting {}... Type: {}", spell.name, spell.incantation));
+    }
+
+    /// Called when spell incantation is typed correctly
+    pub fn cast_spell(&mut self, spell: &super::spells::Spell, player: &mut super::player::Player) -> bool {
+        if player.mp < spell.mp_cost {
+            self.battle_log.push("Not enough MP!".to_string());
+            self.toggle_spell_mode();
+            return false;
+        }
+
+        player.mp -= spell.mp_cost;
+        
+        match &spell.effect {
+            super::spells::SpellEffect::Damage(dmg) => {
+                let damage = (*dmg as f32 * (1.0 + player.stats.intellect as f32 * 0.05)) as i32;
+                self.enemy.current_hp -= damage;
+                self.battle_log.push(format!("✦ {} deals {} damage!", spell.name, damage));
+            }
+            super::spells::SpellEffect::Heal(heal) => {
+                let amount = (*heal as f32 * (1.0 + player.stats.intellect as f32 * 0.03)) as i32;
+                player.heal(amount);
+                self.battle_log.push(format!("✦ {} restores {} HP!", spell.name, amount));
+            }
+            super::spells::SpellEffect::Shield(shield) => {
+                self.player_shield += shield;
+                self.battle_log.push(format!("✦ {} grants {} shield!", spell.name, shield));
+            }
+            super::spells::SpellEffect::Drain { damage, heal_percent } => {
+                let dmg = (*damage as f32 * (1.0 + player.stats.intellect as f32 * 0.05)) as i32;
+                self.enemy.current_hp -= dmg;
+                let heal = dmg * heal_percent / 100;
+                player.heal(heal);
+                self.battle_log.push(format!("✦ {} drains {} life!", spell.name, dmg));
+            }
+            super::spells::SpellEffect::Multi { hits, damage_per_hit } => {
+                let mut total = 0;
+                for _ in 0..*hits {
+                    let dmg = (*damage_per_hit as f32 * (1.0 + player.stats.intellect as f32 * 0.05)) as i32;
+                    self.enemy.current_hp -= dmg;
+                    total += dmg;
+                }
+                self.battle_log.push(format!("✦ {} hits {} times for {} total!", spell.name, hits, total));
+            }
+            _ => {
+                self.battle_log.push(format!("✦ Cast {}!", spell.name));
+            }
+        }
+
+        // Exit spell mode
+        self.toggle_spell_mode();
+        
+        // Check for enemy defeat
+        if self.enemy.current_hp <= 0 {
+            self.phase = CombatPhase::Victory;
+        }
+        
+        true
     }
 }
