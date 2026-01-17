@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2026-01-17
 
-### 🎉 Major Gameplay Integration
+### Major Gameplay Integration
 
 This release focuses on **actually connecting systems** that existed but were dormant. The game went from "vibes-based scaffolding" to "playable loop with real mechanics."
 
