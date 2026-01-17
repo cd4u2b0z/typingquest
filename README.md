@@ -28,7 +28,7 @@ It currently exists in a *largely disconnected state*. There's ~23,000 lines of 
 - ✅ Items, shops, rest sites, treasure rooms
 - ✅ Tutorial system (5 phases)
 - ✅ Help overlay (press `?`)
-- ✅ Meta-progression tracking (Ink earned on death)
+- ✅ Meta-progression with Ink shop (buy permanent upgrades!)
 - ✅ Faction reputation system (displayed in Stats)
 
 ### What's Dormant (~15,000 Lines)
@@ -209,7 +209,7 @@ typingquest/
 │   │   ├── tutorial.rs          # ✅ 5-phase tutorial (617 lines)
 │   │   ├── help_system.rs       # ✅ Help overlay (749 lines)
 │   │   ├── faction_system.rs    # ✅ Faction rep tracking (815 lines)
-│   │   ├── meta_progression.rs  # 🔸 Ink/unlocks framework (612 lines)
+│   │   ├── meta_progression.rs  # ✅ Ink/unlocks framework (612 lines)
 │   │   ├── deep_lore.rs         # 🔸 World cosmology (853 lines)
 │   │   ├── narrative_seed.rs    # 🔸 Story generation (906 lines)
 │   │   ├── voice_system.rs      # 🔸 NPC personality (794 lines)

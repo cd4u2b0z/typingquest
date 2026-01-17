@@ -12,6 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wire up dormant narrative systems
 - Balance pass (once things are connected)
 
+### Added
+- **Meta-Progression Ink Shop**
+  - New "Upgrades" option in title menu (`[U]` key)
+  - Spend Ink earned from runs on permanent upgrades
+  - Available upgrades: HP bonus, Gold bonus, Damage %, Time %, and more
+  - Start bonuses now applied when beginning new games
+  - Ink balance displayed on title menu
+
+### Fixed
+- **Boss Loop Bug** — Defeating floor 5/10 boss no longer spawns infinite bosses
+- **Floor 10 Victory** — Beating final boss now triggers Victory screen immediately
+
 ---
 
 ## [0.3.0] - 2026-01-17
