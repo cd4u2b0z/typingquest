@@ -139,6 +139,7 @@ fn handle_input(game: &mut GameState, key: KeyCode) -> InputResult {
         Scene::Stats => handle_stats_input(game, key),
         Scene::GameOver => handle_game_over_input(game, key),
         Scene::Victory => handle_victory_input(game, key),
+        Scene::Tutorial => handle_tutorial_input(game, key),
     }
 }
 
@@ -178,7 +179,7 @@ fn handle_help_input(game: &mut GameState, key: KeyCode) -> InputResult {
 fn handle_title_input(game: &mut GameState, key: KeyCode) -> InputResult {
     match key {
         KeyCode::Up | KeyCode::Char('k') => game.move_menu_up(),
-        KeyCode::Down | KeyCode::Char('j') => game.move_menu_down(3),
+        KeyCode::Down | KeyCode::Char('j') => game.move_menu_down(4),
         KeyCode::Enter => {
             match game.menu_index {
                 0 => {
@@ -187,10 +188,15 @@ fn handle_title_input(game: &mut GameState, key: KeyCode) -> InputResult {
                     game.menu_index = 0;
                 }
                 1 => {
+                    // Tutorial
+                    game.tutorial_state.reset();
+                    game.scene = Scene::Tutorial;
+                }
+                2 => {
                     // Continue (placeholder - would load save)
                     game.add_message("No save file found...");
                 }
-                2 => {
+                3 => {
                     // Quit
                     return InputResult::Quit;
                 }
@@ -375,7 +381,7 @@ fn handle_shop_input(game: &mut GameState, key: KeyCode) -> InputResult {
 fn handle_rest_input(game: &mut GameState, key: KeyCode) -> InputResult {
     match key {
         KeyCode::Up | KeyCode::Char('k') => game.move_menu_up(),
-        KeyCode::Down | KeyCode::Char('j') => game.move_menu_down(3),
+        KeyCode::Down | KeyCode::Char('j') => game.move_menu_down(4),
         KeyCode::Enter | KeyCode::Char('1') | KeyCode::Char('2') | KeyCode::Char('3') => {
             let choice = match key {
                 KeyCode::Char('1') => 0,
@@ -576,6 +582,48 @@ fn handle_victory_input(game: &mut GameState, key: KeyCode) -> InputResult {
         }
         KeyCode::Char('q') | KeyCode::Esc => {
             return InputResult::Quit;
+        }
+        _ => {}
+    }
+    InputResult::Continue
+}
+
+fn handle_tutorial_input(game: &mut GameState, key: KeyCode) -> InputResult {
+    match key {
+        KeyCode::Esc => {
+            // Exit tutorial, go back to title
+            game.scene = Scene::Title;
+            game.menu_index = 0;
+        }
+        KeyCode::Enter => {
+            // Advance to next step or complete tutorial
+            if game.tutorial_state.is_step_complete() {
+                let completed = game.tutorial_state.advance();
+                if completed {
+                    // Tutorial complete, save progress and start the game
+                    game.tutorial_progress.mark_completed();
+                    game.tutorial_progress.save();
+                    game.scene = Scene::ClassSelect;
+                    game.menu_index = 0;
+                }
+            }
+        }
+        KeyCode::Tab => {
+            // Skip current step (for experienced players)
+            let completed = game.tutorial_state.advance();
+            if completed {
+                game.tutorial_progress.mark_completed();
+                game.tutorial_progress.save();
+                game.scene = Scene::ClassSelect;
+                game.menu_index = 0;
+            }
+        }
+        KeyCode::Char(c) => {
+            // Type characters for the tutorial
+            game.tutorial_state.type_char(c);
+        }
+        KeyCode::Backspace => {
+            game.tutorial_state.backspace();
         }
         _ => {}
     }

@@ -32,6 +32,7 @@ pub enum HelpContext {
     GameOver,
     Victory,
     Dialogue,
+    Tutorial,
 }
 
 impl From<Scene> for HelpContext {
@@ -48,6 +49,7 @@ impl From<Scene> for HelpContext {
             Scene::Stats => HelpContext::Stats,
             Scene::GameOver => HelpContext::GameOver,
             Scene::Victory => HelpContext::Victory,
+            Scene::Tutorial => HelpContext::Tutorial,
         }
     }
 }
@@ -364,7 +366,7 @@ impl HelpSystem {
                 HelpTip::new("󰈆", "Close", "Press Esc to return", TipPriority::Important),
             ],
             
-            HelpContext::GameOver | HelpContext::Victory => vec![
+            HelpContext::GameOver | HelpContext::Victory | HelpContext::Tutorial => vec![
                 HelpTip::new("󰑓", "Try Again", "Press Enter for a new run", TipPriority::Essential),
                 HelpTip::new("󰐀", "Ink Earned", "Currency persists between runs", TipPriority::Important),
                 HelpTip::new("󰗼", "Quit", "Press q to exit", TipPriority::Important),

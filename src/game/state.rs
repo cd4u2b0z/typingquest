@@ -10,12 +10,14 @@ use crate::game::{
     items::Item,
     events::GameEvent,
     help_system::{HelpSystem, HintManager},
+    tutorial::{TutorialState, TutorialProgress},
 };
 use crate::data::GameData;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Scene {
     Title,
+    Tutorial,
     ClassSelect,
     Dungeon,
     Combat,
@@ -56,6 +58,8 @@ pub struct GameState {
     pub game_data: Arc<GameData>,
     pub help_system: HelpSystem,
     pub hint_manager: HintManager,
+    pub tutorial_state: TutorialState,
+    pub tutorial_progress: TutorialProgress,
 }
 
 impl Default for GameState {
@@ -84,6 +88,8 @@ impl GameState {
             game_data: Arc::new(GameData::load_or_default()),
             help_system: HelpSystem::new(),
             hint_manager: HintManager::new(),
+            tutorial_state: TutorialState::new(),
+            tutorial_progress: TutorialProgress::load(),
         }
     }
 

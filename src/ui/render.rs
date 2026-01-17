@@ -25,6 +25,7 @@ pub fn render(f: &mut Frame, state: &GameState) {
         Scene::Stats => render_stats(f, state),
         Scene::GameOver => render_game_over(f, state),
         Scene::Victory => render_victory(f, state),
+        Scene::Tutorial => render_tutorial(f, state),
     }
     
     // Render help overlay on top if visible
@@ -347,7 +348,7 @@ fn render_title(f: &mut Frame, state: &GameState) {
     f.render_widget(subtitle, chunks[1]);
 
     // Menu
-    let menu_items = vec!["[N] New Game", "[C] Continue", "[Q] Quit"];
+    let menu_items = vec!["[N] New Game", "[T] Tutorial", "[C] Continue", "[Q] Quit"];
     let menu: Vec<ListItem> = menu_items
         .iter()
         .enumerate()
@@ -1042,4 +1043,172 @@ fn render_victory(f: &mut Frame, state: &GameState) {
         .style(Style::default().fg(Color::Yellow))
         .alignment(Alignment::Center);
     f.render_widget(help, chunks[2]);
+}
+
+fn render_tutorial(f: &mut Frame, state: &GameState) {
+    let area = f.area();
+    let tutorial = &state.tutorial_state;
+    
+    // Get current step - return early with placeholder if none
+    let step = match tutorial.current_step() {
+        Some(s) => s,
+        None => {
+            let placeholder = Paragraph::new("Tutorial Complete!")
+                .alignment(Alignment::Center)
+                .style(Style::default().fg(Color::Green));
+            f.render_widget(placeholder, area);
+            return;
+        }
+    };
+    
+    // Main layout: title, content area, input area, hints
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .margin(2)
+        .constraints([
+            Constraint::Length(5),   // Title and phase indicator
+            Constraint::Min(8),      // Narrative and instructions
+            Constraint::Length(5),   // Typing area
+            Constraint::Length(3),   // Progress bar
+            Constraint::Length(2),   // Key hints
+        ])
+        .split(area);
+    
+    // Phase title with decorative border
+    let phase = tutorial.current_phase();
+    let phase_icon = match phase {
+        crate::game::tutorial::TutorialPhase::Awakening => "󰛨",
+        crate::game::tutorial::TutorialPhase::FirstStrike => "󰓥",
+        crate::game::tutorial::TutorialPhase::TheCombo => "󱋊",
+        crate::game::tutorial::TutorialPhase::Choice => "󰋗",
+        crate::game::tutorial::TutorialPhase::Discovery => "󰈈",
+        crate::game::tutorial::TutorialPhase::Complete => "󰄬",
+    };
+    
+    let title_block = Block::default()
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(Color::Cyan))
+        .title(Span::styled(
+            "  Tutorial ",
+            Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+        ));
+    
+    let title_text = format!("{} {}", phase_icon, phase.title());
+    let title = Paragraph::new(title_text)
+        .style(Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD))
+        .alignment(Alignment::Center)
+        .block(title_block);
+    f.render_widget(title, chunks[0]);
+    
+    // Narrative and instructions
+    let narrative_block = Block::default()
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(Color::DarkGray))
+        .title(Span::styled(
+            " Story ",
+            Style::default().fg(Color::Magenta),
+        ));
+    
+    let mut lines = vec![
+        Line::from(Span::styled(
+            step.narrative,
+            Style::default().fg(Color::White),
+        )),
+        Line::from(""),
+        Line::from(Span::styled(
+            step.hint,
+            Style::default().fg(Color::Yellow).add_modifier(Modifier::ITALIC),
+        )),
+    ];
+    
+    // Show combo feedback for TheCombo phase
+    if matches!(phase, crate::game::tutorial::TutorialPhase::TheCombo) {
+        lines.push(Line::from(""));
+        let combo = tutorial.current_combo();
+        let combo_text = if combo > 0 {
+            format!("󱋊 Combo: {}x", combo)
+        } else {
+            "󱋊 Build your combo by typing correctly!".to_string()
+        };
+        lines.push(Line::from(Span::styled(
+            combo_text,
+            Style::default().fg(Color::LightMagenta).add_modifier(Modifier::BOLD),
+        )));
+    }
+    
+    let narrative = Paragraph::new(lines)
+        .block(narrative_block)
+        .wrap(Wrap { trim: true });
+    f.render_widget(narrative, chunks[1]);
+    
+    // Typing area - show target and current input
+    let typing_block = Block::default()
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(Color::Green))
+        .title(Span::styled(
+            " Type this ",
+            Style::default().fg(Color::Green),
+        ));
+    
+    // Build colored text showing correct/incorrect characters
+    let target = &step.target_text;
+    let input = &tutorial.typed_input;
+    
+    let mut spans = Vec::new();
+    for (i, target_char) in target.chars().enumerate() {
+        if let Some(input_char) = input.chars().nth(i) {
+            if input_char == target_char {
+                spans.push(Span::styled(
+                    target_char.to_string(),
+                    Style::default().fg(Color::Green).add_modifier(Modifier::BOLD),
+                ));
+            } else {
+                spans.push(Span::styled(
+                    target_char.to_string(),
+                    Style::default().fg(Color::Red).add_modifier(Modifier::UNDERLINED),
+                ));
+            }
+        } else {
+            spans.push(Span::styled(
+                target_char.to_string(),
+                Style::default().fg(Color::DarkGray),
+            ));
+        }
+    }
+    
+    let typing_line = Line::from(spans);
+    let typing = Paragraph::new(vec![
+        typing_line,
+        Line::from(""),
+        Line::from(Span::styled(
+            format!("> {}_", input),
+            Style::default().fg(Color::Cyan),
+        )),
+    ])
+    .block(typing_block)
+    .alignment(Alignment::Center);
+    f.render_widget(typing, chunks[2]);
+    
+    // Progress bar showing tutorial completion
+    let progress_ratio = tutorial.progress_percent() as f64 / 100.0;
+    let progress = Gauge::default()
+        .block(Block::default().borders(Borders::ALL).title(" Progress "))
+        .gauge_style(Style::default().fg(Color::Cyan))
+        .ratio(progress_ratio)
+        .label(format!("{}%", tutorial.progress_percent()));
+    f.render_widget(progress, chunks[3]);
+    
+    // Key hints
+    let complete_hint = if tutorial.is_step_complete() {
+        "[Enter] Continue  "
+    } else {
+        ""
+    };
+    let hints = Paragraph::new(format!(
+        "{}[Tab] Skip Step  [Esc] Exit Tutorial",
+        complete_hint
+    ))
+    .style(Style::default().fg(Color::DarkGray))
+    .alignment(Alignment::Center);
+    f.render_widget(hints, chunks[4]);
 }
