@@ -47,3 +47,6 @@ pub mod deep_lore;
 pub mod lore_fragments;
 pub mod encounter_writing;
 pub mod writing_guidelines;
+pub mod narrative_integration;
+pub mod typing_feel;
+pub mod meta_progression;
