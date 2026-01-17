@@ -79,14 +79,22 @@ cargo build --release
 ## How It Plays
 
 ```
-╭──────────────────────────────────────────────────────────────────╮
-│  ◈═══════════════════════════════════════════════════════════◈  │
-│    ████████╗██╗   ██╗██████╗ ██╗███╗   ██╗ ██████╗              │
-│       ██║    ╚████╔╝ ██████╔╝██║██╔██╗ ██║██║  ███╗             │
-│       ██║     ╚██╔╝  ██╔═══╝ ██║██║╚██╗██║██║   ██║             │
-│       ╚═╝      ╚═╝   ╚═╝     ╚═╝╚═╝  ╚═══╝ ╚═════╝  QUEST  󰌌   │
-│  ◈═══════════════════════════════════════════════════════════◈  │
-╰──────────────────────────────────────────────────────────────────╯
+╭─────────────────────────────────────────────────────────────────────╮
+│  󰈸 FLOOR 3 — The Whispering Archives           HP ████████░░ 42/50 │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   󰟀  Shadow Scribe                                                  │
+│      ████████░░░░░░░░ 34/80 HP                                      │
+│                                                                     │
+│   ┌─────────────────────────────────────────┐                       │
+│   │  Type:  「 arcane manuscript 」          │                       │
+│   │         ~~~~~~ ___________              │                       │
+│   └─────────────────────────────────────────┘                       │
+│                                                                     │
+│   󰑴 Combo: 7x  ·  󰓅 Flow: BUILDING  ·  󰧺 89 WPM  ·  󰸞 96%         │
+│                                                                     │
+╰─────────────────────────────────────────────────────────────────────╯
+    [Tab] Spells  [?] Help  [Esc] Flee
 ```
 
 ### Core Loop
@@ -122,6 +130,8 @@ Each floor contains rooms: combat encounters, elite enemies, shops, rest sites, 
 | `?` | Toggle help overlay |
 | `i` | Inventory |
 | `s` | Character stats |
+| `Tab` | Toggle spell mode (combat) |
+| `1-9` | Select spell (spell mode) |
 
 ---
 
@@ -139,40 +149,39 @@ Each floor contains rooms: combat encounters, elite enemies, shops, rest sites, 
 
 ## Features
 
-### Implemented (v0.2.1)
+### Working (v0.3.0)
 
 **Core Gameplay**
-- 5 playable classes with distinct mechanics
+- 5 playable classes with distinct stats
 - 10-floor dungeon with procedural room generation
 - Typing-based combat with real-time feedback
-- Item system — equipment, consumables, relics
-- Spell system — elemental magic with MP costs
+- Spell casting — Tab to toggle, 1-9 to select, type incantation
+- Item system — equipment, consumables (effects are minimal)
 - Shop, rest, treasure, and event encounters
 
-**Game Feel (Phase 3)**
-- Combo system with damage multipliers (up to 3x)
+**Combat Feel**
+- Combo system with 10% damage bonus per combo (up to 3x at 20)
 - Flow states: Building → Flowing → Transcendent
-- WPM and accuracy tracking
-- Visual feedback for typing performance
+- WPM and accuracy tracking with live display
+- Faction reputation tracking (displayed in Stats)
 
-**UI Polish (Phase 4)**
+**UI/UX**
 - Consistent visual theme with semantic colors
 - 40+ Nerd Font icons throughout
-- Contextual help system with tips
-- Interactive tutorial for new players
+- Contextual help system (`?` key)
+- 5-phase interactive tutorial
+- Meta-progression: Ink earned on death (doesn't persist yet)
 
-**Narrative Foundation**
-- Five factions with distinct philosophies
-- Lore fragments discoverable through gameplay
-- NPC encounters with authored dialogue
-- Mystery progression system (framework)
+### Dormant (written but not connected)
 
-### In Progress
+- Deep lore system, lore fragments, world cosmology
+- NPC voice/personality system
+- Authored encounter writing
+- Skill trees (active/passive)
+- Run modifiers and challenge variants
+- Thematic word generation by context
 
-- Save/load functionality
-- Full meta-progression loop
-- Sound effects
-- Content expansion and balancing
+See [Project Status](#️-project-status) for the full breakdown.
 
 ---
 
@@ -181,56 +190,76 @@ Each floor contains rooms: combat encounters, elite enemies, shops, rest sites, 
 ```
 typingquest/
 ├── src/
-│   ├── main.rs              # Game loop, input handling (~600 lines)
-│   ├── game/
-│   │   ├── state.rs         # Core game state
-│   │   ├── combat.rs        # Combat mechanics
-│   │   ├── combat_engine.rs # Combat calculation
-│   │   ├── player.rs        # Player/class definitions
-│   │   ├── enemy.rs         # Enemy definitions
-│   │   ├── dungeon.rs       # Floor/room generation
-│   │   ├── items.rs         # Item system
-│   │   ├── spells.rs        # Spell system
-│   │   ├── typing_feel.rs   # Combo/flow/feedback (~550 lines)
-│   │   ├── tutorial.rs      # Tutorial system (~650 lines)
-│   │   ├── help_system.rs   # Help overlay (~750 lines)
-│   │   └── ...              # Narrative, factions, events
-│   ├── ui/
-│   │   ├── render.rs        # All screen rendering (~1300 lines)
-│   │   └── theme.rs         # Colors, icons, styles (~350 lines)
-│   └── data/
-│       └── words.rs         # Word lists
+│   ├── main.rs                  # Game loop, input handling (772 lines)
+│   │
+│   ├── game/                    # Core game logic (~15,000 lines)
+│   │   ├── state.rs             # Game state, scene management
+│   │   ├── combat.rs            # Combat state, spell mode
+│   │   ├── combat_engine.rs     # Damage calc, word generation
+│   │   ├── player.rs            # Player, classes, leveling
+│   │   ├── enemy.rs             # Enemy definitions
+│   │   ├── dungeon.rs           # Floor/room generation
+│   │   ├── items.rs             # Equipment, consumables
+│   │   ├── spells.rs            # Spell definitions
+│   │   ├── typing_feel.rs       # ✅ Combo, flow, rhythm (550 lines)
+│   │   ├── tutorial.rs          # ✅ 5-phase tutorial (617 lines)
+│   │   ├── help_system.rs       # ✅ Help overlay (749 lines)
+│   │   ├── faction_system.rs    # ✅ Faction rep tracking (815 lines)
+│   │   ├── meta_progression.rs  # 🔸 Ink/unlocks framework (612 lines)
+│   │   ├── deep_lore.rs         # 🔸 World cosmology (853 lines)
+│   │   ├── narrative_seed.rs    # 🔸 Story generation (906 lines)
+│   │   ├── voice_system.rs      # 🔸 NPC personality (794 lines)
+│   │   ├── skills.rs            # 🔸 Skill trees (490 lines)
+│   │   ├── typing_context.rs    # 🔸 Thematic words (754 lines)
+│   │   ├── encounter_writing.rs # 🔸 Authored events (783 lines)
+│   │   └── run_modifiers.rs     # 🔸 Challenge variants (632 lines)
+│   │
+│   ├── ui/                      # Rendering (~1,900 lines)
+│   │   ├── render.rs            # All screen rendering (1,399 lines)
+│   │   └── theme.rs             # Colors, icons, styles (424 lines)
+│   │
+│   └── data/                    # Static content (~1,350 lines)
+│       ├── enemies.rs           # Enemy data (555 lines)
+│       ├── sentences.rs         # Word lists (490 lines)
+│       └── word_lists.rs        # More words (155 lines)
+│
 ├── Cargo.toml
 ├── CHANGELOG.md
 └── README.md
+
+✅ = Wired up and working
+🔸 = Written but dormant
 ```
 
-**~21,500 lines of Rust** across 35+ source files.
+**~23,700 lines of Rust** across 45 source files.
 
 ---
 
 ## Roadmap
 
-### v0.3.0 — Persistence
+### v0.3.0 — Gameplay Integration ✅
+- [x] Wire up spell casting (Tab + 1-9 + incantation)
+- [x] Wire up faction reputation system
+- [x] Wire up combat feel (combos, flow states)
+- [x] Meta-progression: Ink earned on death
+- [x] Fix floor progression bugs
+
+### v0.4.0 — Persistence (someday)
 - [ ] Save/load game state
-- [ ] Meta-progression currency (Ink) persistence
-- [ ] Settings configuration
+- [ ] Ink persistence between runs
+- [ ] Settings/config file
 
-### v0.4.0 — Content
-- [ ] More enemy variety per floor
-- [ ] Additional spells and items
-- [ ] Expanded event encounters
-- [ ] Achievement tracking
+### v0.5.0 — Connect Dormant Systems (aspirational)
+- [ ] Wire up deep lore / lore fragments
+- [ ] Wire up voice system for NPCs
+- [ ] Wire up skill trees
+- [ ] Wire up thematic word generation
 
-### v0.5.0 — Balance
-- [ ] Difficulty tuning
-- [ ] Class balance pass
-- [ ] Pacing adjustments
-
-### v1.0.0 — Release
-- [ ] Complete 10-floor campaign
+### v1.0.0 — Probably Never
+- [ ] Balance pass
 - [ ] Multiple endings
 - [ ] Full documentation
+- [ ] Actually finish something for once
 
 ---
 
