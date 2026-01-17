@@ -8,25 +8,34 @@
 [![Lines of Code](https://img.shields.io/badge/Lines-20k+-yellow?style=flat)]()
 [![TUI](https://img.shields.io/badge/TUI-ratatui-purple?style=flat)](https://github.com/ratatui-org/ratatui)
 
-TypingQuest combines the satisfying mechanics of typing trainers like [ttyper](https://github.com/max-niederman/ttyper) with deep RPG progression inspired by *Undertale*, *Earthbound*, *Balatro*, and classic roguelikes.
+TypingQuest combines the satisfying mechanics of typing trainers like [ttyper](https://github.com/max-niederman/ttyper) with deep RPG progression inspired by *Undertale*, *Earthbound*, *Balatro*, *Hades*, and classic roguelikes.
 
 ```
-╔══════════════════════════════════════════════════════════════════╗
-║  TypingQuest                                    Floor: 3         ║
-╠══════════════════════════════════════════════════════════════════╣
-║                                                                  ║
-║       ╭─────╮      vs      ╭─────╮                               ║
-║       │ YOU │              │ 󰚌  │  Shadow Wraith                 ║
-║       │ ███ │              │ ░░░ │  HP: ████████░░ 80/100        ║
-║       ╰─────╯              ╰─────╯                               ║
-║                                                                  ║
-║  ┌────────────────────────────────────────────────────────────┐  ║
-║  │  Type: "incantation"                                       │  ║
-║  │  >     incan_                          󰔚 3.2s  󰈸 5x        │  ║
-║  └────────────────────────────────────────────────────────────┘  ║
-║                                                                  ║
-║  [WPM: 78]  [Accuracy: 96%]  [Combo: 5x]  [Streak: 󰈸󰈸󰈸]          ║
-╚══════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════════════════════════╗
+║  TypingQuest v0.2.0                          Chapter: Discovery          ║
+║  ═══════════════════════════════════════════════════════════════════════ ║
+║                                                                          ║
+║   ╭───────────╮                    ╭───────────╮                         ║
+║   │    YOU    │      ⚔️  vs ⚔️      │   󰚌 ELITE │                         ║
+║   │  Wordsmith│                    │Silent Warden│                       ║
+║   │ HP ████░░ │                    │ HP ██████░░ │                        ║
+║   │ MP ██████ │                    │             │                        ║
+║   ╰───────────╯                    ╰───────────╯                         ║
+║                                                                          ║
+║   ┌────────────────────────────────────────────────────────────────┐    ║
+║   │  "The threshold remembers all who cross it."                   │    ║
+║   │                                                                │    ║
+║   │  Type: "incantation of binding"                                │    ║
+║   │  >     incantation of b_                                       │    ║
+║   └────────────────────────────────────────────────────────────────┘    ║
+║                                                                          ║
+║   ╭─ FLOW ─────────╮  ╭─ COMBO ────────╮  ╭─ STATS ────────────────╮    ║
+║   │ ✨ TRANSCENDENT │  │ 󰈸 12x STREAK  │  │ WPM: 94  ACC: 98%      │    ║
+║   │ Crit +30%      │  │ DMG: 3.0x      │  │ 󰐀 Ink: 847            │    ║
+║   ╰────────────────╯  ╰────────────────╯  ╰────────────────────────╯    ║
+║                                                                          ║
+║   [Silent Order: ████████░░ Ally]  [Mystery: ██████░░ Tier 3/5]         ║
+╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
 ---
@@ -40,6 +49,7 @@ TypingQuest combines the satisfying mechanics of typing trainers like [ttyper](h
 - [How to Play](#-how-to-play)
 - [Controls](#-controls)
 - [Classes](#-classes)
+- [Factions](#-factions)
 - [Architecture](#-architecture)
 - [Configuration](#-configuration)
 - [Roadmap](#-roadmap)
@@ -210,72 +220,164 @@ cargo install typingquest
 
 ---
 
+## 󰒖 Factions
+
+Your choices shape your standing with the five factions that control the realm:
+
+| Faction | Philosophy | Ally | Enemy |
+|---------|------------|------|-------|
+| 󰂵 **Silent Order** | Knowledge through observation | Wardens | Choir |
+| 󰋾 **Echoing Choir** | Truth through prophecy | Void Touched | Silent Order |
+| 󰆧 **Gilded Merchants** | Power through commerce | — | — |
+| 󰛡 **Threshold Wardens** | Protection at any cost | Silent Order | Void Touched |
+| 󰚌 **Void Touched** | Embrace dissolution | Choir | Wardens |
+
+**Reputation Effects:**
+- **Ally (50+)**: Exclusive encounters, discounts, quest access
+- **Neutral (0)**: Standard interactions
+- **Hostile (-50)**: Ambushes, closed doors, harder negotiations
+
+Your faction standings influence which of the **12 endings** you can achieve.
+
+---
+
 ## 󰙅 Architecture
 
 ```
-src/
-├── main.rs           # Entry point, game loop
-├── game/
-│   ├── state.rs      # Core game state machine
-│   ├── player.rs     # Player stats, inventory
-│   ├── combat.rs     # Typing combat system
-│   ├── combat_engine.rs  # Event-driven combat
-│   ├── enemy.rs      # Enemy definitions
-│   ├── dungeon.rs    # Floor generation
-│   ├── items.rs      # Balatro-style items & jokers
-│   ├── spells.rs     # Magic system
-│   ├── skills.rs     # Skill trees
-│   ├── events.rs     # Random encounters
-│   ├── narrative.rs  # Story & dialogue
-│   ├── quests.rs     # Quest system
-│   ├── world.rs      # Lore & locations
-│   ├── characters.rs # NPCs
-│   ├── stats.rs      # Achievement tracking
-│   ├── save.rs       # Save/load system
-│   └── config.rs     # Game configuration
+typingquest/
+├── Cargo.toml                    # Dependencies & metadata
+├── README.md                     # This file
+├── CHANGELOG.md                  # Version history
 ├── data/
-│   ├── word_lists.rs # Typing word pools
-│   ├── sentences.rs  # Boss phrases
-│   └── enemies.rs    # Enemy database
-└── ui/
-    └── render.rs     # Ratatui TUI rendering
+│   ├── enemies.toml              # Enemy definitions
+│   └── config.ron                # Game configuration
+│
+└── src/
+    ├── main.rs                   # Entry point (533 lines)
+    │
+    ├── game/                     # 󰓎 CORE SYSTEMS (~15,000 lines)
+    │   ├── mod.rs                # Module exports
+    │   │
+    │   │── # 🎭 Narrative Layer
+    │   ├── deep_lore.rs          # Cosmology, endings (1,200 lines)
+    │   ├── lore_fragments.rs     # Discoverable lore (900 lines)
+    │   ├── encounter_writing.rs  # Authored encounters (1,000 lines)
+    │   ├── writing_guidelines.rs # Literary standards (650 lines)
+    │   ├── narrative_integration.rs # Engine coordinator (600 lines)
+    │   ├── narrative_seed.rs     # Procedural narrative (900 lines)
+    │   ├── faction_system.rs     # 5 factions (815 lines)
+    │   ├── voice_system.rs       # NPC personalities (800 lines)
+    │   ├── narrative.rs          # Base narrative (600 lines)
+    │   │
+    │   │── # ⌨️ Typing Systems
+    │   ├── typing_feel.rs        # Flow & combos (450 lines)
+    │   ├── typing_context.rs     # Context analysis (650 lines)
+    │   ├── combat.rs             # Typing combat (370 lines)
+    │   ├── combat_engine.rs      # Event-driven (420 lines)
+    │   ├── combat_events.rs      # Combat events (200 lines)
+    │   │
+    │   │── # 🏆 Progression
+    │   ├── meta_progression.rs   # Hades-style unlocks (650 lines)
+    │   ├── run_modifiers.rs      # Heat system (630 lines)
+    │   ├── stats.rs              # Achievements (450 lines)
+    │   ├── skills.rs             # Skill trees (550 lines)
+    │   │
+    │   │── # 🎮 Core Game
+    │   ├── state.rs              # Game state machine (150 lines)
+    │   ├── player.rs             # Player data (270 lines)
+    │   ├── enemy.rs              # Enemy system (400 lines)
+    │   ├── dungeon.rs            # Floor generation (220 lines)
+    │   ├── items.rs              # Items & relics (480 lines)
+    │   ├── spells.rs             # Magic system (260 lines)
+    │   ├── events.rs             # Random events (320 lines)
+    │   ├── quests.rs             # Quest system (420 lines)
+    │   ├── characters.rs         # NPCs (370 lines)
+    │   ├── world.rs              # World/locations (700 lines)
+    │   ├── world_engine.rs       # World state (270 lines)
+    │   ├── event_bus.rs          # Event system (500 lines)
+    │   ├── save.rs               # Save/load (220 lines)
+    │   └── config.rs             # Configuration (320 lines)
+    │
+    ├── data/                     # 󰆼 CONTENT (~2,500 lines)
+    │   ├── mod.rs                # Data exports
+    │   ├── word_lists.rs         # Typing pools (200 lines)
+    │   ├── sentences.rs          # Boss phrases (600 lines)
+    │   └── enemies.rs            # Enemy database (520 lines)
+    │
+    └── ui/                       # 󰍹 RENDERING (~700 lines)
+        ├── mod.rs                # UI exports
+        └── render.rs             # Ratatui TUI (690 lines)
+
+Total: ~20,000 lines of Rust across 37 source files
 ```
 
 ### Key Systems
 
 | System | File | LOC | Description |
 |--------|------|-----|-------------|
-| Narrative Engine | `narrative_integration.rs` | ~550 | Coordinates all story systems |
-| Deep Lore | `deep_lore.rs` | ~700 | Cosmology, faction histories, endings |
+| Narrative Engine | `narrative_integration.rs` | ~600 | Coordinates all story systems |
+| Deep Lore | `deep_lore.rs` | ~1,200 | Cosmology, faction histories, endings |
 | Typing Feel | `typing_feel.rs` | ~450 | Flow states, combos, visual effects |
 | Meta Progression | `meta_progression.rs` | ~650 | Persistent unlocks, achievements |
 | Faction System | `faction_system.rs` | ~815 | Five factions with relationships |
 | Voice System | `voice_system.rs` | ~800 | NPC dialogue with personalities |
 | Narrative Seed | `narrative_seed.rs` | ~900 | Procedural narrative generation |
-| Event Bus | `event_bus.rs` | ~600 | Game-wide event system |
-| Combat Engine | `combat_engine.rs` | ~350 | Event-driven typing combat |
+| Event Bus | `event_bus.rs` | ~500 | Game-wide event system |
+| Combat Engine | `combat_engine.rs` | ~420 | Event-driven typing combat |
 
 ### System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     NarrativeEngine                             │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
-│  │ DeepLore │  │ Factions │  │  Voice   │  │  Lore    │       │
-│  │ System   │  │ System   │  │  System  │  │ Fragments│       │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘       │
-│       └─────────────┴─────────────┴─────────────┘              │
-│                         │                                       │
-│  ┌──────────────────────┴──────────────────────┐               │
-│  │              TypingFeel Engine               │               │
-│  │   FlowState → Combo → Rhythm → Visual FX    │               │
-│  └──────────────────────┬──────────────────────┘               │
-│                         │                                       │
-│  ┌──────────────────────┴──────────────────────┐               │
-│  │             MetaProgression                  │               │
-│  │   Ink → Unlocks → Codex → Bonds → Heat     │               │
-│  └─────────────────────────────────────────────┘               │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           TYPINGQUEST v0.2.0                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────── NARRATIVE LAYER ───────────────────────┐         │
+│  │                                                                │         │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────┐  │         │
+│  │  │ DeepLore │  │ Factions │  │  Voice   │  │    Lore      │  │         │
+│  │  │  System  │  │  System  │  │  System  │  │  Fragments   │  │         │
+│  │  │ 12 ends  │  │ 5 groups │  │ 15+ NPCs │  │ 13+ pieces   │  │         │
+│  │  └────┬─────┘  └────┬─────┘  └────┬─────┘  └──────┬───────┘  │         │
+│  │       └─────────────┴─────────────┴───────────────┘           │         │
+│  │                           │                                    │         │
+│  │              ┌────────────┴────────────┐                      │         │
+│  │              │   NarrativeEngine       │                      │         │
+│  │              │  Chapter • Mystery •    │                      │         │
+│  │              │  Encounters • Bonds     │                      │         │
+│  │              └────────────┬────────────┘                      │         │
+│  └───────────────────────────┼───────────────────────────────────┘         │
+│                              │                                              │
+│  ┌───────────────────────────┴────────────── TYPING LAYER ──────┐         │
+│  │                                                               │         │
+│  │  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  │         │
+│  │  │   FlowState    │  │     Combo      │  │    Rhythm      │  │         │
+│  │  │ Building →     │  │   1x → 3x      │  │   Cadence      │  │         │
+│  │  │ Transcendent   │  │   multiplier   │  │   Analysis     │  │         │
+│  │  └───────┬────────┘  └───────┬────────┘  └───────┬────────┘  │         │
+│  │          └───────────────────┼───────────────────┘           │         │
+│  │                              │                                │         │
+│  │              ┌───────────────┴───────────────┐               │         │
+│  │              │      TypingFeel Engine        │               │         │
+│  │              │   Visual FX • Crit Chance     │               │         │
+│  │              └───────────────┬───────────────┘               │         │
+│  └──────────────────────────────┼───────────────────────────────┘         │
+│                                 │                                          │
+│  ┌──────────────────────────────┴─── PERSISTENCE LAYER ─────────┐         │
+│  │                                                               │         │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐         │         │
+│  │  │   Ink   │  │ Unlocks │  │  Codex  │  │  Heat   │         │         │
+│  │  │ Currency│  │  Tree   │  │  Lore   │  │ System  │         │         │
+│  │  └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘         │         │
+│  │       └────────────┴────────────┴────────────┘              │         │
+│  │                           │                                  │         │
+│  │              ┌────────────┴────────────┐                    │         │
+│  │              │     MetaProgression     │                    │         │
+│  │              │  Survives permadeath    │                    │         │
+│  │              └─────────────────────────┘                    │         │
+│  └──────────────────────────────────────────────────────────────┘         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
