@@ -24,6 +24,7 @@ use crate::game::{
     run_modifiers::{RunModifiers, RunType},
 };
 use crate::data::GameData;
+use crate::ui::effects::EffectsManager;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Scene {
@@ -114,6 +115,8 @@ pub struct GameState {
     pub current_encounter: Option<AuthoredEncounter>,
     /// Run modifiers affecting difficulty/rewards
     pub run_modifiers: RunModifiers,
+    /// Visual effects manager (floating text, screen shake, etc.)
+    pub effects: EffectsManager,
 }
 
 impl Default for GameState {
@@ -163,6 +166,7 @@ impl GameState {
             encounter_tracker: EncounterTracker::new(),
             current_encounter: None,
             run_modifiers: RunModifiers::new(),
+            effects: EffectsManager::new(),
         }
     }
 
@@ -620,5 +624,94 @@ impl GameState {
                 // Log unhandled events for debugging if needed
             }
         }
+    }
+}
+
+// ============================================================================
+// Visual Effects Integration
+// ============================================================================
+
+impl GameState {
+    /// Update visual effects each frame (call in main loop)
+    pub fn update_effects(&mut self) {
+        self.effects.update();
+    }
+    
+    /// Trigger damage number and screen shake when player hits enemy
+    pub fn effect_player_damage(&mut self, damage: i32, is_crit: bool) {
+        self.effects.add_damage(damage, is_crit);
+        
+        // Bigger shake for crits
+        if is_crit {
+            self.effects.screen_shake = Some(crate::ui::effects::ScreenShake::medium());
+            self.effects.hit_flash = Some(crate::ui::effects::HitFlash::critical());
+        } else if damage > 20 {
+            self.effects.screen_shake = Some(crate::ui::effects::ScreenShake::light());
+        }
+    }
+    
+    /// Trigger effects when player takes damage
+    pub fn effect_enemy_damage(&mut self, damage: i32) {
+        self.effects.player_hit(damage);
+    }
+    
+    /// Trigger combo effects
+    pub fn effect_combo(&mut self, combo: i32) {
+        self.effects.add_combo(combo);
+    }
+    
+    /// Trigger keystroke ripple effect
+    pub fn effect_keystroke(&mut self, correct: bool) {
+        self.effects.keystroke(correct);
+    }
+    
+    /// Victory effects
+    pub fn effect_victory(&mut self) {
+        self.effects.floating_texts.push(
+            crate::ui::effects::FloatingText::combo(999, 0.5, 0.3)
+        );
+        self.effects.combo_pulse = Some(crate::ui::effects::ComboPulse::new(999));
+    }
+    
+    /// Defeat effects
+    pub fn effect_defeat(&mut self) {
+        self.effects.screen_shake = Some(crate::ui::effects::ScreenShake::heavy());
+        self.effects.floating_texts.push(
+            crate::ui::effects::FloatingText {
+                text: "DEFEAT".to_string(),
+                x: 0.5,
+                y: 0.4,
+                color: crate::ui::effects::TextColor::Miss,
+                size: crate::ui::effects::TextSize::Huge,
+                velocity_y: -0.5,
+                opacity: 1.0,
+                created_at: std::time::Instant::now(),
+                lifetime_ms: 3000,
+            }
+        );
+    }
+    
+    /// Perfect word typed effect
+    pub fn effect_perfect(&mut self) {
+        self.effects.floating_texts.push(
+            crate::ui::effects::FloatingText::perfect(0.5, 0.5)
+        );
+    }
+    
+    /// Heal effect
+    pub fn effect_heal(&mut self, amount: i32) {
+        self.effects.floating_texts.push(
+            crate::ui::effects::FloatingText {
+                text: format!("+{}", amount),
+                x: 0.5,
+                y: 0.8,
+                color: crate::ui::effects::TextColor::Heal,
+                size: crate::ui::effects::TextSize::Large,
+                velocity_y: -2.0,
+                opacity: 1.0,
+                created_at: std::time::Instant::now(),
+                lifetime_ms: 1200,
+            }
+        );
     }
 }

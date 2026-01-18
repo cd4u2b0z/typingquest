@@ -4,3 +4,5 @@
 pub mod render;
 pub mod theme;
 pub mod lore_render;
+pub mod effects;
+pub mod combat_render;
