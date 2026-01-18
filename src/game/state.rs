@@ -223,6 +223,17 @@ impl GameState {
         self.current_enemy = Some(enemy.clone());
         let difficulty = self.dungeon.as_ref().map(|d| d.current_floor as u32).unwrap_or(1);
         self.combat_state = Some(CombatState::new(enemy, self.game_data.clone(), difficulty, difficulty, self.active_typing_modifier.clone(), Some(&self.skill_tree)));
+        
+        // Initialize immersion systems for this combat
+        if let Some(ref mut combat) = self.combat_state {
+            if let Some(ref player) = self.player {
+                combat.init_immersion(&player.class);
+            }
+        }
+        
+        // Clear any lingering effects
+        self.effects.clear();
+        
         self.scene = Scene::Combat;
         
         self.add_message(&format!("{} appears!", enemy_name));

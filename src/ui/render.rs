@@ -19,7 +19,7 @@ pub fn render(f: &mut Frame, state: &GameState) {
         Scene::Title => render_title(f, state),
         Scene::ClassSelect => render_class_select(f, state),
         Scene::Dungeon => render_dungeon(f, state),
-        Scene::Combat => render_combat(f, state),
+        Scene::Combat => crate::ui::combat_render::render_combat_enhanced(f, state),
         Scene::Shop => render_shop(f, state),
         Scene::Rest => render_rest(f, state),
         Scene::Event => render_event(f, state),
@@ -711,6 +711,9 @@ fn render_combat(f: &mut Frame, state: &GameState) {
         
         // Render typing feel overlay
         render_typing_feel_overlay(f, state, f.area());
+        
+        // Render visual effects overlay (floating damage, hit flash, etc.)
+        render_effects_overlay(f, state, f.area());
     }
 }
 
@@ -1498,5 +1501,97 @@ fn render_typing_feel_overlay(f: &mut Frame, state: &GameState, area: Rect) {
         );
         let acc_widget = Paragraph::new(acc_text);
         f.render_widget(acc_widget, acc_area);
+    }
+}
+
+/// Render visual effects overlay (floating damage, screen shake, hit flash)
+fn render_effects_overlay(f: &mut Frame, state: &GameState, area: Rect) {
+    use crate::ui::effects::{TextColor, TextSize};
+    
+    // Render floating texts
+    for text in &state.effects.floating_texts {
+        if text.is_expired() {
+            continue;
+        }
+        
+        let x = (area.x as f32 + area.width as f32 * text.x) as u16;
+        let y = (area.y as f32 + area.height as f32 * text.current_y().max(0.0).min(1.0)) as u16;
+        
+        if y >= area.y && y < area.y + area.height && x >= area.x && x < area.x + area.width {
+            let color = match text.color {
+                TextColor::Damage => Color::Red,
+                TextColor::Critical => Color::Yellow,
+                TextColor::Heal => Color::Green,
+                TextColor::Combo => Color::Cyan,
+                TextColor::Miss => Color::DarkGray,
+                TextColor::Perfect => Color::White,
+                TextColor::Bonus => Color::Magenta,
+            };
+            
+            let mut style = Style::default().fg(color);
+            match text.size {
+                TextSize::Huge | TextSize::Large => {
+                    style = style.add_modifier(Modifier::BOLD);
+                }
+                _ => {}
+            }
+            
+            // Fade effect
+            if text.current_opacity() < 0.5 {
+                style = style.add_modifier(Modifier::DIM);
+            }
+            
+            let text_len = text.text.len() as u16;
+            let text_area = Rect {
+                x: x.saturating_sub(text_len / 2).max(area.x),
+                y,
+                width: text_len.min(area.width),
+                height: 1,
+            };
+            
+            let widget = Paragraph::new(text.text.clone())
+                .style(style)
+                .alignment(Alignment::Center);
+            f.render_widget(widget, text_area);
+        }
+    }
+    
+    // Hit flash effect - color the border
+    if let Some(ref flash) = state.effects.hit_flash {
+        if flash.is_active() {
+            let flash_color = match flash.color {
+                crate::ui::effects::FlashColor::Red => Color::Red,
+                crate::ui::effects::FlashColor::White => Color::White,
+                crate::ui::effects::FlashColor::Yellow => Color::Yellow,
+                crate::ui::effects::FlashColor::Green => Color::Green,
+            };
+            
+            // Render a flash border
+            let flash_block = Block::default()
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(flash_color).add_modifier(Modifier::BOLD));
+            f.render_widget(flash_block, area);
+        }
+    }
+    
+    // Combo pulse indicator
+    if let Some(ref pulse) = state.effects.combo_pulse {
+        if pulse.is_active() {
+            let pulse_text = format!("🔥 {}x COMBO! 🔥", pulse.combo);
+            let pulse_width = pulse_text.len() as u16 + 4;
+            let pulse_area = Rect {
+                x: area.width / 2 - pulse_width / 2,
+                y: 2,
+                width: pulse_width,
+                height: 1,
+            };
+            
+            let widget = Paragraph::new(pulse_text)
+                .style(Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD))
+                .alignment(Alignment::Center);
+            f.render_widget(widget, pulse_area);
+        }
     }
 }

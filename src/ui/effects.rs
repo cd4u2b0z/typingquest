@@ -330,6 +330,15 @@ impl EffectsManager {
     }
 
     /// Update all effects, removing expired ones
+    /// Clear all active effects (call when starting new combat)
+    pub fn clear(&mut self) {
+        self.floating_texts.clear();
+        self.screen_shake = None;
+        self.hit_flash = None;
+        self.combo_pulse = None;
+        self.typing_ripple = None;
+    }
+    
     pub fn update(&mut self) {
         // Remove expired floating texts
         self.floating_texts.retain(|t| !t.is_expired());

@@ -79,17 +79,30 @@ fn run_game(
             }
         }
 
+        // Update visual effects each frame
+        game.update_effects();
+        
+        // Track damage for effects (deferred pattern to avoid borrow issues)
+        let mut enemy_damage_for_effects: Option<i32> = None;
+        
         // Update combat timer if in combat
         if let Some(combat) = &mut game.combat_state {
             combat.tick();
+            
+            // Update immersion system (50ms tick rate)
+            combat.immersive_update(50);
             
             // Check for time running out OR enemy turn phase
             if combat.time_remaining <= 0.0 || combat.phase == CombatPhase::EnemyTurn {
                 // Enemy attacks
                 if let Some(player) = &mut game.player {
+                    let hp_before = player.hp;
                     combat.execute_enemy_turn(player);
-                            // Player took damage - trigger feel effects
-                            game.typing_feel.screen_shake = 0.5;
+                    let damage = hp_before - player.hp;
+                    if damage > 0 {
+                        enemy_damage_for_effects = Some(damage);
+                        game.typing_feel.screen_shake = 0.5;
+                    }
                 }
             }
             
@@ -100,6 +113,11 @@ fn run_game(
             } else if combat.phase == CombatPhase::Defeat {
                 game.check_game_over();
             }
+        }
+        
+        // Apply deferred visual effects (after combat borrow released)
+        if let Some(damage) = enemy_damage_for_effects {
+            game.effect_enemy_damage(damage);
         }
         
         // Process events from the event bus (system reactions)
@@ -403,6 +421,9 @@ fn handle_combat_input(game: &mut GameState, key: KeyCode) -> InputResult {
                 let typed_len_before = combat.typed_input.len();
                 let word_was_complete = combat.typed_input == combat.current_word;
                 
+                // Track enemy HP BEFORE typing (damage is applied in on_char_typed -> on_word_complete)
+                let enemy_hp_before = combat.enemy.current_hp;
+                
                 // Typing input
                 combat.on_char_typed(c);
                 
@@ -430,6 +451,10 @@ fn handle_combat_input(game: &mut GameState, key: KeyCode) -> InputResult {
                         combat.max_combo = combat.combo;
                     }
                     
+                    // Calculate damage dealt (using tracked hp from before on_char_typed)
+                    let damage_dealt = (enemy_hp_before - combat.enemy.current_hp).max(0);
+                    let current_combo = combat.combo;
+                    
                     // Handle spell casting if in spell mode
                     if combat.spell_mode {
                         if let Some(incantation) = &combat.spell_incantation.clone() {
@@ -450,6 +475,14 @@ fn handle_combat_input(game: &mut GameState, key: KeyCode) -> InputResult {
                             game.end_combat(true);
                             game.check_victory();
                         }
+                    }
+                    
+                    // Trigger visual effects for player attack (deferred to here where borrow is released)
+                    if damage_dealt > 0 {
+                        game.effect_player_damage(damage_dealt, false);
+                    }
+                    if current_combo > 1 {
+                        game.effect_combo(current_combo);
                     }
                 }
             }
