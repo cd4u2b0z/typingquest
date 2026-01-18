@@ -51,6 +51,16 @@ pub struct CombatState {
     pub skill_damage_reduction: f32,
     pub skill_evasion_chance: f32,
     pub skill_transcendence_threshold: Option<f32>,
+    /// WPM tracking for this combat
+    pub wpm_samples: Vec<f32>,
+    /// Peak WPM achieved this combat
+    pub peak_wpm: f32,
+    /// Total damage dealt this combat
+    pub total_damage_dealt: i32,
+    /// Total damage taken this combat
+    pub total_damage_taken: i32,
+    /// Combat start time
+    pub combat_start: Instant,
     /// Immersive combat feedback system (optional)
     pub immersive: Option<ImmersiveCombat>,
 }
@@ -131,6 +141,11 @@ impl CombatState {
             skill_damage_reduction: skills.map(|s| s.get_damage_reduction()).unwrap_or(0.0),
             skill_evasion_chance: skills.map(|s| s.get_evasion_chance()).unwrap_or(0.0),
             skill_transcendence_threshold: skills.and_then(|s| s.get_active_effects().iter().find_map(|e| match e { super::skills::SkillEffect::Transcendence(t) => Some(*t), _ => None })),
+            wpm_samples: Vec::new(),
+            peak_wpm: 0.0,
+            total_damage_dealt: 0,
+            total_damage_taken: 0,
+            combat_start: Instant::now(),
             immersive: None,
         }
 
@@ -239,6 +254,15 @@ impl CombatState {
             let damage = self.calculate_damage(wpm, accuracy);
             
             self.enemy.current_hp -= damage;
+            self.total_damage_dealt += damage;
+            
+            // Track WPM
+            if wpm > 0.0 {
+                self.wpm_samples.push(wpm);
+                if wpm > self.peak_wpm {
+                    self.peak_wpm = wpm;
+                }
+            }
             
             self.battle_log.push(format!(
                 "✓ {} ({:.0} WPM, {:.0}% acc) - {} damage! [{}x combo]",
@@ -316,6 +340,7 @@ impl CombatState {
         };
 
         player.take_damage(actual_damage);
+        self.total_damage_taken += actual_damage;
         
         // Get a random attack message
         let attack_msg = self.enemy.get_attack_message();
@@ -484,7 +509,7 @@ impl CombatState {
             turns_taken: self.turn,
             max_combo: self.max_combo,
             accuracy,
-            avg_wpm: 0.0, // TODO: track average WPM
+            avg_wpm: if self.wpm_samples.is_empty() { 0.0 } else { self.wpm_samples.iter().sum::<f32>() / self.wpm_samples.len() as f32 },
         });
     }
 
@@ -597,6 +622,7 @@ impl CombatState {
             super::spells::SpellEffect::Damage(dmg) => {
                 let damage = (*dmg as f32 * (1.0 + player.stats.intellect as f32 * 0.05)) as i32;
                 self.enemy.current_hp -= damage;
+                self.total_damage_dealt += damage;
                 self.battle_log.push(format!("✦ {} deals {} damage!", spell.name, damage));
             }
 
@@ -703,8 +729,9 @@ impl CombatState {
     /// Returns feedback if immersion is active
     pub fn immersive_word_complete(&mut self, base_damage: i32) -> Option<WordFeedback> {
         let hp_pct = ((self.enemy.current_hp as f32 / self.enemy.max_hp as f32) * 100.0) as i32;
+        let wpm = self.calculate_wpm();
         if let Some(ref mut imm) = self.immersive {
-            Some(imm.on_word_complete(hp_pct, base_damage))
+            Some(imm.on_word_complete(hp_pct, base_damage, wpm))
         } else {
             None
         }

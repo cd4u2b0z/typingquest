@@ -145,7 +145,7 @@ fn handle_input(game: &mut GameState, key: KeyCode) -> InputResult {
     // During combat/tutorial, 'h' should go to typing, not help
     let in_typing_mode = matches!(game.scene, Scene::Combat | Scene::Tutorial);
     match key {
-        KeyCode::Char('?') => {
+        KeyCode::Char('?') if !in_typing_mode => {
             game.help_system.toggle();
             return InputResult::Continue;
         }
@@ -172,6 +172,7 @@ fn handle_input(game: &mut GameState, key: KeyCode) -> InputResult {
         Scene::Lore => handle_lore_input(game, key),
         Scene::Milestone => handle_milestone_input(game, key),
         Scene::Upgrades => handle_upgrades_input(game, key),
+        Scene::BattleSummary => handle_battle_summary_input(game, key),
     }
 }
 
@@ -752,6 +753,17 @@ fn handle_victory_input(game: &mut GameState, key: KeyCode) -> InputResult {
             return InputResult::Quit;
         }
         _ => {}
+    }
+    InputResult::Continue
+}
+
+fn handle_battle_summary_input(game: &mut GameState, key: KeyCode) -> InputResult {
+    match key {
+        _ => {
+            // Any key dismisses the battle summary
+            game.current_battle_summary = None;
+            game.scene = Scene::Dungeon;
+        }
     }
     InputResult::Continue
 }

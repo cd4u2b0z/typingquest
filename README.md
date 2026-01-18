@@ -10,7 +10,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.70+-DEA584?style=flat&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.5.3-blue?style=flat)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.5.4-blue?style=flat)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/Status-Active_Development_🔥-orange?style=flat)]()
 [![TUI](https://img.shields.io/badge/TUI-ratatui-purple?style=flat)](https://github.com/ratatui-org/ratatui)
 
@@ -20,7 +20,7 @@
 
 **This is a personal hobby project — a fun "fuck around and find out" experiment in terminal game development.**
 
-### What Actually Works (v0.5.3)
+### What Actually Works (v0.5.4)
 - ✅ Full 10-floor dungeon progression with zone-themed encounters
 - ✅ Combat with typing, combos, and flow states
 - ✅ **Lore-integrated typing** — words match the zone, enemy, and story
@@ -33,7 +33,7 @@
 - ✅ **Authored encounters** — scripted narrative moments during exploration
 - ✅ **Run modifiers** — difficulty scaling for challenge modes
 - ✅ Tutorial system (5 phases)
-- ✅ Help overlay (press `?`)
+- ✅ Help overlay (press `?` — now works properly in combat!)
 - ✅ Meta-progression with Ink shop (buy permanent upgrades!)
 - ✅ Faction reputation system (displayed in Stats)
 - ✅ Boss-specific dialogue during boss fights
@@ -41,8 +41,19 @@
 - ✅ **EventBus architecture** — systems communicate dynamically
 - ✅ **Immersive combat** — per-keystroke feedback, enemy damage states, player avatars
 - ✅ **Visual effects LIVE** — floating damage numbers, screen shake, hit flash, combos
+- ✅ **Battle summaries** — stats shown after every fight (WPM, damage, accuracy)
+- ✅ **Run summaries** — comprehensive stats at victory/game over
+- ✅ **Save system** — save and load game progress
 
-### Recently Integrated (v0.5.3) 🔌
+### Recently Added (v0.5.4) 🎮
+**Stats & Polish** — Battle summaries, run stats, bug fixes:
+- ✅ **Battle Summary Screen** — shows after every combat with full stats
+- ✅ **Run Summary UI** — comprehensive stats at game end (win or lose)
+- ✅ **Real WPM Tracking** — accurate per-word WPM, peak WPM, averages
+- ✅ **"?" Key Fix** — can now type question marks in combat sentences
+- ✅ **Title Screen Update** — renamed to "KEYBOARD WARRIOR" with version
+
+### Previously Integrated (v0.5.3) 🔌
 **Effects System Wiring** — Visual juice now actually works:
 - ✅ **Game Loop Integration** — effects update every frame
 - ✅ **Damage Tracking** — accurate damage numbers on hits
@@ -82,9 +93,9 @@ Systems wired in previous release:
 - 🐛 Balance is completely untested — you might breeze or get wrecked
 - 🐛 Some events reference systems that don't exist yet
 - 🐛 Spell damage calculations are placeholder
-- 🐛 No save/load — death is permadeath, closing is also death
 - 🐛 Item effects are minimal
 - 🐛 The game "ending" is pretty anticlimactic
+- 🐛 Some run stats (total damage, perfect words) not yet tracked across full run
 
 This is a learning project. It compiles. It runs. It's fun to hack on. Don't expect polish. Expect to die.
 

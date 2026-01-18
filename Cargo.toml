@@ -1,6 +1,6 @@
 [package]
 name = "keyboard-warrior"
-version = "0.5.3"
+version = "0.5.4"
 edition = "2021"
 authors = ["Dr. Baklava"]
 description = "Finally, a reason to be a keyboard warrior. A high-fantasy typing roguelike for the terminal."

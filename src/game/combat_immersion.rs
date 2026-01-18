@@ -47,6 +47,8 @@ pub struct ImmersiveCombat {
     pub pending_messages: Vec<CombatMessage>,
     /// Is this a boss fight
     pub is_boss: bool,
+    /// Current typing WPM
+    pub current_wpm: f32,
 }
 
 /// Feedback for a single keystroke
@@ -158,6 +160,7 @@ impl ImmersiveCombat {
             last_word_feedback: None,
             pending_messages: Vec::new(),
             is_boss,
+            current_wpm: 0.0,
         }
     }
     
@@ -197,7 +200,8 @@ impl ImmersiveCombat {
     }
     
     /// Called when word is completed - returns comprehensive feedback
-    pub fn on_word_complete(&mut self, enemy_health_percent: i32, base_damage: i32) -> WordFeedback {
+    pub fn on_word_complete(&mut self, enemy_health_percent: i32, base_damage: i32, current_wpm: f32) -> WordFeedback {
+        self.current_wpm = current_wpm;
         let completion = self.typing.complete_word(base_damage);
         
         // Update dialogue context
@@ -383,7 +387,7 @@ impl ImmersiveCombat {
                 self.accuracy,
             ),
             zone: ZoneContext::from_floor(self.floor),
-            typing_speed: 5.0, // TODO: Track actual typing speed
+            typing_speed: self.current_wpm,
             accuracy: self.accuracy,
         }
     }
@@ -479,7 +483,7 @@ mod tests {
         combat.on_keystroke('s', true);
         combat.on_keystroke('t', true);
         
-        let feedback = combat.on_word_complete(50, 10);
+        let feedback = combat.on_word_complete(50, 10, 60.0);
         
         assert!(feedback.total_damage > 0);
         assert!(!feedback.message.is_empty());

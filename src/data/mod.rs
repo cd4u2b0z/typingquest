@@ -8,6 +8,10 @@ pub mod sentences;
 pub mod word_lists;
 pub mod enemies;
 pub mod lore_words;
+pub mod items;
+pub mod spells;
+pub mod zones;
+pub mod achievements;
 pub use lore_words::LoreWords;
 
 use std::fs;
@@ -17,6 +21,10 @@ use rand::seq::SliceRandom;
 pub use sentences::SentenceDatabase;
 pub use word_lists::WordDatabase;
 pub use enemies::EnemyDatabase;
+pub use items::{ItemDatabase, Equipment, Consumable, Relic, Rarity};
+pub use spells::{SpellDatabase, Spell, Element, SpellTier};
+pub use zones::{ZoneDatabase, Zone, SpecialMechanic};
+pub use achievements::{AchievementDatabase, Achievement, AchievementProgress, AchievementCategory, AchievementTier};
 
 /// Error type for data loading operations
 #[derive(Debug)]

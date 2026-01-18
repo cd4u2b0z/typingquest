@@ -40,6 +40,7 @@ pub enum Scene {
     Stats,
     GameOver,
     Victory,
+    BattleSummary,
     /// Lore discovery popup
     Lore,
     /// Milestone/story event
@@ -107,6 +108,8 @@ pub struct GameState {
     pub faction_voices: HashMap<Faction, FactionVoice>,
     /// Current NPC dialogue (if any)
     pub current_npc_dialogue: Option<(String, String)>,
+    /// Current battle summary (shown after combat)
+    pub current_battle_summary: Option<crate::ui::stats_summary::BattleSummary>,
     /// All authored encounters
     pub encounters: HashMap<String, AuthoredEncounter>,
     /// Tracks which encounters have been seen/choices made
@@ -162,6 +165,7 @@ impl GameState {
             skill_tree: SkillTree::new(),
             faction_voices: build_faction_voices(),
             current_npc_dialogue: None,
+            current_battle_summary: None,
             encounters: build_encounters(),
             encounter_tracker: EncounterTracker::new(),
             current_encounter: None,
@@ -253,6 +257,28 @@ impl GameState {
                 let gold_reward = ((enemy.gold_reward as f32) * self.run_modifiers.reward_multiplier).round() as u64;
                 let is_boss = enemy.is_boss;
                 
+                // Create battle summary
+                if let Some(combat) = &self.combat_state {
+                    let summary = crate::ui::stats_summary::BattleSummary {
+                        enemy_name: enemy_name.clone(),
+                        victory: true,
+                        was_boss: is_boss,
+                        xp_gained: xp_reward as i32,
+                        gold_gained: gold_reward as i32,
+                        damage_dealt: combat.total_damage_dealt,
+                        damage_taken: combat.total_damage_taken,
+                        turns_taken: combat.turn,
+                        words_completed: combat.turn,
+                        max_combo: combat.max_combo,
+                        accuracy: combat.correct_chars as f32 / combat.total_chars.max(1) as f32 * 100.0,
+                        avg_wpm: if combat.wpm_samples.is_empty() { 0.0 } else { combat.wpm_samples.iter().sum::<f32>() / combat.wpm_samples.len() as f32 },
+                        peak_wpm: combat.peak_wpm,
+                        perfect_words: 0, // TODO: track perfect words
+                        time_elapsed: combat.combat_start.elapsed().as_secs_f32(),
+                    };
+                    self.current_battle_summary = Some(summary);
+                }
+                
                 self.add_message(&format!("Defeated {}!", enemy_name));
                 
                 if let Some(player) = &mut self.player {
@@ -301,7 +327,8 @@ impl GameState {
                 dungeon.current_room.cleared = true;
                 dungeon.rooms_cleared += 1;
             }
-        self.scene = Scene::Dungeon;
+        // Transition to battle summary screen
+        self.scene = Scene::BattleSummary;
     }
 
     pub fn start_event(&mut self, event: GameEvent) {

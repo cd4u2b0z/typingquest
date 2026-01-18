@@ -10,9 +10,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Save/load persistence
-- Ink currency persistence between runs
-- Balance tuning pass
+- More comprehensive run stats tracking (total damage, perfect words, etc.)
+- Better death cause tracking for game over screen
+
+---
+
+## [0.5.4] - 2026-01-18
+
+### 🎮 UI/UX Improvements & Bug Fixes
+
+**Stats, Stats, Stats** — Battle summaries after every fight, comprehensive run stats at game end.
+
+### Fixed
+- **"?" Key Bug** — Question mark no longer opens help menu during combat typing
+  - Added `!in_typing_mode` check so "?" can be typed in sentences
+
+### Added - Battle Summary Screen
+- New `Scene::BattleSummary` shows after every combat victory
+- Displays: Enemy name, XP/gold earned, damage dealt/taken
+- Shows: WPM (average & peak), accuracy, max combo, time elapsed
+- Press any key to dismiss and return to dungeon
+
+### Added - Run Summary UI  
+- Enhanced game over screen with comprehensive stats
+- Enhanced victory screen with full run breakdown
+- Created `stats_summary.rs` (450+ lines) with rich stat rendering:
+  - `BattleSummary` struct for post-combat stats
+  - `RunSummary` struct for end-game stats
+  - `render_battle_summary()` — popup overlay after fights
+  - `render_run_summary()` — full-screen end-game stats
+
+### Added - Real WPM Tracking
+- `CombatState` now tracks: `wpm_samples`, `peak_wpm`, `total_damage_dealt`, `total_damage_taken`, `combat_start`
+- WPM tracked per-word and aggregated for battle/run summaries
+- Fixed `avg_wpm` calculation (was hardcoded to 0.0)
+- Fixed immersive combat typing speed (was placeholder 5.0)
+
+### Changed - Title Screen
+- Renamed from "TYPING QUEST" to "KEYBOARD WARRIOR" 
+- Added version number (v0.5.3) to title screen
+- Updated ASCII art banner
+
+### Technical
+- Added `current_battle_summary` field to `GameState`
+- Added `BattleSummary` scene handling to main input loop
+- Added `BattleSummary` to help system context
+- 57 Rust source files, ~29,500 lines of code
 
 ---
 
