@@ -21,6 +21,7 @@ use crate::game::{
     voice_system::{FactionVoice, build_faction_voices, generate_faction_dialogue, DialogueContext},
     narrative::Faction,
     encounter_writing::{AuthoredEncounter, EncounterTracker, build_encounters},
+    run_modifiers::{RunModifiers, RunType},
 };
 use crate::data::GameData;
 
@@ -111,6 +112,8 @@ pub struct GameState {
     pub encounter_tracker: EncounterTracker,
     /// Current authored encounter being displayed
     pub current_encounter: Option<AuthoredEncounter>,
+    /// Run modifiers affecting difficulty/rewards
+    pub run_modifiers: RunModifiers,
 }
 
 impl Default for GameState {
@@ -159,6 +162,7 @@ impl GameState {
             encounters: build_encounters(),
             encounter_tracker: EncounterTracker::new(),
             current_encounter: None,
+            run_modifiers: RunModifiers::new(),
         }
     }
 
@@ -231,7 +235,7 @@ impl GameState {
             if let Some(enemy) = &self.current_enemy {
                 let enemy_name = enemy.name.clone();
                 let xp_reward = ((enemy.xp_reward as f32) * self.skill_tree.get_xp_multiplier()).round() as u64;
-                let gold_reward = enemy.gold_reward as u64;
+                let gold_reward = ((enemy.gold_reward as f32) * self.run_modifiers.reward_multiplier).round() as u64;
                 let is_boss = enemy.is_boss;
                 
                 self.add_message(&format!("Defeated {}!", enemy_name));
@@ -477,6 +481,53 @@ impl GameState {
         }
     }
 
+
+    
+    /// Get enemy health multiplier from run modifiers
+    pub fn get_enemy_health_multiplier(&self) -> f32 {
+        use crate::game::run_modifiers::Modifier;
+        let mut mult = 1.0;
+        for active in &self.run_modifiers.active {
+            if let Modifier::ToughEnemies { health_multiplier } = active.modifier {
+                mult *= health_multiplier * active.level as f32;
+            }
+        }
+        mult
+    }
+    
+    /// Get enemy damage multiplier from run modifiers
+    pub fn get_enemy_damage_multiplier(&self) -> f32 {
+        use crate::game::run_modifiers::Modifier;
+        let mut mult = 1.0;
+        for active in &self.run_modifiers.active {
+            if let Modifier::DangerousEnemies { damage_multiplier } = active.modifier {
+                mult *= damage_multiplier * active.level as f32;
+            }
+        }
+        mult
+    }
+    
+    /// Get gold multiplier (reward_multiplier minus any drain)
+    pub fn get_gold_multiplier(&self) -> f32 {
+        use crate::game::run_modifiers::Modifier;
+        let mut mult = self.run_modifiers.reward_multiplier;
+        for active in &self.run_modifiers.active {
+            if let Modifier::GoldDrain { reduction_percent } = active.modifier {
+                mult *= 1.0 - (reduction_percent * active.level as f32);
+            }
+        }
+        mult.max(0.1) // Minimum 10% gold
+    }
+    
+    /// Set run type (applies preset modifiers)
+    pub fn set_run_type(&mut self, run_type: RunType) {
+        self.run_modifiers.set_run_type(run_type);
+    }
+    
+    /// Get total heat level
+    pub fn get_heat_level(&self) -> u32 {
+        self.run_modifiers.total_heat
+    }
 
     pub fn check_game_over(&mut self) -> bool {
         if let Some(player) = &self.player {
