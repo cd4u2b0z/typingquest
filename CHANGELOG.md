@@ -16,47 +16,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.5.2] - 2026-01-18
+## [0.5.3] - 2026-01-18
 
-### 💥 Visual Juice System
+### 🔌 Effects System Wiring
 
-**Feel Every Hit** — Combat now has visual punch with floating damage numbers, screen shake, and dynamic effects.
+**Actually Working Now** — All the visual juice systems are now properly connected to the game loop.
 
-### Added - Effects System
-- **FloatingText**: Damage numbers that float up and fade out
-  - Red for normal damage, yellow for criticals
-  - Cyan for combo celebrations
-  - White for "PERFECT!" indicators
-  - Green for heals
-- **ScreenShake**: Light/medium/heavy impact feedback with decay
-- **HitFlash**: Border color flashes on hits (red/white/yellow)
-- **ComboPulse**: Scaling animation on combo counter
-- **TypingRipple**: Per-keystroke visual feedback
-- **EffectsManager**: Centralized effect coordination and cleanup
+### Fixed - System Integration
+- **Game Loop**: `update_effects()` called every frame to animate effects
+- **Immersion Updates**: `immersive_update()` called during combat tick
+- **Damage Tracking**: Deferred pattern to avoid Rust borrow checker issues
+- **Combat Render**: Switched to `render_combat_enhanced()` for full visual experience
+- **Effect Triggers**: Player/enemy damage now triggers floating numbers, screen shake, hit flash
+- **Combo Effects**: Combo celebrations trigger on combo > 1
 
-### Added - Enhanced Combat Render
-- Enemy health-based color tinting (white → yellow → orange → red)
-- Danger indicators on HP bars (💀 CRITICAL!)
-- Combat dialogue integration from immersion system
-- Dynamic combo display (🔥 STREAK!, ⚡ UNSTOPPABLE!)
-- Player avatar state indicators (⚔️ 🛡️ 💥)
-- Color-coded battle log messages
-- Floating effects overlay rendered on top of combat
-- Hit flash border effect
+### Added
+- `render_effects_overlay()` function in render.rs
+- `EffectsManager::clear()` method for combat reset
+- Enemy HP tracking before/after attacks for accurate damage display
+- Deferred effects pattern (capture data, release borrow, then trigger)
 
-### Added - GameState Effect Triggers
-- `effect_player_damage(damage, is_crit)` — on dealing damage
-- `effect_enemy_damage(damage)` — when player takes damage
-- `effect_combo(combo)` — combo celebrations
-- `effect_keystroke(correct)` — typing feedback
-- `effect_victory()` / `effect_defeat()` — end state effects
-- `effect_heal(amount)` / `effect_perfect()` — positive feedback
-- `update_effects()` — call each frame for animation
-
-### Changed
-- UI module now exports `effects` and `combat_render`
-- GameState includes `EffectsManager` field
-- 28 tests passing (4 new effects tests)
+### Technical
+- Fixed borrow checker conflicts with deferred effect pattern
+- Effects now properly animate and clean up expired effects
+- 56 Rust source files, ~29,000 lines of code
 
 ---
 

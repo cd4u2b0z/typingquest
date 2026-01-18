@@ -356,7 +356,7 @@ keyboard-warrior/
 🗑️ = Legacy/deprecated
 ```
 
-**~28,000 lines of Rust** across 55 source files.
+**~29,000 lines of Rust** across 56 source files.
 
 ---
 
