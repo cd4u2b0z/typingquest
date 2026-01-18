@@ -252,8 +252,8 @@ keyboard-warrior/
 │   │   ├── mod.rs                 # Module exports
 │   │   │
 │   │   │ # ─── CORE SYSTEMS (wired up) ───
-│   │   ├── state.rs               # ✅ Game state, scene management (348)
-│   │   ├── combat.rs              # ✅ Combat state, spell mode (520)
+│   │   ├── state.rs               # ✅ Game state, scene management (500+)
+│   │   ├── combat.rs              # ✅ Combat state, skill integration (600+)
 │   │   ├── combat_engine.rs       # ✅ Damage calc, word generation (510)
 │   │   ├── combat_events.rs       # ✅ Combat event handling (282)
 │   │   ├── player.rs              # ✅ Player, classes, leveling (381)
@@ -275,28 +275,30 @@ keyboard-warrior/
 │   │   ├── meta_progression.rs    # ✅ Ink/unlocks framework (612)
 │   │   ├── save.rs                # ✅ Save/load system (299)
 │   │   │
-│   │   │ # ─── WORLD & LORE (fantasy overhaul complete) ───
+│   │   │ # ─── INTEGRATED SYSTEMS (v0.5.0) ───
+│   │   ├── event_bus.rs           # ✅ Central event messaging (594)
+│   │   ├── narrative_seed.rs      # ✅ Corruption effects on typing (906)
+│   │   ├── skills.rs              # ✅ Skill trees → combat (490+)
+│   │   ├── voice_system.rs        # ✅ Faction NPC dialogue (794)
+│   │   ├── encounter_writing.rs   # ✅ Authored exploration events (783)
+│   │   ├── run_modifiers.rs       # ✅ Difficulty scaling (632)
+│   │   │
+│   │   │ # ─── WORLD & LORE (content complete) ───
 │   │   ├── deep_lore.rs           # 🔸 High fantasy cosmology (1,016)
 │   │   ├── lore_fragments.rs      # 🔸 Discoverable lore pieces (752)
 │   │   ├── narrative.rs           # 🔸 Core narrative structures (486)
-│   │   ├── narrative_seed.rs      # 🔸 Story generation (906)
 │   │   ├── narrative_integration.rs # 🔸 Narrative hooks (649)
 │   │   ├── world.rs               # 🔸 World locations (607)
 │   │   ├── world_engine.rs        # 🔸 World simulation (274)
 │   │   ├── world_integration.rs   # 🔸 Zone definitions (407)
 │   │   ├── writing_guidelines.rs  # 🔸 Tone/style guide (540)
 │   │   │
-│   │   │ # ─── CHARACTERS & VOICE (dormant) ───
-│   │   ├── voice_system.rs        # 🔸 NPC personality (794)
+│   │   │ # ─── CHARACTERS & QUESTS (dormant) ───
 │   │   ├── characters.rs          # 🔸 NPC definitions (329)
 │   │   ├── quests.rs              # 🔸 Quest system (368)
 │   │   │
-│   │   │ # ─── ADVANCED SYSTEMS (dormant) ───
-│   │   ├── skills.rs              # 🔸 Skill trees (490)
-│   │   ├── typing_context.rs      # 🔸 Thematic words (754)
-│   │   ├── encounter_writing.rs   # 🔸 Authored events (783)
-│   │   ├── run_modifiers.rs       # 🔸 Challenge variants (632)
-│   │   ├── event_bus.rs           # 🔸 Event messaging (594)
+│   │   │ # ─── LEGACY ───
+│   │   ├── typing_context.rs      # 🔄 Replaced by lore_words.rs (754)
 │   │   └── enemy_old.rs           # 🗑️ Legacy (240)
 │   │
 │   ├── ui/                        # Rendering (~2,000 lines)
@@ -311,6 +313,9 @@ keyboard-warrior/
 │       ├── word_lists.rs          # More words (155)
 │       └── lore_words.rs          # ✅ Zone/enemy/boss word pools (350)
 │
+├── docs/
+│   └── SYSTEM_INTEGRATION_PLAN.md # Integration roadmap (completed)
+│
 ├── .github/                       # GitHub configuration
 │   ├── workflows/ci.yml           # CI pipeline (Rust checks, cross-build)
 │   ├── ISSUE_TEMPLATE/            # Bug report, feature request templates
@@ -321,7 +326,8 @@ keyboard-warrior/
 └── README.md
 
 ✅ = Wired up and working
-🔸 = Written, lore updated, not connected to gameplay
+🔸 = Content written, not connected to gameplay
+🔄 = Superseded
 🗑️ = Legacy/deprecated
 ```
 
