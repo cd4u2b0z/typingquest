@@ -10,7 +10,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.70+-DEA584?style=flat&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.5.0-blue?style=flat)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.5.1-blue?style=flat)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/Status-Active_Development_🔥-orange?style=flat)]()
 [![TUI](https://img.shields.io/badge/TUI-ratatui-purple?style=flat)](https://github.com/ratatui-org/ratatui)
 
@@ -20,7 +20,7 @@
 
 **This is a personal hobby project — a fun "fuck around and find out" experiment in terminal game development.**
 
-### What Actually Works (v0.5.0)
+### What Actually Works (v0.5.1)
 - ✅ Full 10-floor dungeon progression with zone-themed encounters
 - ✅ Combat with typing, combos, and flow states
 - ✅ **Lore-integrated typing** — words match the zone, enemy, and story
@@ -39,9 +39,19 @@
 - ✅ Boss-specific dialogue during boss fights
 - ✅ Narrative progression through typed sentences
 - ✅ **EventBus architecture** — systems communicate dynamically
+- ✅ **Immersive combat** — per-keystroke feedback, enemy damage states, player avatars
 
-### Recently Integrated (v0.5.0) 🔗
-These dormant systems are now ACTIVE and affecting gameplay:
+### Recently Integrated (v0.5.1) 🎭
+**Immersion Overhaul** — Combat now feels visceral and alive:
+- ✅ **Typing Impact** (372 lines) — per-keystroke damage, rhythm bonuses, attack types
+- ✅ **Dialogue Engine** (384 lines) — context-aware enemy taunts and death rattles
+- ✅ **Enemy Visuals** (412 lines) — progressive ASCII damage, posture shifts, wound overlays
+- ✅ **Pacing System** (370 lines) — tension/breather beats, atmospheric messages
+- ✅ **Player Avatar** (381 lines) — class-based visual presence with combat animations
+- ✅ **Combat Immersion** (498 lines) — unified wrapper integrating all systems
+
+### Previously Integrated (v0.5.0) 🔗
+Systems wired in previous release:
 - ✅ **EventBus** (60+ event types) — central nervous system for game events
 - ✅ **NarrativeSeed** — corruption types that modify typing patterns
 - ✅ **SkillTree** (5 trees, 25+ skills) — combat modifiers actually apply
@@ -275,7 +285,7 @@ keyboard-warrior/
 │   │   ├── meta_progression.rs    # ✅ Ink/unlocks framework (612)
 │   │   ├── save.rs                # ✅ Save/load system (299)
 │   │   │
-│   │   │ # ─── INTEGRATED SYSTEMS (v0.5.0) ───
+│   │   │ # ─── INTEGRATED SYSTEMS (v0.5.1) ───
 │   │   ├── event_bus.rs           # ✅ Central event messaging (594)
 │   │   ├── narrative_seed.rs      # ✅ Corruption effects on typing (906)
 │   │   ├── skills.rs              # ✅ Skill trees → combat (490+)

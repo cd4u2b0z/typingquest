@@ -16,6 +16,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.1] - 2026-01-18
+
+### 🎭 Immersion Overhaul
+
+**Every Keystroke Tells a Story** — 2,500+ lines of new immersion systems that make combat feel visceral and alive.
+
+### Added - Typing Impact System
+- **Per-keystroke damage tracking**: Each keypress contributes incremental damage
+- **Rhythm detection**: Fast, consistent typing triggers "Flurry" attacks
+- **Attack types**: Light Jab, Quick Strike, Solid Hit, Power Strike, Critical Blow
+- **Visual intensity scaling**: Damage feedback correlates with typing speed
+
+### Added - Dialogue Engine
+- **Context-aware enemy dialogue**: Enemies react based on their health, your combo, combat phase
+- **6 personality themes**: Goblin (crude), Undead (nihilistic), Spectral (cryptic), etc.
+- **Dynamic taunts and death rattles**: "Your words cut deeper than steel..."
+- **Player momentum tracking**: Dominant/Confident/Struggling states affect dialogue
+
+### Added - Enemy Visual States
+- **Progressive ASCII damage**: Enemy art deteriorates as they take damage
+- **5 posture states**: Confident -> Wary -> Staggered -> Wounded -> Dying
+- **Wound overlays**: Slash marks, blood particles appear on enemy art
+- **Health-synced animations**: Visual shifts at 75%, 50%, 25%, 10% HP
+
+### Added - Pacing System
+- **Tension/breather beats**: Combat flow alternates intensity naturally
+- **Boss tension multipliers**: Boss fights maintain higher baseline tension
+- **Atmospheric messages**: "The air grows thick..." during tension peaks
+- **Recovery windows**: Brief pauses after defeating enemies
+
+### Added - Player Avatar
+- **4 class-based avatars**: Wordsmith, Chronicler, Codebreaker, Freelancer
+- **Combat animation states**: Idle, Attacking, Hit, Victory, Defeat
+- **Wounded variations**: Avatar art changes when HP is low
+- **Visual presence**: Player now has on-screen representation
+
+### Added - Combat Immersion Wrapper
+- **ImmersiveCombat struct**: Unified API integrating all subsystems
+- **Enemy theme inference**: Auto-detects goblin/undead/spectral from name
+- **Read-only rendering**: Supports immutable render contexts
+- **Optional integration**: Graceful degradation if not initialized
+
+### Changed
+- CombatState gains optional immersive field
+- init_immersion(player_class) one-call setup
+- Helper methods for keystroke/word/render feedback
+- Maps game Class to avatar PlayerClass
+
+---
+
 ## [0.5.0] - 2026-01-18
 
 ### 🔗 Deep System Integration

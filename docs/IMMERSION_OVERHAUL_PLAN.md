@@ -4,6 +4,24 @@
 
 ---
 
+## ✅ IMPLEMENTATION COMPLETE — v0.5.1 (2026-01-18)
+
+All planned systems have been implemented:
+
+| System | Status | Lines | Module |
+|--------|--------|-------|--------|
+| Typing Impact | ✅ Complete | 372 | typing_impact.rs |
+| Dialogue Engine | ✅ Complete | 384 | dialogue_engine.rs |
+| Enemy Visuals | ✅ Complete | 412 | enemy_visuals.rs |
+| Pacing System | ✅ Complete | 370 | pacing.rs |
+| Player Avatar | ✅ Complete | 381 | player_avatar.rs |
+| Combat Immersion | ✅ Complete | 498 | combat_immersion.rs |
+| **Total** | **✅** | **2,417** | **6 modules** |
+
+Integration into CombatState complete with readonly rendering support.
+
+---
+
 ## Executive Summary
 
 Your game has **excellent architectural bones** — 794 lines of voice system, 540 lines of writing guidelines, 550 lines of typing feel, a full event bus. But these systems whisper when they should shout. The player types into a void and numbers change.
