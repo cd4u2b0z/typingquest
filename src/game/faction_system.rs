@@ -238,6 +238,21 @@ impl FactionRelations {
             bounty.hunters_sent += 1;
         }
     }
+    
+    /// Modify standing with all factions slightly (for general deeds)
+    pub fn modify_all_standings(&mut self, change: i32, _reason: &str) {
+        let factions = vec![
+            Faction::MagesGuild,
+            Faction::TempleOfDawn,
+            Faction::RangersOfTheWild,
+            Faction::ShadowGuild,
+            Faction::MerchantConsortium,
+        ];
+        for faction in factions {
+            let current = self.standings.entry(faction).or_insert(0);
+            *current = (*current + change).clamp(-100, 100);
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

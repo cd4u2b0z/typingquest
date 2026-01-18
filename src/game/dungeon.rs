@@ -293,6 +293,11 @@ impl Dungeon {
         
         map
     }
+    
+    /// Get the current zone name
+    pub fn get_zone_name(&self) -> String {
+        self.zone_name.clone()
+    }
 }
 
 impl Room {

@@ -14,6 +14,9 @@ use crate::game::{
     typing_feel::TypingFeel,
     faction_system::FactionRelations,
     meta_progression::MetaProgress,
+    event_bus::{EventBus, GameEvent as BusEvent, CombatOutcome},
+    narrative_seed::{NarrativeSeed, TypingModifier},
+    skills::SkillTree,
 };
 use crate::data::GameData;
 
@@ -86,6 +89,14 @@ pub struct GameState {
     pub damage_bonus_percent: f32,
     /// Meta-progression time bonus (from unlocks)
     pub time_bonus_percent: f32,
+    /// Central event bus for system communication
+    pub event_bus: EventBus,
+    /// Narrative seed for run coherence
+    pub narrative_seed: Option<NarrativeSeed>,
+    /// Active typing modifier from corruption
+    pub active_typing_modifier: Option<TypingModifier>,
+    /// Player skill tree
+    pub skill_tree: SkillTree,
 }
 
 impl Default for GameState {
@@ -125,6 +136,10 @@ impl GameState {
             meta_progress: MetaProgress::default(),
             damage_bonus_percent: 0.0,
             time_bonus_percent: 0.0,
+            event_bus: EventBus::new(),
+            narrative_seed: None,
+            active_typing_modifier: None,
+            skill_tree: SkillTree::new(),
         }
     }
 
@@ -150,6 +165,20 @@ impl GameState {
             self.add_message(&format!("Meta-bonuses: +{} HP, +{} Gold", bonus.hp_bonus, bonus.gold_bonus));
         }
         self.add_message("Your typing quest begins!");
+        
+        // Generate narrative seed for this run
+        let seed = NarrativeSeed::generate_random();
+        self.active_typing_modifier = Some(seed.world_state.corruption_type.typing_modifier());
+        
+        // Emit run start event
+        self.event_bus.emit(BusEvent::ChapterStarted {
+            chapter: 1,
+            title: format!("The {} begins", seed.world_state.corruption_type.name()),
+        });
+        
+        // Show corruption warning
+        self.add_message(&format!("󰈸 The {} corrupts this realm...", seed.world_state.corruption_type.name()));
+        self.narrative_seed = Some(seed);
     }
 
     pub fn add_message(&mut self, msg: &str) {
@@ -161,13 +190,21 @@ impl GameState {
     }
 
     pub fn start_combat(&mut self, enemy: Enemy) {
+        let enemy_name = enemy.name.clone();
+        let zone_name = self.dungeon.as_ref().map(|d| d.get_zone_name()).unwrap_or_else(|| "Unknown".to_string());
+        
         self.current_enemy = Some(enemy.clone());
         let difficulty = self.dungeon.as_ref().map(|d| d.current_floor as u32).unwrap_or(1);
-        self.combat_state = Some(CombatState::new(enemy, self.game_data.clone(), difficulty, difficulty));
+        self.combat_state = Some(CombatState::new(enemy, self.game_data.clone(), difficulty, difficulty, self.active_typing_modifier.clone()));
         self.scene = Scene::Combat;
-        if let Some(e) = &self.current_enemy {
-            self.add_message(&format!("{} appears!", e.name));
-        }
+        
+        self.add_message(&format!("{} appears!", enemy_name));
+        
+        // Emit combat start event
+        self.event_bus.emit(BusEvent::CombatStarted {
+            enemy: enemy_name,
+            location: zone_name,
+        });
     }
 
     pub fn end_combat(&mut self, victory: bool) {
@@ -185,6 +222,21 @@ impl GameState {
                     player.gold += gold_reward;
                 }
                 self.total_enemies_defeated += 1;
+                
+                // Emit combat victory event
+                self.event_bus.emit(BusEvent::CombatEnded {
+                    enemy: enemy_name.clone(),
+                    outcome: CombatOutcome::Victory {
+                        xp_gained: xp_reward as u32,
+                        loot: vec![format!("{} gold", gold_reward)],
+                    },
+                });
+                
+                // Emit XP event
+                self.event_bus.emit(BusEvent::ExperienceGained {
+                    amount: xp_reward as u32,
+                    source: enemy_name.clone(),
+                });
                 
                 // Mark boss as defeated for this floor
                 if is_boss {
@@ -347,6 +399,53 @@ impl GameState {
     pub fn move_menu_down(&mut self, max: usize) {
         if self.menu_index < max.saturating_sub(1) {
             self.menu_index += 1;
+        }
+    }
+    
+    /// Process all pending events from the event bus
+    /// This is the "nervous system" - where systems react to each other
+    pub fn process_events(&mut self) {
+        // Tick deferred events
+        self.event_bus.tick();
+        
+        // Process all pending events
+        let events = self.event_bus.drain_all();
+        for event in events {
+            self.handle_event(event);
+        }
+    }
+    
+    /// Handle a single game event - triggers reactions across systems
+    fn handle_event(&mut self, event: BusEvent) {
+        match &event {
+            BusEvent::CombatEnded { enemy, outcome } => {
+                // Update faction relations based on combat
+                if let CombatOutcome::Victory { .. } = outcome {
+                    // Defeating enemies improves reputation with most factions
+                    self.faction_relations.modify_all_standings(1, &format!("Defeated {}", enemy));
+                }
+            }
+            BusEvent::ExperienceGained { amount, source } => {
+                // Track XP for statistics
+                if let Some(player) = &self.player {
+                    self.add_message(&format!("Gained {} XP from {}", amount, source));
+                }
+            }
+            BusEvent::LoreDiscovered { lore_id, category } => {
+                // Could trigger UI notification, journal update, etc.
+                self.add_message(&format!("Discovered lore: {} ({})", lore_id, category));
+            }
+            BusEvent::FactionStandingChanged { faction, old_standing, new_standing, reason } => {
+                let direction = if new_standing > old_standing { "improved" } else { "worsened" };
+                self.add_message(&format!("Your standing with {:?} has {} ({})", faction, direction, reason));
+            }
+            BusEvent::PlayerLeveledUp { new_level, skill_points } => {
+                self.add_message(&format!("Level up! Now level {} (+{} skill points)", new_level, skill_points));
+            }
+            // Add more event handlers as systems get wired up
+            _ => {
+                // Log unhandled events for debugging if needed
+            }
         }
     }
 }

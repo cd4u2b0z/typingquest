@@ -101,6 +101,9 @@ fn run_game(
                 game.check_game_over();
             }
         }
+        
+        // Process events from the event bus (system reactions)
+        game.process_events();
     }
 
     Ok(())

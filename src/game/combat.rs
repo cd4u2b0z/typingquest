@@ -3,6 +3,7 @@
 use std::time::{Duration, Instant};
 use std::sync::Arc;
 use super::{player::Player, enemy::Enemy, spells::Spell};
+use super::narrative_seed::TypingModifier;
 use crate::data::GameData;
 use rand::Rng;
 
@@ -36,6 +37,10 @@ pub struct CombatState {
     pub selected_spell: Option<usize>,
     /// The spell incantation to type (when in spell mode)
     pub spell_incantation: Option<String>,
+    /// Active corruption modifier affecting typing
+    pub corruption_modifier: Option<TypingModifier>,
+    /// Damage from corruption mistakes this combat
+    pub corruption_damage_taken: i32,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -63,7 +68,7 @@ pub struct CombatResult {
 }
 
 impl CombatState {
-    pub fn new(enemy: Enemy, game_data: Arc<GameData>, difficulty: u32, floor: u32) -> Self {
+    pub fn new(enemy: Enemy, game_data: Arc<GameData>, difficulty: u32, floor: u32, corruption: Option<TypingModifier>) -> Self {
         // Use sentences for bosses or high difficulty, otherwise words
         let use_sentences = enemy.is_boss || difficulty >= 5;
         let starting_word = if use_sentences {
@@ -105,6 +110,8 @@ impl CombatState {
             spell_mode: false,
             selected_spell: None,
             spell_incantation: None,
+            corruption_modifier: corruption,
+            corruption_damage_taken: 0,
         }
     }
 
@@ -158,6 +165,12 @@ impl CombatState {
         let expected_char = self.current_word.chars().nth(self.typed_input.len() - 1);
         if expected_char == Some(c) {
             self.correct_chars += 1;
+        } else {
+            // Corruption effect: MistakesDealDamage
+            if let Some(TypingModifier::MistakesDealDamage { damage_per_error }) = &self.corruption_modifier {
+                self.corruption_damage_taken += damage_per_error;
+                self.battle_log.push(format!("Corruption punishes your error! (-{} HP)", damage_per_error));
+            }
         }
 
         // Check if word is complete
