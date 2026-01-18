@@ -195,7 +195,7 @@ impl Region {
      /       |     KNOWLEDGE     |       \
     /_________|___________________|_______\
 "#.to_string(),
-            faction_territory: Some(Faction::Archivists),
+            faction_territory: Some(Faction::MerchantConsortium),
             danger_level: 3,
             locations: vec![
                 Location {
@@ -266,7 +266,7 @@ impl Region {
       /  [KEY][KEY][KEY][KEY]  \
      /_________________________\
 "#.to_string(),
-            faction_territory: Some(Faction::Mechanists),
+            faction_territory: Some(Faction::TempleOfDawn),
             danger_level: 5,
             locations: vec![
                 Location {
@@ -281,7 +281,7 @@ impl Region {
                         sentences: vec![
                             "Speed is life. Hesitation is death. Type or be forgotten.".to_string(),
                         ],
-                        reward: ChallengeReward::FactionReputation(Faction::Mechanists, 20),
+                        reward: ChallengeReward::FactionReputation(Faction::TempleOfDawn, 20),
                         repeatable: true,
                     }),
                 },
@@ -325,7 +325,7 @@ impl Region {
             . . . . . . . .
               SHADOW QUARTER
 "#.to_string(),
-            faction_territory: Some(Faction::ShadowWriters),
+            faction_territory: Some(Faction::ShadowGuild),
             danger_level: 6,
             locations: vec![
                 Location {
@@ -348,7 +348,7 @@ impl Region {
                 "Somewhere, a deal is struck. Somewhere else, a secret dies.".to_string(),
             ],
             accessible: false,
-            discovery_requirement: Some(DiscoveryRequirement::FactionReputation(Faction::ShadowWriters, 20)),
+            discovery_requirement: Some(DiscoveryRequirement::FactionReputation(Faction::ShadowGuild, 20)),
         }
     }
     
@@ -381,7 +381,7 @@ impl Region {
              GREEN
               WORD
 "#.to_string(),
-            faction_territory: Some(Faction::Naturalists),
+            faction_territory: Some(Faction::RangersOfTheWild),
             danger_level: 4,
             locations: vec![
                 Location {

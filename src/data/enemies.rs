@@ -106,8 +106,8 @@ impl EnemyDatabase {
         // === TIER 1: Tutorial/Easy ===
         enemies.insert("typo_gremlin".to_string(), EnemyTemplate {
             id: "typo_gremlin".to_string(),
-            name: "Typo Gremlin".to_string(),
-            description: "A mischievous creature that feeds on typing mistakes.".to_string(),
+            name: "Goblin Lurker".to_string(),
+            description: "A small, wretched creature that lurks in dark corners.".to_string(),
             base_hp: 20,
             base_damage: 5,
             base_defense: 0,
@@ -124,14 +124,14 @@ impl EnemyDatabase {
                 "The gremlin giggles and throws a typo at you!".to_string(),
                 "It scribbles errors in the air!".to_string(),
             ],
-            death_message: "The gremlin dissolves into scattered letters.".to_string(),
+            death_message: "The goblin falls with a pitiful screech.".to_string(),
             special_ability: None,
         });
         
         enemies.insert("word_wisp".to_string(), EnemyTemplate {
             id: "word_wisp".to_string(),
-            name: "Word Wisp".to_string(),
-            description: "A ghostly fragment of forgotten text.".to_string(),
+            name: "Spectral Wisp".to_string(),
+            description: "A shimmering spirit of the restless dead.".to_string(),
             base_hp: 15,
             base_damage: 8,
             base_defense: 0,
@@ -148,15 +148,15 @@ impl EnemyDatabase {
                 "The wisp flickers with malevolent light!".to_string(),
                 "Ghostly letters swirl around you!".to_string(),
             ],
-            death_message: "The wisp fades, its words returning to silence.".to_string(),
+            death_message: "The wisp dissipates into ethereal mist.".to_string(),
             special_ability: None,
         });
         
         // === TIER 2-3: Early Game ===
         enemies.insert("syntax_spider".to_string(), EnemyTemplate {
             id: "syntax_spider".to_string(),
-            name: "Syntax Spider".to_string(),
-            description: "Weaves webs of confusing punctuation.".to_string(),
+            name: "Venomous Spider".to_string(),
+            description: "A giant arachnid with venom-dripping fangs.".to_string(),
             base_hp: 35,
             base_damage: 12,
             base_defense: 2,
@@ -174,14 +174,14 @@ impl EnemyDatabase {
                 "The spider shoots a web of semicolons!".to_string(),
                 "It tangles you in nested parentheses!".to_string(),
             ],
-            death_message: "The spider's web unravels into clean code.".to_string(),
+            death_message: "The spider curls and goes still.".to_string(),
             special_ability: Some(SpecialAbility::Corruption { extra_chars: 2 }),
         });
         
         enemies.insert("vowel_vampire".to_string(), EnemyTemplate {
             id: "vowel_vampire".to_string(),
-            name: "Vowel Vampire".to_string(),
-            description: "Drains the vowels from your words.".to_string(),
+            name: "Lesser Vampire".to_string(),
+            description: "An undead creature that thirsts for mortal essence.".to_string(),
             base_hp: 45,
             base_damage: 15,
             base_defense: 3,
@@ -200,15 +200,15 @@ impl EnemyDatabase {
                 "The vampire hisses, stealing your vowels!".to_string(),
                 "It bites into your text hungrily!".to_string(),
             ],
-            death_message: "The vampire crumbles, vowels escaping like bats.".to_string(),
+            death_message: "The vampire crumbles to ash and bone.".to_string(),
             special_ability: Some(SpecialAbility::Blind { duration: 2.0 }),
         });
         
         // === TIER 4-5: Mid Game ===
         enemies.insert("corrupted_typer".to_string(), EnemyTemplate {
             id: "corrupted_typer".to_string(),
-            name: "Corrupted Typer".to_string(),
-            description: "Once a skilled typist, now consumed by the Unwriting.".to_string(),
+            name: "Blighted Thrall".to_string(),
+            description: "A shambling corpse corrupted by dark magic.".to_string(),
             base_hp: 60,
             base_damage: 18,
             base_defense: 5,
@@ -228,14 +228,14 @@ impl EnemyDatabase {
                 "The corrupted typer hammers keys randomly!".to_string(),
                 "Gibberish streams from their broken fingers!".to_string(),
             ],
-            death_message: "They collapse, whispering 'I remember... words...'".to_string(),
+            death_message: "The thrall crumbles, finally at peace".to_string(),
             special_ability: Some(SpecialAbility::WordScramble),
         });
         
         enemies.insert("meaning_eater".to_string(), EnemyTemplate {
             id: "meaning_eater".to_string(),
-            name: "Meaning Eater".to_string(),
-            description: "A creature that devours the significance of words.".to_string(),
+            name: "Soul Devourer".to_string(),
+            description: "A fiend that feeds on the souls of the fallen.".to_string(),
             base_hp: 75,
             base_damage: 20,
             base_defense: 6,
@@ -254,15 +254,15 @@ impl EnemyDatabase {
                 "The creature opens its maw to consume your words!".to_string(),
                 "Your sentences feel hollow as meaning drains away!".to_string(),
             ],
-            death_message: "The creature implodes, releasing stolen meanings.".to_string(),
+            death_message: "The devourer releases its stolen souls in a blinding flash.".to_string(),
             special_ability: Some(SpecialAbility::TimeWarp { reduction: 3.0 }),
         });
         
         // === TIER 6-7: Late Game ===
         enemies.insert("grammar_golem".to_string(), EnemyTemplate {
             id: "grammar_golem".to_string(),
-            name: "Grammar Golem".to_string(),
-            description: "Constructed from petrified punctuation and solidified syntax.".to_string(),
+            name: "Stone Golem".to_string(),
+            description: "A massive construct of animated stone and ancient magic.".to_string(),
             base_hp: 100,
             base_damage: 25,
             base_defense: 10,
@@ -281,14 +281,14 @@ impl EnemyDatabase {
                 "The golem swings a fist of fossilized footnotes!".to_string(),
                 "Ancient grammatical rules crash down upon you!".to_string(),
             ],
-            death_message: "The golem crumbles into a pile of properly parsed sentences.".to_string(),
+            death_message: "The golem crumbles into inert rubble.".to_string(),
             special_ability: Some(SpecialAbility::Enrage { damage_mult: 1.5, duration: 5.0 }),
         });
         
         enemies.insert("void_scribe".to_string(), EnemyTemplate {
             id: "void_scribe".to_string(),
-            name: "Void Scribe".to_string(),
-            description: "A being that writes in darkness, erasing as it creates.".to_string(),
+            name: "Void Walker".to_string(),
+            description: "A traveler between worlds, touched by the Void.".to_string(),
             base_hp: 90,
             base_damage: 30,
             base_defense: 8,
@@ -308,15 +308,15 @@ impl EnemyDatabase {
                 "The scribe writes your doom in invisible ink!".to_string(),
                 "Words appear and vanish simultaneously!".to_string(),
             ],
-            death_message: "The void scribe dissolves, its empty pages scattering.".to_string(),
+            death_message: "The walker fades back into the darkness.".to_string(),
             special_ability: Some(SpecialAbility::Mirror),
         });
         
         // === TIER 8-10: Endgame ===
         enemies.insert("entropy_weaver".to_string(), EnemyTemplate {
             id: "entropy_weaver".to_string(),
-            name: "Entropy Weaver".to_string(),
-            description: "Spins threads of chaos through the fabric of language.".to_string(),
+            name: "Shadow Weaver".to_string(),
+            description: "A dark sorcerer that weaves deadly shadow magic.".to_string(),
             base_hp: 120,
             base_damage: 35,
             base_defense: 12,
@@ -335,14 +335,14 @@ impl EnemyDatabase {
                 "Reality unravels at the seams!".to_string(),
                 "Your words tangle into meaningless threads!".to_string(),
             ],
-            death_message: "The weaver's threads snap, order restored.".to_string(),
+            death_message: "The weaver's shadows disperse into nothing.".to_string(),
             special_ability: Some(SpecialAbility::WordScramble),
         });
         
         enemies.insert("paragraph_phantom".to_string(), EnemyTemplate {
             id: "paragraph_phantom".to_string(),
-            name: "Paragraph Phantom".to_string(),
-            description: "A spectral mass of forgotten manuscripts haunting the margins.".to_string(),
+            name: "Wailing Wraith".to_string(),
+            description: "The tormented spirit of one who died in anguish.".to_string(),
             base_hp: 110,
             base_damage: 28,
             base_defense: 15,
@@ -361,14 +361,14 @@ impl EnemyDatabase {
                 "Ghostly paragraphs surge toward you!".to_string(),
                 "The phantom rewrites your fate!".to_string(),
             ],
-            death_message: "The phantom disperses into scattered punctuation.".to_string(),
+            death_message: "The wraith fades with a final mournful wail.".to_string(),
             special_ability: Some(SpecialAbility::Blind { duration: 3.0 }),
         });
         
         enemies.insert("lexicon_leviathan".to_string(), EnemyTemplate {
             id: "lexicon_leviathan".to_string(),
-            name: "Lexicon Leviathan".to_string(),
-            description: "A massive beast formed from ten thousand dictionaries.".to_string(),
+            name: "Ancient Wyrm".to_string(),
+            description: "An ancient dragon-kin of immense power.".to_string(),
             base_hp: 150,
             base_damage: 40,
             base_defense: 18,
@@ -387,14 +387,14 @@ impl EnemyDatabase {
                 "The leviathan speaks in tongues long dead!".to_string(),
                 "A tidal wave of definitions crashes down!".to_string(),
             ],
-            death_message: "The leviathan collapses, words scattering like scales.".to_string(),
+            death_message: "The wyrm crashes down, its reign ended.".to_string(),
             special_ability: Some(SpecialAbility::Summon { enemy_id: "word_wisp".to_string(), count: 2 }),
         });
         
         enemies.insert("silence_incarnate".to_string(), EnemyTemplate {
             id: "silence_incarnate".to_string(),
-            name: "Silence Incarnate".to_string(),
-            description: "The physical manifestation of empty pages and unwritten thoughts.".to_string(),
+            name: "Death Knight".to_string(),
+            description: "An undead warrior of terrible skill and cold resolve.".to_string(),
             base_hp: 140,
             base_damage: 45,
             base_defense: 20,
@@ -413,16 +413,16 @@ impl EnemyDatabase {
                 "...".to_string(),
                 "The silence is deafening.".to_string(),
             ],
-            death_message: "Sound returns to the world.".to_string(),
+            death_message: "The knight falls, armor clattering.".to_string(),
             special_ability: Some(SpecialAbility::TimeWarp { reduction: 5.0 }),
         });
         
         // === BOSSES ===
         bosses.insert("corruption_elemental".to_string(), BossTemplate {
             id: "corruption_elemental".to_string(),
-            name: "Corruption Elemental".to_string(),
+            name: "Blight Elemental".to_string(),
             title: "Herald of the Unwriting".to_string(),
-            description: "A swirling vortex of corrupted text and broken meaning.".to_string(),
+            description: "A being of pure corruption and decay.".to_string(),
             lore: "Born from the first fragments of the Unwriting, this elemental \
                    seeks to spread corruption through all written language.".to_string(),
             base_hp: 200,
@@ -478,9 +478,9 @@ impl EnemyDatabase {
         
         bosses.insert("the_unwriter".to_string(), BossTemplate {
             id: "the_unwriter".to_string(),
-            name: "The Unwriter".to_string(),
+            name: "The Void Herald".to_string(),
             title: "Entropy's Avatar".to_string(),
-            description: "The source of all corruption. Where meaning goes to die.".to_string(),
+            description: "The harbinger of the Void, speaker of the end times.".to_string(),
             lore: "In the beginning was the Word. The Unwriter seeks the end. \
                    It is not evil—it is simply the cessation of all meaning, \
                    the final period at the end of reality's sentence.".to_string(),

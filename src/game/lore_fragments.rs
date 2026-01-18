@@ -40,16 +40,16 @@ pub struct LoreFragment {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum LoreCategory {
-    /// History of the world before the Unwriting
+    /// History of the world before the Sundering
     AncientHistory,
-    /// The First Silence and its immediate aftermath
-    FirstSilence,
+    /// The Sundering and its immediate aftermath
+    TheSundering,
     /// Individual faction histories and philosophies
     FactionLore,
     /// Personal stories of NPCs and historical figures
     PersonalStories,
-    /// Technical knowledge about the Corruption
-    CorruptionStudies,
+    /// Knowledge about the Blight and the Breach
+    BlightStudies,
     /// Poetry, literature, and cultural artifacts
     Arts,
     /// Prophecies and predictions
@@ -137,7 +137,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
         discovery_method: DiscoveryMethod::Search { difficulty: 2 },
         content: LoreContent {
             full_text: "In the three-hundred-and-seventh year of the Age of Writing, the \
-                Conclave of Scribes gathered at the meeting of three rivers to establish \
+                Conclave of Mages gathered at the meeting of three rivers to establish \
                 a repository of all knowledge. Here, where water—the most mutable of \
                 elements—becomes briefly still, we shall build permanence.
 
@@ -225,7 +225,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
     fragments.insert("first_speaker_journal_1".to_string(), LoreFragment {
         id: "first_speaker_journal_1".to_string(),
         title: "Personal Journal (First Volume)".to_string(),
-        category: LoreCategory::FirstSilence,
+        category: LoreCategory::TheSundering,
         form: LoreForm::Book { pages: 200, condition: TextCondition::Worn },
         location: "Shadow Quarter - Hidden cache".to_string(),
         discovery_method: DiscoveryMethod::FactionSecret { 
@@ -270,7 +270,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
 
                 They're sick. Something in the Codex—something we touched in our research— \
                 it's undoing them. Their name is harder to remember each day. I have to \
-                keep typing it. I have to keep making it true.
+                keep fighting it. I have to keep making it true.
 
                 Why can't I fix this? I can make apples blue. Why can't I make them well?".to_string(),
             excerpt: "Today I achieved what the masters said was impossible. I typed a lie that became true.".to_string(),
@@ -289,7 +289,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
     fragments.insert("first_speaker_journal_2".to_string(), LoreFragment {
         id: "first_speaker_journal_2".to_string(),
         title: "Personal Journal (Second Volume)".to_string(),
-        category: LoreCategory::FirstSilence,
+        category: LoreCategory::TheSundering,
         form: LoreForm::Book { pages: 150, condition: TextCondition::Damaged },
         location: "Shadow Quarter - Cipher's personal vault".to_string(),
         discovery_method: DiscoveryMethod::QuestReward { quest: "cipher_trust".to_string() },
@@ -335,7 +335,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
 
                 It's done.
 
-                I typed the Unwriting. I filled the silence.
+                I caused the Sundering. I filled the silence.
                 And now
 
                 [The rest of the journal is blank]".to_string(),
@@ -365,9 +365,9 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
             sender: "Sister Verity".to_string(), 
             recipient: "The First Speaker".to_string() 
         },
-        location: "Scribes Sanctuary - Verity's sealed chambers".to_string(),
+        location: "Mages Guild Tower - Verity's sealed chambers".to_string(),
         discovery_method: DiscoveryMethod::FactionSecret { 
-            faction: "Scribes".to_string(), 
+            faction: "MagesGuild".to_string(), 
             rank: "Voice Initiate".to_string() 
         },
         content: LoreContent {
@@ -392,7 +392,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 could do it? I have meditated on this for decades and I still don't \
                 know. I don't know if I was a coward or a collaborator.
 
-                All I know is this: when you typed the Unwriting, I felt it. Every \
+                All I know is this: when you caused the Sundering, I felt it. Every \
                 scribe in the world felt it. We all knew, in that moment, that words \
                 would never be trustworthy again.
 
@@ -428,7 +428,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
         content: LoreContent {
             full_text: "My name was [encrypted]. I was a librarian at Logos Prime.
 
-                When the Unwriting began, I was shelving books in the East Wing. \
+                When the Sundering began, I was shelving books in the East Wing. \
                 I heard the silence first—a silence that had weight, that had presence. \
                 Then I heard the screaming.
 
@@ -478,7 +478,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
     fragments.insert("corruption_taxonomy".to_string(), LoreFragment {
         id: "corruption_taxonomy".to_string(),
         title: "A Classification of Linguistic Decay".to_string(),
-        category: LoreCategory::CorruptionStudies,
+        category: LoreCategory::BlightStudies,
         form: LoreForm::Book { pages: 78, condition: TextCondition::Worn },
         location: "Athenaeum - Research Section".to_string(),
         discovery_method: DiscoveryMethod::Gift { 
@@ -487,7 +487,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
         },
         content: LoreContent {
             full_text: "A Classification of Linguistic Decay
-                by Archivist Chen, Year 32 of the Unwriting
+                by Archivist Chen, Year 32 of the Sundering
 
                 INTRODUCTION
 
@@ -503,7 +503,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 TYPE TWO: LITERAL MANIFESTATION
                 Written words become physically real in harmful ways. Write 'fire' and \
                 flames appear. This type is rare but immediately dangerous. \
-                Countermeasure: Avoid concrete nouns when typing in affected areas.
+                Countermeasure: Avoid concrete nouns in affected areas.
 
                 TYPE THREE: BABEL EFFECT
                 Languages blend and fracture. Sentences contain words from tongues that \
@@ -518,7 +518,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 TYPE FIVE: GRAPHEME PARASITISM
                 Letters become predatory, consuming other letters. Words shorten, then \
                 vanish entirely. Silence spreads. \
-                Countermeasure: Constant typing to replace lost text.
+                Countermeasure: Constant vigilance to reinforce reality.
 
                 TYPE SIX: LINGUISTIC ACCELERATION
                 Time flows differently through text. Words age rapidly. Past tense \
@@ -528,10 +528,10 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 CONCLUSION
 
                 I believe these six types represent fragments of a single phenomenon: \
-                the Unwriting. Each is a different symptom of reality trying to reject \
+                the Sundering. Each is a different symptom of reality trying to reject \
                 the wound caused by [the next page is torn out]".to_string(),
             excerpt: "The phenomenon we call 'Corruption' is not singular.".to_string(),
-            attributed_to: "Archivist Chen, Year 32 of the Unwriting".to_string(),
+            attributed_to: "Archivist Chen, Year 32 of the Sundering".to_string(),
             player_notes: Some("The six corruption types match the game's mechanical system.".to_string()),
         },
         revelations: vec![
@@ -552,7 +552,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
         title: "Tomorrow Text, Fragment Seven".to_string(),
         category: LoreCategory::Prophecy,
         form: LoreForm::Book { pages: 1, condition: TextCondition::Fragmentary },
-        location: "Scribes Sanctuary - Prophecy vault".to_string(),
+        location: "Mages Guild Tower - Prophecy vault".to_string(),
         discovery_method: DiscoveryMethod::QuestReward { quest: "scribe_prophecy".to_string() },
         content: LoreContent {
             full_text: "When silence speaks and speech falls silent,
@@ -579,11 +579,11 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 The hand awaits the heart.
                 The heart awaits itself.".to_string(),
             excerpt: "One will come who is many. One who died yet lives. One who remembers by forgetting.".to_string(),
-            attributed_to: "Unknown prophet, pre-Unwriting".to_string(),
+            attributed_to: "Unknown prophet, pre-Sundering".to_string(),
             player_notes: Some("This prophecy describes the player.".to_string()),
         },
         revelations: vec![
-            "The player was prophesied before the Unwriting.".to_string(),
+            "The player was prophesied before the Sundering.".to_string(),
             "There are three possible outcomes.".to_string(),
             "The 'door that is not a door' suggests a hidden path.".to_string(),
         ],
@@ -626,7 +626,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 That some words cannot be unwritten
                 No matter what the cost.".to_string(),
             excerpt: "Where someone loved too much, too long, and lost what they would teach.".to_string(),
-            attributed_to: "Traditional, post-Unwriting".to_string(),
+            attributed_to: "Traditional, post-Sundering".to_string(),
             player_notes: Some("Folk memory of the First Silence. Mostly accurate.".to_string()),
         },
         revelations: vec![
@@ -660,7 +660,7 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 Current incarnation: [ENCRYPTED - KEY REQUIRED]
                 Previous incarnations: 47 recorded, suspected 60+
                 First recorded: Year 2890 of the Age of Writing
-                Last recorded death: Year 46 of the Unwriting
+                Last recorded death: Year 46 of the Sundering
 
                 SUMMARY:
                 This individual is causally linked to the First Silence. Following \
@@ -671,8 +671,8 @@ pub fn build_lore_fragments() -> HashMap<String, LoreFragment> {
                 PATTERN:
                 Each incarnation eventually recovers their memories. Upon recovery, \
                 they either:
-                1. Attempt to complete the Unwriting (13 times)
-                2. Attempt to reverse the Unwriting (8 times)
+                1. Attempt to complete the Sundering (13 times)
+                2. Attempt to reverse the Sundering (8 times)
                 3. Choose suicide to prevent either (26 times)
 
                 None have succeeded. The wound persists.

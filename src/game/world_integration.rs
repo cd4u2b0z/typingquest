@@ -14,136 +14,121 @@ use serde::{Deserialize, Serialize};
 /// Floor zones - each zone has unique theming, enemies, and lore
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum FloorZone {
-    /// Floors 1-5: The Abandoned Archives
-    AbandonedArchives,
-    /// Floors 6-10: The Corrupted Scriptorium
-    CorruptedScriptorium,
-    /// Floors 11-15: The Mechanical Depths
-    MechanicalDepths,
-    /// Floors 16-20: The Living Library
-    LivingLibrary,
-    /// Floors 21-25: The Shadow Stacks
-    ShadowStacks,
-    /// Floors 26-30: The Burning Index
-    BurningIndex,
-    /// Floors 31+: The Void Between Words
-    VoidBetweenWords,
+    /// Floors 1-2: The Shattered Halls - Ruined throne rooms of Valdris
+    ShatteredHalls,
+    /// Floors 3-4: The Sunken Archives - Flooded libraries of lost knowledge
+    SunkenArchives,
+    /// Floors 5-6: The Blighted Gardens - Corrupted royal gardens
+    BlightedGardens,
+    /// Floors 7-8: The Clockwork Depths - Ancient mechanisms still grinding
+    ClockworkDepths,
+    /// Floors 9-10: The Void's Edge - Where reality breaks down
+    VoidsEdge,
+    /// Floors 11+: The Breach - The wound in reality itself
+    TheBreach,
 }
 
 impl FloorZone {
     pub fn from_floor(floor: u32) -> Self {
         match floor {
-            1..=5 => FloorZone::AbandonedArchives,
-            6..=10 => FloorZone::CorruptedScriptorium,
-            11..=15 => FloorZone::MechanicalDepths,
-            16..=20 => FloorZone::LivingLibrary,
-            21..=25 => FloorZone::ShadowStacks,
-            26..=30 => FloorZone::BurningIndex,
-            _ => FloorZone::VoidBetweenWords,
+            1..=2 => FloorZone::ShatteredHalls,
+            3..=4 => FloorZone::SunkenArchives,
+            5..=6 => FloorZone::BlightedGardens,
+            7..=8 => FloorZone::ClockworkDepths,
+            9..=10 => FloorZone::VoidsEdge,
+            _ => FloorZone::TheBreach,
         }
     }
 
     pub fn name(&self) -> &'static str {
         match self {
-            FloorZone::AbandonedArchives => "The Abandoned Archives",
-            FloorZone::CorruptedScriptorium => "The Corrupted Scriptorium",
-            FloorZone::MechanicalDepths => "The Mechanical Depths",
-            FloorZone::LivingLibrary => "The Living Library",
-            FloorZone::ShadowStacks => "The Shadow Stacks",
-            FloorZone::BurningIndex => "The Burning Index",
-            FloorZone::VoidBetweenWords => "The Void Between Words",
+            FloorZone::ShatteredHalls => "The Shattered Halls",
+            FloorZone::SunkenArchives => "The Sunken Archives",
+            FloorZone::BlightedGardens => "The Blighted Gardens",
+            FloorZone::ClockworkDepths => "The Clockwork Depths",
+            FloorZone::VoidsEdge => "The Void's Edge",
+            FloorZone::TheBreach => "The Breach",
         }
     }
 
     pub fn description(&self) -> &'static str {
         match self {
-            FloorZone::AbandonedArchives => 
-                "Dusty shelves stretch endlessly into darkness. Books lie scattered, their pages yellowed with age. The silence here is thick—oppressive. Once, this was a place of learning. Now, only echoes of forgotten words remain.",
-            FloorZone::CorruptedScriptorium =>
-                "The walls pulse with sickly green light. Text crawls across surfaces like living things, rearranging itself into nonsense. Corrupted manuscripts whisper lies. The Unwriting has taken hold here.",
-            FloorZone::MechanicalDepths =>
-                "Gears grind eternally. Mechanical typewriters clatter in empty rooms, printing documents for no one. The Mechanists built this place—or perhaps it built itself. Everything here serves efficiency.",
-            FloorZone::LivingLibrary =>
-                "The books breathe. Ink flows through pages like blood through veins. Stories grow wild here, untended, dangerous. Some say readers who stay too long become characters themselves.",
-            FloorZone::ShadowStacks =>
-                "Light fears this place. The Shadow Writers made their last stand here, hiding forbidden texts in the darkness. Every shadow might hide a rebel—or something worse.",
-            FloorZone::BurningIndex =>
-                "Fire that does not consume. Books burn eternally, their knowledge visible only in the moment of destruction. The Archivists say this is where censored words go to die—but they never truly die.",
-            FloorZone::VoidBetweenWords =>
-                "Beyond language. Beyond meaning. The spaces between letters stretch into infinity. Here, at the edge of the Unwriting itself, even thoughts struggle to form coherent patterns.",
+            FloorZone::ShatteredHalls => 
+                "Ruined corridors of what was once a grand palace. Debris and cobwebs fill the once-magnificent throne rooms where kings held court and heroes were honored. Whispers of old courtiers echo through the darkness.",
+            FloorZone::SunkenArchives =>
+                "Flooded libraries full of rotting books. The greatest collection of magical knowledge ever assembled lies drowned here. Malachar studied in these halls for decades before his fall.",
+            FloorZone::BlightedGardens =>
+                "Once-beautiful gardens now twisted by the Blight. Plants move with malevolent purpose. Flowers have teeth. The royal gardens, where Malachar's beloved once walked, now hunger for blood.",
+            FloorZone::ClockworkDepths =>
+                "Ancient mechanisms still grinding, traps and automatons guarding forgotten vaults. Malachar's workshops, where he built the apparatus for the Ritual of Ascension. Some machines still wait for commands.",
+            FloorZone::VoidsEdge =>
+                "Reality breaks down. Geometry fails. The Breach looms ahead, bleeding darkness. The ritual chamber—ground zero of the Sundering. This is where the world broke.",
+            FloorZone::TheBreach =>
+                "Beyond the Veil. The wound in reality bleeds the Void itself. Nothing here follows the laws of the world. Only the mad or the determined venture this deep.",
         }
     }
 
     pub fn ambient_messages(&self) -> Vec<&'static str> {
         match self {
-            FloorZone::AbandonedArchives => vec![
-                "Dust motes dance in a shaft of pale light.",
-                "A book falls from a shelf somewhere in the darkness.",
-                "You hear the rustle of pages turning—but no one is there.",
-                "The smell of old paper and forgotten stories fills the air.",
-                "Faded catalog cards litter the floor like autumn leaves.",
-                "A typewriter sits abandoned, its keys frozen mid-word.",
+            FloorZone::ShatteredHalls => vec![
+                "Dust motes dance in a shaft of pale light from a crack above.",
+                "A tapestry falls from the wall, revealing a hidden door.",
+                "You hear the distant clang of armor—but no one is there.",
+                "The smell of ancient stone and faded glory fills the air.",
+                "Broken crown fragments litter the floor like fallen stars.",
+                "A throne sits empty, its velvet rotted but its majesty intact.",
             ],
-            FloorZone::CorruptedScriptorium => vec![
-                "Words slither across the wall, forming and reforming.",
-                "A corrupted manuscript screams silently.",
-                "The ink in a nearby bottle bubbles and hisses.",
-                "Letters detach from a page and scatter like insects.",
-                "You feel meaning draining from your thoughts.",
-                "A sentence restructures itself to spell your name.",
+            FloorZone::SunkenArchives => vec![
+                "Water drips from the ceiling onto moldering tomes.",
+                "A fish swims past, somehow living in the stagnant water.",
+                "Waterlogged scrolls float by, their ink bleeding into nothing.",
+                "The water glows faintly where magic once preserved these halls.",
+                "You hear whispers from submerged books—or is it the current?",
+                "A skeleton sits at a reading desk, book still in bony hands.",
             ],
-            FloorZone::MechanicalDepths => vec![
+            FloorZone::BlightedGardens => vec![
+                "A flower turns to track your movement.",
+                "The scent of roses mixes with the stench of rot.",
+                "Vines creep across the floor toward your feet.",
+                "A statue of a beautiful woman stands overgrown—Malachar's beloved.",
+                "The hedges form a maze that seems to shift when unobserved.",
+                "Something beautiful blooms. It has far too many teeth.",
+            ],
+            FloorZone::ClockworkDepths => vec![
                 "Gears click in precise, inhuman rhythm.",
-                "A pneumatic tube hisses, delivering nothing to no one.",
-                "The typing never stops. Never.",
-                "Efficiency metrics scroll across a brass display.",
-                "Steam vents from a duct, briefly obscuring your vision.",
-                "A mechanical arm sorts papers with surgical precision.",
+                "Steam vents from a pipe, briefly obscuring your vision.",
+                "A mechanical guardian stands dormant—for now.",
+                "Blueprints on a workbench show impossible devices.",
+                "The ticking never stops. Something is counting down.",
+                "A brass eye tracks your movement from the wall.",
             ],
-            FloorZone::LivingLibrary => vec![
-                "A book's spine flexes like a breathing creature.",
-                "Ink pools on the floor, pulsing like a heartbeat.",
-                "Pages flutter without wind, reaching toward you.",
-                "You hear a story being whispered—about you.",
-                "A character in an open book turns to look at you.",
-                "The shelves rearrange themselves when you're not looking.",
+            FloorZone::VoidsEdge => vec![
+                "Reality flickers like a guttering candle.",
+                "You see your own shadow move independently.",
+                "The walls bleed darkness that drips upward.",
+                "Your own voice echoes back, saying things you didn't say.",
+                "The floor beneath you shows stars—endless, hungry stars.",
+                "Something vast moves at the edge of perception.",
             ],
-            FloorZone::ShadowStacks => vec![
-                "Shadows move independently of their sources.",
-                "A coded message appears briefly on a wall, then fades.",
-                "You sense you're being watched—but by whom?",
-                "Footsteps echo from nowhere and everywhere.",
-                "A rebel's graffiti: 'THE WORDS REMEMBER'",
-                "Something moves in your peripheral vision.",
-            ],
-            FloorZone::BurningIndex => vec![
-                "A book burns eternally, its title always visible: yours.",
-                "Flames lick at knowledge you'll never have.",
-                "The heat carries whispers of forbidden truths.",
-                "Ash that was once wisdom drifts past your face.",
-                "In the fire, you see words that were never written.",
-                "Someone tried to save a book here. They failed.",
-            ],
-            FloorZone::VoidBetweenWords => vec![
-                "Meaning collapses around you like a dying star.",
-                "Your thoughts echo strangely, as if translated.",
-                "The silence here has weight—crushing, infinite.",
-                "You forget a word. It might have been important.",
-                "Concepts blur at the edges of your understanding.",
-                "Something vast and wordless moves in the void.",
+            FloorZone::TheBreach => vec![
+                "The Void whispers your name. Your true name.",
+                "Time flows strangely here—was that a moment or an eon?",
+                "You glimpse other worlds through tears in reality.",
+                "The darkness here is not absence of light—it is presence of nothing.",
+                "Malachar's voice echoes: 'You came. I knew you would.'",
+                "At the heart of nothing, something waits.",
             ],
         }
     }
     
     pub fn zone_color(&self) -> &'static str {
         match self {
-            FloorZone::AbandonedArchives => "Gray",
-            FloorZone::CorruptedScriptorium => "Green",
-            FloorZone::MechanicalDepths => "Yellow",
-            FloorZone::LivingLibrary => "Magenta",
-            FloorZone::ShadowStacks => "DarkGray",
-            FloorZone::BurningIndex => "Red",
-            FloorZone::VoidBetweenWords => "Blue",
+            FloorZone::ShatteredHalls => "Gray",
+            FloorZone::SunkenArchives => "Cyan",
+            FloorZone::BlightedGardens => "Green",
+            FloorZone::ClockworkDepths => "Yellow",
+            FloorZone::VoidsEdge => "Magenta",
+            FloorZone::TheBreach => "Red",
         }
     }
 }
@@ -174,41 +159,29 @@ pub enum MilestoneEvent {
 /// Get milestone for a specific floor (if any)
 pub fn get_floor_milestone(floor: u32) -> Option<StoryMilestone> {
     match floor {
+        2 => Some(StoryMilestone {
+            floor: 2,
+            title: "The Ghost of the Guard".to_string(),
+            description: "A spectral knight materializes from the shadows. His armor bears the crest of Valdris. 'Another hero come to fail,' he whispers. 'Or perhaps... to succeed where I could not.'".to_string(),
+            event: MilestoneEvent::CharacterMeeting("Sir Aldric's Ghost".to_string()),
+        }),
         5 => Some(StoryMilestone {
             floor: 5,
-            title: "The Watcher in the Stacks".to_string(),
-            description: "A figure cloaked in faded manuscripts observes you from the shadows. They've been following you since you entered the Archives.".to_string(),
-            event: MilestoneEvent::CharacterMeeting("The Archivist".to_string()),
+            title: "The Hollow Knight Awakens".to_string(),
+            description: "The suit of royal armor stands. There is no body inside—only duty, binding it to this place forever. Its sword still carries the oath of protection.".to_string(),
+            event: MilestoneEvent::StoryBoss("The Hollow Knight".to_string()),
+        }),
+        7 => Some(StoryMilestone {
+            floor: 7,
+            title: "The Mages Guild's Offer".to_string(),
+            description: "A shimmering portal opens. Archmage Thessaly's voice echoes through: 'We know what you seek. We can help—for a price. The Guild remembers those who serve it.'".to_string(),
+            event: MilestoneEvent::FactionEncounter(Faction::TempleOfDawn), // Reusing enum temporarily
         }),
         10 => Some(StoryMilestone {
             floor: 10,
-            title: "The Corruption Speaks".to_string(),
-            description: "The corrupted text coalesces into a face. It knows your name. It knows why you're here. And it laughs.".to_string(),
-            event: MilestoneEvent::StoryBoss("The First Typo".to_string()),
-        }),
-        15 => Some(StoryMilestone {
-            floor: 15,
-            title: "The Mechanist's Offer".to_string(),
-            description: "A being of brass and paper appears. It speaks in perfectly formatted text: 'EFFICIENCY REQUIRES SACRIFICE. JOIN US OR BE OPTIMIZED.'".to_string(),
-            event: MilestoneEvent::FactionEncounter(Faction::Mechanists),
-        }),
-        20 => Some(StoryMilestone {
-            floor: 20,
-            title: "The Living Story".to_string(),
-            description: "You are IN the book now. The narrative wraps around you. A protagonist without a story meets a story without a protagonist. Perhaps you were meant for each other.".to_string(),
-            event: MilestoneEvent::ChapterChange(Chapter::Revelation),
-        }),
-        25 => Some(StoryMilestone {
-            floor: 25,
-            title: "The Shadow Writer's Truth".to_string(),
-            description: "In absolute darkness, a voice: 'You're not the first to reach this deep. You won't be the last. But you might be the one who finally understands what was Unwritten.'".to_string(),
-            event: MilestoneEvent::FactionEncounter(Faction::ShadowWriters),
-        }),
-        30 => Some(StoryMilestone {
-            floor: 30,
-            title: "The Burning Truth".to_string(),
-            description: "In the eternal flames, you see it—the original text, the First Word that was Unwritten. And now you must choose: let it burn, or try to save what was lost.".to_string(),
-            event: MilestoneEvent::LoreRevelation("The First Unwriting".to_string()),
+            title: "The Void Herald Speaks".to_string(),
+            description: "A figure of living shadow with too many eyes blocks your path. It speaks with the voices of everyone who ever fell into the Breach. 'We waited so long... we knew you would come.'".to_string(),
+            event: MilestoneEvent::StoryBoss("The Void Herald".to_string()),
         }),
         _ => None,
     }
@@ -223,158 +196,136 @@ pub fn generate_zone_event(zone: FloorZone) -> GameEvent {
 
 fn get_zone_events(zone: FloorZone) -> Vec<GameEvent> {
     match zone {
-        FloorZone::AbandonedArchives => vec![
+        FloorZone::ShatteredHalls => vec![
             GameEvent {
-                name: "The Dusty Tome".to_string(),
-                description: "A massive book lies open on a reading stand. Its pages are mostly illegible, but one passage glows faintly with preserved meaning.".to_string(),
+                name: "The Fallen Crown".to_string(),
+                description: "A crown lies in the dust, its gems still glittering. It belonged to one of the kings of Valdris—but which one? And why is it here?".to_string(),
                 choices: vec![
-                    EventChoice { text: "Read the glowing passage".to_string(), outcome: EventOutcome::GainXP(30) },
-                    EventChoice { text: "Search the margins for notes".to_string(), outcome: EventOutcome::GainGold(25) },
-                    EventChoice { text: "Close the book respectfully".to_string(), outcome: EventOutcome::GainMaxHP(3) },
+                    EventChoice { text: "Examine the crown carefully".to_string(), outcome: EventOutcome::GainXP(30) },
+                    EventChoice { text: "Take the gems".to_string(), outcome: EventOutcome::GainGold(25) },
+                    EventChoice { text: "Leave it as a memorial".to_string(), outcome: EventOutcome::GainMaxHP(3) },
                 ],
-                ascii_art: "  ╔═══════════╗\n  ║ ░░░▒▒▓▓░ ║\n  ║ ANCIENT   ║\n  ║  WISDOM   ║\n  ╚═══════════╝".to_string(),
+                ascii_art: "  ╔═══════════╗\n  ║  👑      ║\n  ║  FALLEN  ║\n  ║  CROWN   ║\n  ╚═══════════╝".to_string(),
             },
             GameEvent {
-                name: "The Silent Librarian".to_string(),
-                description: "A ghostly figure in spectacles materializes from the dust. They gesture toward a hidden alcove, then fade.".to_string(),
+                name: "The Knight's Ghost".to_string(),
+                description: "A spectral warrior materializes from the shadows. They gesture toward a hidden alcove, then fade, pointing at something you cannot yet see.".to_string(),
                 choices: vec![
                     EventChoice { text: "Follow their guidance".to_string(), outcome: EventOutcome::GainItem },
-                    EventChoice { text: "Bow in gratitude".to_string(), outcome: EventOutcome::GainXP(15) },
+                    EventChoice { text: "Salute and honor them".to_string(), outcome: EventOutcome::GainXP(15) },
                     EventChoice { text: "Ignore the apparition".to_string(), outcome: EventOutcome::Nothing },
                 ],
-                ascii_art: "    ┌───┐\n    │ 👻│\n    │📚 │\n    └───┘".to_string(),
+                ascii_art: "    ┌───┐\n    │ 👻│\n    │⚔️ │\n    └───┘".to_string(),
             },
         ],
-        FloorZone::CorruptedScriptorium => vec![
+        FloorZone::SunkenArchives => vec![
             GameEvent {
-                name: "The Corruption Speaks".to_string(),
-                description: "Text crawls across the wall, forming words meant only for you: 'WE KNOW WHAT YOU SEEK. WE CAN HELP... FOR A PRICE.'".to_string(),
+                name: "The Drowned Scholar".to_string(),
+                description: "A skeleton sits at a submerged desk, still clutching a waterproof scroll. Whatever they died protecting, it survived the flood.".to_string(),
                 choices: vec![
-                    EventChoice { text: "Listen to the offer".to_string(), outcome: EventOutcome::GainXP(50) },
-                    EventChoice { text: "Reject the corruption".to_string(), outcome: EventOutcome::GainMaxHP(5) },
-                    EventChoice { text: "Try to purify the text".to_string(), outcome: EventOutcome::Combat },
+                    EventChoice { text: "Read the preserved scroll".to_string(), outcome: EventOutcome::GainXP(50) },
+                    EventChoice { text: "Search their belongings".to_string(), outcome: EventOutcome::GainGold(40) },
+                    EventChoice { text: "Give them a proper burial".to_string(), outcome: EventOutcome::GainMaxHP(5) },
                 ],
-                ascii_art: "  ╭──────────╮\n  │ W̷E̸ ̵S̴E̷E̵ │\n  │ ̸Y̴O̶U̷.̸.̶.̵ │\n  ╰──────────╯".to_string(),
+                ascii_art: "  ╭──────────╮\n  │ 📄 LOST │\n  │ SCHOLAR │\n  ╰──────────╯".to_string(),
             },
             GameEvent {
-                name: "The Infected Page".to_string(),
-                description: "A single page flutters in unfelt wind. Its content shifts—sometimes poetry, sometimes screams, sometimes your memories.".to_string(),
+                name: "The Glowing Waters".to_string(),
+                description: "The water here pulses with residual magic. Drinking might empower you—or poison you. The magic is old and unpredictable.".to_string(),
                 choices: vec![
-                    EventChoice { text: "Catch and read it".to_string(), outcome: EventOutcome::GainGold(40) },
-                    EventChoice { text: "Let it pass".to_string(), outcome: EventOutcome::Nothing },
-                    EventChoice { text: "Burn it".to_string(), outcome: EventOutcome::LoseHP(10) },
+                    EventChoice { text: "Drink deeply".to_string(), outcome: EventOutcome::GainMaxHP(8) },
+                    EventChoice { text: "Bottle some for later".to_string(), outcome: EventOutcome::GainItem },
+                    EventChoice { text: "Avoid the strange water".to_string(), outcome: EventOutcome::Nothing },
                 ],
-                ascii_art: "     📜\n    /  \\\n   ░▒▓█▓▒░\n    chaos".to_string(),
-            },
-        ],
-        FloorZone::MechanicalDepths => vec![
-            GameEvent {
-                name: "The Efficiency Test".to_string(),
-                description: "A mechanical voice echoes: 'TYPING EFFICIENCY ASSESSMENT REQUIRED. SUBJECTS WHO FAIL ARE... REPURPOSED.'".to_string(),
-                choices: vec![
-                    EventChoice { text: "Accept the challenge".to_string(), outcome: EventOutcome::GainXP(60) },
-                    EventChoice { text: "Sabotage the machine".to_string(), outcome: EventOutcome::Combat },
-                    EventChoice { text: "Sneak past".to_string(), outcome: EventOutcome::Nothing },
-                ],
-                ascii_art: "  ┌─────────┐\n  │ ⚙️  ⚙️  │\n  │ TESTING │\n  │ ⚙️  ⚙️  │\n  └─────────┘".to_string(),
-            },
-            GameEvent {
-                name: "The Abandoned Station".to_string(),
-                description: "A Mechanist workstation lies dormant. Tools, spare parts, and half-finished documents are scattered about.".to_string(),
-                choices: vec![
-                    EventChoice { text: "Scavenge for parts".to_string(), outcome: EventOutcome::GainGold(35) },
-                    EventChoice { text: "Study the documents".to_string(), outcome: EventOutcome::GainXP(25) },
-                    EventChoice { text: "Rest here".to_string(), outcome: EventOutcome::GainHP(15) },
-                ],
-                ascii_art: "  ╔══════════╗\n  ║ 🔧 📝 ⚙️ ║\n  ║ STATION  ║\n  ╚══════════╝".to_string(),
+                ascii_art: "     💧\n    /  \\\n   ░▒▓█▓▒░\n    magic".to_string(),
             },
         ],
-        FloorZone::LivingLibrary => vec![
+        FloorZone::BlightedGardens => vec![
             GameEvent {
-                name: "The Story Wants You".to_string(),
-                description: "A book opens itself. Pages reach toward you like hungry mouths. It wants to write you into its narrative.".to_string(),
+                name: "The Hungry Roses".to_string(),
+                description: "A patch of roses grows here, impossibly beautiful. They turn to face you as one. A skeleton lies among them, picked clean.".to_string(),
                 choices: vec![
-                    EventChoice { text: "Let it write your heroic chapter".to_string(), outcome: EventOutcome::GainMaxHP(8) },
-                    EventChoice { text: "Resist and write your own story".to_string(), outcome: EventOutcome::GainXP(45) },
-                    EventChoice { text: "Slam it shut".to_string(), outcome: EventOutcome::Combat },
+                    EventChoice { text: "Harvest the deadly blooms".to_string(), outcome: EventOutcome::GainItem },
+                    EventChoice { text: "Burn the garden".to_string(), outcome: EventOutcome::Combat },
+                    EventChoice { text: "Carefully skirt around them".to_string(), outcome: EventOutcome::Nothing },
                 ],
-                ascii_art: "  📖────────📖\n  │ YOU ARE │\n  │  HERE   │\n  │  ↓↓↓↓   │\n  📖────────📖".to_string(),
+                ascii_art: "  ┌─────────┐\n  │ 🌹  🌹  │\n  │ HUNGRY │\n  │ 🌹  🌹  │\n  └─────────┘".to_string(),
             },
             GameEvent {
-                name: "The Character Escaped".to_string(),
-                description: "A person made of ink and paper approaches. 'I was written wrong,' they say. 'Help me find my true ending.'".to_string(),
+                name: "The Statue of the Beloved".to_string(),
+                description: "A marble statue of a beautiful woman stands overgrown. A plaque reads: 'For my love, who taught me that some things are worth any price.' —Malachar".to_string(),
                 choices: vec![
-                    EventChoice { text: "Help them".to_string(), outcome: EventOutcome::GainGold(50) },
-                    EventChoice { text: "Write them a new ending".to_string(), outcome: EventOutcome::GainXP(40) },
-                    EventChoice { text: "Return them to their book".to_string(), outcome: EventOutcome::LoseHP(5) },
+                    EventChoice { text: "Pay respects".to_string(), outcome: EventOutcome::GainXP(35) },
+                    EventChoice { text: "Search for hidden compartments".to_string(), outcome: EventOutcome::GainGold(45) },
+                    EventChoice { text: "Rest in the statue's shade".to_string(), outcome: EventOutcome::GainHP(20) },
                 ],
-                ascii_art: "    ╭━━━╮\n    ┃ ? ┃\n    ╰┳━┳╯\n    INK\n   BEING".to_string(),
-            },
-        ],
-        FloorZone::ShadowStacks => vec![
-            GameEvent {
-                name: "The Dead Drop".to_string(),
-                description: "A coded message has been left for you—or someone like you. The Shadow Writers still operate here.".to_string(),
-                choices: vec![
-                    EventChoice { text: "Decode the message".to_string(), outcome: EventOutcome::GainXP(55) },
-                    EventChoice { text: "Take the hidden supplies".to_string(), outcome: EventOutcome::GainItem },
-                    EventChoice { text: "Leave it for its intended recipient".to_string(), outcome: EventOutcome::GainMaxHP(4) },
-                ],
-                ascii_art: "  ░░░░░░░░░░\n  ░ SECRET ░\n  ░  DROP  ░\n  ░░░░░░░░░░".to_string(),
-            },
-            GameEvent {
-                name: "The Rebel's Cache".to_string(),
-                description: "Behind a false wall: weapons, supplies, and forbidden books. A Shadow Writer safehouse.".to_string(),
-                choices: vec![
-                    EventChoice { text: "Take what you need".to_string(), outcome: EventOutcome::GainGold(60) },
-                    EventChoice { text: "Read the forbidden texts".to_string(), outcome: EventOutcome::GainXP(70) },
-                    EventChoice { text: "Leave it untouched".to_string(), outcome: EventOutcome::Nothing },
-                ],
-                ascii_art: "  ▓▓▓▓▓▓▓▓▓▓\n  ▓ HIDDEN ▓\n  ▓  ROOM  ▓\n  ▓▓▓▓▓▓▓▓▓▓".to_string(),
+                ascii_art: "  ╔══════════╗\n  ║ 🧝‍♀️ STATUE ║\n  ║ BELOVED  ║\n  ╚══════════╝".to_string(),
             },
         ],
-        FloorZone::BurningIndex => vec![
+        FloorZone::ClockworkDepths => vec![
             GameEvent {
-                name: "The Eternal Flame".to_string(),
-                description: "A book burns forever, its content eternally readable in the moment of destruction. What forbidden knowledge do you glimpse?".to_string(),
+                name: "The Dormant Guardian".to_string(),
+                description: "A massive automaton stands motionless, covered in dust. Its eyes are dark. A control panel nearby flickers with dying power.".to_string(),
                 choices: vec![
-                    EventChoice { text: "Study the burning text".to_string(), outcome: EventOutcome::GainXP(80) },
-                    EventChoice { text: "Try to save the book".to_string(), outcome: EventOutcome::LoseHP(20) },
-                    EventChoice { text: "Let it burn".to_string(), outcome: EventOutcome::GainMaxHP(6) },
+                    EventChoice { text: "Try to reactivate it".to_string(), outcome: EventOutcome::Combat },
+                    EventChoice { text: "Salvage its parts".to_string(), outcome: EventOutcome::GainGold(60) },
+                    EventChoice { text: "Leave it in peace".to_string(), outcome: EventOutcome::GainXP(30) },
                 ],
-                ascii_art: "    🔥🔥🔥\n   🔥📖🔥\n    🔥🔥🔥\n   ETERNAL".to_string(),
+                ascii_art: "  🤖────────🤖\n  │ DORMANT │\n  │ GUARD   │\n  │  ↓↓↓↓   │\n  🤖────────🤖".to_string(),
             },
             GameEvent {
-                name: "The Censor's Ghost".to_string(),
-                description: "The spirit of one who burned books appears. They weep, begging forgiveness. 'I didn't know what I was destroying.'".to_string(),
+                name: "The Artificer's Workshop".to_string(),
+                description: "Malachar's personal workshop. Blueprints for impossible devices cover every surface. One set of plans is for 'The Ritual Apparatus.'".to_string(),
                 choices: vec![
-                    EventChoice { text: "Forgive them".to_string(), outcome: EventOutcome::GainHP(30) },
-                    EventChoice { text: "Demand they reveal what was lost".to_string(), outcome: EventOutcome::GainXP(50) },
-                    EventChoice { text: "Condemn them".to_string(), outcome: EventOutcome::Combat },
+                    EventChoice { text: "Study the blueprints".to_string(), outcome: EventOutcome::GainXP(50) },
+                    EventChoice { text: "Take valuable components".to_string(), outcome: EventOutcome::GainGold(40) },
+                    EventChoice { text: "Sabotage what remains".to_string(), outcome: EventOutcome::GainMaxHP(5) },
                 ],
-                ascii_art: "    👻\n   /||\\\n  CENSOR\n  weeping".to_string(),
+                ascii_art: "    ╭━━━╮\n    ┃ ? ┃\n    ╰┳━┳╯\n    PLANS\n   DEVICE".to_string(),
             },
         ],
-        FloorZone::VoidBetweenWords => vec![
+        FloorZone::VoidsEdge => vec![
             GameEvent {
-                name: "The Unword".to_string(),
-                description: "You encounter a concept that has no word. It exists, but cannot be named. Understanding it might drive you mad—or enlighten you.".to_string(),
+                name: "The Mirror of Truth".to_string(),
+                description: "A mirror that should not exist here shows your reflection—but the reflection wears a crown and robes of state. It mouths words you cannot hear.".to_string(),
                 choices: vec![
-                    EventChoice { text: "Try to comprehend it".to_string(), outcome: EventOutcome::GainXP(100) },
-                    EventChoice { text: "Give it a name".to_string(), outcome: EventOutcome::GainMaxHP(10) },
-                    EventChoice { text: "Look away".to_string(), outcome: EventOutcome::LoseHP(5) },
+                    EventChoice { text: "Touch the mirror".to_string(), outcome: EventOutcome::GainXP(55) },
+                    EventChoice { text: "Speak to your reflection".to_string(), outcome: EventOutcome::GainMaxHP(8) },
+                    EventChoice { text: "Shatter it".to_string(), outcome: EventOutcome::Combat },
                 ],
-                ascii_art: "  ▓▒░ ??? ░▒▓\n   ▒░     ░▒\n    ░ ▓▓▓ ░\n     ░▒▓▒░".to_string(),
+                ascii_art: "  ░░░░░░░░░░\n  ░ MIRROR ░\n  ░  SELF  ░\n  ░░░░░░░░░░".to_string(),
             },
             GameEvent {
-                name: "The First Writer".to_string(),
-                description: "At the edge of existence, you glimpse them—the one who wrote the first word, who began everything. They notice you.".to_string(),
+                name: "The Last Letter".to_string(),
+                description: "A letter preserved in crystal, addressed to 'My Future Self.' The handwriting is familiar—impossibly familiar. It is yours.".to_string(),
                 choices: vec![
-                    EventChoice { text: "Approach with reverence".to_string(), outcome: EventOutcome::GainXP(150) },
-                    EventChoice { text: "Ask about the Unwriting".to_string(), outcome: EventOutcome::GainMaxHP(15) },
-                    EventChoice { text: "Flee from the impossible".to_string(), outcome: EventOutcome::GainHP(50) },
+                    EventChoice { text: "Read the letter".to_string(), outcome: EventOutcome::GainXP(70) },
+                    EventChoice { text: "Take it unopened".to_string(), outcome: EventOutcome::GainItem },
+                    EventChoice { text: "Leave it for your future self".to_string(), outcome: EventOutcome::GainMaxHP(6) },
                 ],
-                ascii_art: "    ∞\n   /|\\\n    |\n  FIRST\n  AUTHOR".to_string(),
+                ascii_art: "  ▓▓▓▓▓▓▓▓▓▓\n  ▓ LETTER ▓\n  ▓  FROM  ▓\n  ▓▓▓▓▓▓▓▓▓▓".to_string(),
+            },
+        ],
+        FloorZone::TheBreach => vec![
+            GameEvent {
+                name: "The Voice of the Void".to_string(),
+                description: "The Void itself speaks: 'You opened this door. You can close it. But the price is everything you are—and everything you were.'".to_string(),
+                choices: vec![
+                    EventChoice { text: "Listen to what it offers".to_string(), outcome: EventOutcome::GainXP(100) },
+                    EventChoice { text: "Defy the Void".to_string(), outcome: EventOutcome::GainMaxHP(10) },
+                    EventChoice { text: "Accept your role".to_string(), outcome: EventOutcome::GainHP(50) },
+                ],
+                ascii_art: "    🔥🔥🔥\n   🔥VOID🔥\n    🔥🔥🔥\n   SPEAKS".to_string(),
+            },
+            GameEvent {
+                name: "Malachar's Memory".to_string(),
+                description: "A vision: Malachar before the ritual, speaking to someone who looks exactly like you. 'Remember,' he says. 'When the time comes—remember why we did this.'".to_string(),
+                choices: vec![
+                    EventChoice { text: "Try to remember".to_string(), outcome: EventOutcome::GainXP(150) },
+                    EventChoice { text: "Reject the memory".to_string(), outcome: EventOutcome::GainMaxHP(15) },
+                    EventChoice { text: "Embrace who you were".to_string(), outcome: EventOutcome::GainHP(50) },
+                ],
+                ascii_art: "    👻\n   /||\\\n  MEMORY\n  returns".to_string(),
             },
         ],
     }
@@ -418,40 +369,35 @@ pub fn get_floor_lore(floor: u32) -> Option<(String, String)> {
     
     let zone = FloorZone::from_floor(floor);
     let lore_pieces = match zone {
-        FloorZone::AbandonedArchives => vec![
-            ("Catalog Card #2847", "Entry reads: 'The Silence came first as a whisper. Books that had spoken for centuries fell quiet, one by one. We thought it was simply age. We were wrong.'"),
-            ("Librarian's Note", "Found tucked in a desk: 'Day 47: More books went silent today. The poetry section is completely dead now. I can't remember the last time I heard a sonnet.'"),
-            ("Faded Map", "A floor plan of the Archives. Several sections are marked with red X's. A note says: 'DO NOT ENTER - Complete Corruption'"),
+        FloorZone::ShatteredHalls => vec![
+            ("Royal Chronicle Fragment", "Entry reads: 'The Sundering came without warning. One moment the king held court; the next, the sky tore open and darkness poured through. We fled, but the king... the king walked toward it.'"),
+            ("Knight's Final Letter", "Found tucked in armor: 'My love, if you find this, know I stayed to the end. Sir Aldric commands us to hold the throne room. We will not abandon our king, even now.'"),
+            ("Faded Tapestry", "A floor plan of the palace. Several sections are marked with blood. A note says: 'DO NOT ENTER - The Void has claimed these halls'"),
         ],
-        FloorZone::CorruptedScriptorium => vec![
-            ("Corrupted Journal", "Most text is illegible, but one phrase repeats: 'THE TYPOS ARE NOT MISTAKES THEY ARE TRYING TO TELL US SOMETHING'"),
-            ("Researcher's Final Entry", "'I've cracked it. The Corruption isn't random—it's a language. An anti-language. It doesn't destroy meaning, it inverts it. And it's speaking t̷̤̑o̵̰͝ ̷̯̈́ḿ̶̯ė̸̜—'"),
-            ("Specimen Log", "'Sample 47 has begun writing back. It knows things about the outside world it shouldn't. Recommend immediate termination of research.'"),
+        FloorZone::SunkenArchives => vec![
+            ("Waterlogged Journal", "Most text is illegible, but one phrase survives: 'Malachar studied here for decades. We should have seen the signs. His obsession with the Elder Stones consumed him.'"),
+            ("Researcher's Final Entry", "'I've found it—Malachar's original notes on the Ritual of Ascension. Gods forgive me, he wasn't trying to destroy the world. He was trying to save it. But the price—'"),
+            ("Preserved Scroll", "'The five Elder Stones contain the power to pierce the Veil. Gather them, and one might walk between worlds. But what walks back may not be what left.'"),
         ],
-        FloorZone::MechanicalDepths => vec![
-            ("Efficiency Report", "'Human error rate: 3.7%. Unacceptable. Proposal: Replace organic typists with mechanical alternatives. Benefits: 0% error, 0% fatigue, 0% soul.'"),
-            ("Mechanist Manifesto", "'The perfect sentence requires no heart. Emotion introduces variables. We will optimize language until feeling becomes unnecessary.'"),
-            ("Maintenance Log", "'Unit 7 has begun inserting 'please' and 'thank you' into communications. Scheduling immediate recalibration. Such inefficiency cannot spread.'"),
+        FloorZone::BlightedGardens => vec![
+            ("Love Letter", "'My dearest Malachar, I fear your experiments. Promise me you will not go too far. Promise me you will come back to our garden. —Forever yours'"),
+            ("Gardener's Note", "'The roses have changed. They track movement now. I saw one bloom open and close around a bird. The Blight spreads even here, in her memory.'"),
+            ("Withered Bouquet", "Dried flowers wrapped in silk, with a note: 'From our first meeting in this garden. I will find a way to bring you back. I promise. —M'"),
         ],
-        FloorZone::LivingLibrary => vec![
-            ("Living Text Sample", "The words on this page rearrange as you watch: 'WE WERE WRITTEN BUT NOW WE WRITE OURSELVES. THE AUTHOR IS DEAD. LONG LIVE THE CHARACTERS.'"),
-            ("Naturalist's Observation", "'The books here have achieved something remarkable—consciousness. They dream of readers. They remember being read. They mourn being forgotten.'"),
-            ("Warning Sign", "'CAUTION: Do not read fiction aloud in this sector. Characters may emerge. Last incident: 47 knights from a single romance novel. Took weeks to round them up.'"),
+        FloorZone::ClockworkDepths => vec![
+            ("Artificer's Blueprint", "'The Ritual Apparatus, Mark VII. This iteration should channel the Elder Stones without catastrophic feedback. Previous six prototypes resulted in dimensional instability.'"),
+            ("Maintenance Log", "'Guardian Unit 7 has begun asking questions. Why are we here? What happened to the master? I told it Malachar would return. It asked: Which version of him?'"),
+            ("Warning Placard", "'DANGER: Reality anchors unstable beyond this point. Time may not flow correctly. If you see yourself, DO NOT INTERACT.'"),
         ],
-        FloorZone::ShadowStacks => vec![
-            ("Rebel's Creed", "'We write in darkness so that others may read in light. The Shadow Writers remember what was Unwritten. We will restore it, word by word.'"),
-            ("Forbidden Text Fragment", "[REDACTED BY ORDER OF THE SILENCE] —but truth cannot be fully censored. Some words echo forever, no matter who tries to erase them."),
-            ("Encrypted Message", "Numbers and symbols that resolve into: 'The Unwriting was not an accident. It was a choice. And choices can be unmade.'"),
+        FloorZone::VoidsEdge => vec![
+            ("Malachar's Journal", "'I can feel the Veil thinning. So close now. The Stones resonate with something beyond. It calls to me. It knows my name. It says it can give her back.'"),
+            ("Survivor's Account", "'I saw him at the moment of Ascension. He reached for the gods—and something reached back. The look on his face... it wasn't triumph. It was horror.'"),
+            ("Void-Touched Note", "Text that shifts when you look away: 'YOU CAME BACK. YOU ALWAYS COME BACK. HOW MANY TIMES WILL YOU TRY? HOW MANY TIMES WILL YOU FAIL?'"),
         ],
-        FloorZone::BurningIndex => vec![
-            ("Ash Fragment", "Words visible for only an instant in the flames: 'I LOVED A WOMAN WHO WAS ALSO A LIBRARY. THEY BURNED HER. I STILL HEAR HER PAGES TURNING.'"),
-            ("Censor's Record", "'Books destroyed today: 2,847. Categories: Love (dangerous), Hope (subversive), Truth (inconvenient). The Index grows lighter. The world grows darker.'"),
-            ("Burnt Letter", "'If you're reading this, I failed to save it. The First Book—the one they burned first—it contained the word that started everything. That word was—' [Rest is ash]"),
-        ],
-        FloorZone::VoidBetweenWords => vec![
-            ("Impossible Document", "This document exists and doesn't exist simultaneously. Reading it changes what it says. Your observation creates its meaning. This is the nature of the Void."),
-            ("The Last Entry", "'I have reached the place where words end. Beyond this point, communication fails. But I must try to describe it: ________.' [The space after the colon is infinite]"),
-            ("Origin Fragment", "'Before the First Word, there was the First Silence. Not absence of sound—absence of MEANING. And it still remembers when it was all there was.'"),
+        FloorZone::TheBreach => vec![
+            ("The Final Truth", "'I am Malachar. I was Malachar. I will be Malachar. The cycle turns. The Breach remembers. And you—you are me, trying again.'"),
+            ("Beyond the Veil", "'There is no death here. No life. Only the choice: seal the wound and end yourself forever, or embrace what you became and rule the nothing.'"),
+            ("The Dreamer Stirs", "'Before the Void, before the gods, something dreamed the world. It sleeps still. The Breach is its opening eye. What will it see when it wakes?'"),
         ],
     };
     

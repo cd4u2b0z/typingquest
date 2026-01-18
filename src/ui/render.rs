@@ -983,11 +983,11 @@ fn render_stats(f: &mut Frame, state: &GameState) {
     let factions = &state.faction_relations;
     let faction_text = format!(
         "󰜃 Faction Standings 󰜃\n\n  󰂡 Scribes: {}  󰬲 Mechanists: {}  󰌪 Naturalists: {}\n  󰬡 Shadow Writers: {}  󰏮 Archivists: {}",
-        format_standing(factions.standings.get(&crate::game::narrative::Faction::Scribes).copied().unwrap_or(0)),
-        format_standing(factions.standings.get(&crate::game::narrative::Faction::Mechanists).copied().unwrap_or(0)),
-        format_standing(factions.standings.get(&crate::game::narrative::Faction::Naturalists).copied().unwrap_or(0)),
-        format_standing(factions.standings.get(&crate::game::narrative::Faction::ShadowWriters).copied().unwrap_or(0)),
-        format_standing(factions.standings.get(&crate::game::narrative::Faction::Archivists).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::MagesGuild).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::TempleOfDawn).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::RangersOfTheWild).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::ShadowGuild).copied().unwrap_or(0)),
+        format_standing(factions.standings.get(&crate::game::narrative::Faction::MerchantConsortium).copied().unwrap_or(0)),
     );
     let faction_widget = Paragraph::new(faction_text)
         .style(Style::default().fg(Color::Cyan))

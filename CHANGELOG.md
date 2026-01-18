@@ -9,20 +9,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Planned
 - Save/load game state
-- Wire up dormant narrative systems
+- Wire up dormant narrative systems to gameplay
 - Balance pass (once things are connected)
 
-### Added
-- **Meta-Progression Ink Shop**
-  - New "Upgrades" option in title menu (`[U]` key)
-  - Spend Ink earned from runs on permanent upgrades
-  - Available upgrades: HP bonus, Gold bonus, Damage %, Time %, and more
-  - Start bonuses now applied when beginning new games
-  - Ink balance displayed on title menu
+---
 
-### Fixed
-- **Boss Loop Bug** — Defeating floor 5/10 boss no longer spawns infinite bosses
-- **Floor 10 Victory** — Beating final boss now triggers Victory screen immediately
+## [0.4.0] - 2026-01-17
+
+### 🏰 Fantasy Lore Overhaul
+
+Complete rewrite of all lore systems from keyboard/typing theme to **high fantasy D&D-style** worldbuilding. Inspired by Tolkien, Elder Scrolls, Dark Souls, and Forgotten Realms.
+
+### Changed - World Cosmology
+- **Three Ages**: Age of Dawn (gods walked among mortals), Age of Crowns (mortal kingdoms), Age of Shadow (current era)
+- **The Sundering**: Central catastrophe when Archon Malachar tried to pierce the Veil and become a god
+- **The Blight**: Raw chaos leaking from the Void through the wound in reality
+- **Player Mystery**: You are Malachar reborn, seeking redemption or dark ascension
+
+### Changed - Factions (complete rename)
+- Scribes → **Mages Guild** (arcane knowledge seekers)
+- Mechanists → **Temple of Dawn** (divine light, healing, undead hunters)
+- Naturalists → **Rangers of the Wild** (nature's defenders, Blight fighters)
+- ShadowWriters → **Shadow Guild** (information brokers, assassins)
+- Archivists → **Merchant Consortium** (trade, neutrality, pragmatism)
+
+### Changed - Dungeon Zones
+- **Floors 1-2**: The Shattered Halls (ruined castle)
+- **Floors 3-4**: The Sunken Archives (flooded library)
+- **Floors 5-6**: The Blighted Gardens (corrupted greenhouse)
+- **Floors 7-8**: The Clockwork Depths (ancient machinery)
+- **Floors 9-10**: The Void's Edge (reality breaks down)
+- **Floor 11+**: The Breach (where the Sundering occurred)
+
+### Changed - Bosses
+- "THE GREAT QWERTY" → **The Hollow Knight** (Floor 5)
+- "CLIPPY THE FALLEN" → **The Void Herald** (Floor 10)
+
+### Changed - Enemies (14 renamed with new descriptions)
+- Typo Gremlin → **Goblin Lurker**
+- Word Wisp → **Spectral Wisp**
+- Syntax Spider → **Venomous Spider**
+- Vowel Vampire → **Lesser Vampire**
+- Corrupted Typer → **Blighted Thrall**
+- Meaning Eater → **Soul Devourer**
+- Grammar Golem → **Stone Golem**
+- Void Scribe → **Void Walker**
+- Entropy Weaver → **Shadow Weaver**
+- Paragraph Phantom → **Wailing Wraith**
+- Lexicon Leviathan → **Ancient Wyrm**
+- Silence Incarnate → **Death Knight**
+- Corruption Elemental → **Blight Elemental**
+- The Unwriter → **The Void Herald**
+
+### Changed - Lore References
+- "Unwriting" → "Sundering" throughout codebase
+- All typing/keyboard metaphors replaced with fantasy equivalents
+- Updated ambient messages, event text, and zone descriptions
+
+### Changed - Three Endings
+- **Final Rest**: Seal the breach, sacrifice yourself, world saved
+- **Dark Ascension**: Complete Malachar's ritual, become the new dark god
+- **Third Path**: Find another way (requires all faction alliances)
+
+### Technical
+- `deep_lore.rs`: 853 → 1,016 lines (complete rewrite)
+- Updated faction references in 12+ files
+- All changes compile cleanly (`cargo check` passes)
+
+### Documentation
+- README project structure now lists all 48 source files
+- Accurate line counts for all modules
+- New roadmap section for v0.4.0 lore overhaul
 
 ---
 

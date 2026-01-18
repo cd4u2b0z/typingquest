@@ -3,32 +3,26 @@
 //! This module establishes the foundational truth of the universe.
 //! All other systems reference this as the source of coherent worldbuilding.
 //!
-//! Design Principles (from studying masters of the craft):
-//! - Tolkien: Languages shape culture; history feels lived-in
-//! - Ursula K. Le Guin: Magic has costs; systems have rules
-//! - Gene Wolfe: Unreliable narrators; truth revealed through contradiction
-//! - Dark Souls/Elden Ring: Environmental storytelling; fragmented lore
-//! - Planescape Torment: Belief shapes reality; words have power
-//! - Disco Elysium: Internal voices; ideology as character
+//! Inspiration: Tolkien, Elder Scrolls, D&D Forgotten Realms, Dark Souls,
+//! Earthbound's cosmic horror, Fallout's mysterious past.
 
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
-// ============================================================================
+// ===========================================================================
 // THE COSMOLOGY - What is true about this universe
-// ============================================================================
+// ===========================================================================
 
-/// The fundamental truth of the world: reality is made of language.
-/// Before there was matter, there was the Word.
-/// The Unwriting threatens to unmake creation itself.
+/// The fundamental truth of the world: The Veil is thinning.
+/// An ancient evil stirs beneath the mountains. Heroes are needed.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Cosmology {
     /// The three ages of the world
     pub ages: WorldAges,
-    /// The nature of the Corruption/Unwriting
+    /// The nature of the Blight/Corruption
     pub corruption_truth: CorruptionTruth,
-    /// The original sin that started everything
-    pub the_first_silence: FirstSilence,
+    /// The Sundering that started everything
+    pub the_sundering: TheSundering,
     /// What the world was like before
     pub before_memory: BeforeMemory,
 }
@@ -45,7 +39,7 @@ impl Cosmology {
         Self {
             ages: WorldAges::canonical(),
             corruption_truth: CorruptionTruth::canonical(),
-            the_first_silence: FirstSilence::canonical(),
+            the_sundering: TheSundering::canonical(),
             before_memory: BeforeMemory::canonical(),
         }
     }
@@ -54,51 +48,52 @@ impl Cosmology {
 /// The three ages of the world
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WorldAges {
-    pub age_of_voices: AgeOfVoices,
-    pub age_of_writing: AgeOfWriting,
-    pub age_of_unwriting: AgeOfUnwriting,
+    pub age_of_dawn: AgeOfDawn,
+    pub age_of_crowns: AgeOfCrowns,
+    pub age_of_shadow: AgeOfShadow,
 }
 
 impl WorldAges {
     pub fn canonical() -> Self {
         Self {
-            age_of_voices: AgeOfVoices {
-                description: "Before writing, when words existed only as breath. \
-                    The First Speakers shaped reality through speech alone. \
-                    Nothing was permanent. Every truth could be forgotten. \
-                    The world was mutable, dreamlike, contradictory.".to_string(),
-                key_event: "The Speaking of the First Names gave form to chaos.".to_string(),
-                duration: "Unknown - time itself was unwritten".to_string(),
-                ended_by: "The First Scribe discovered how to make words permanent.".to_string(),
+            age_of_dawn: AgeOfDawn {
+                description: "When the gods walked among mortals. \
+                    The First Flame burned eternal in the heart of the world. \
+                    Dragons ruled the skies and spoke prophecy. \
+                    Magic flowed freely, and death was but a passage.".to_string(),
+                key_event: "The Forging of the Elder Stones gave form to chaos.".to_string(),
+                duration: "Unknown - before mortal reckoning".to_string(),
+                ended_by: "The gods withdrew beyond the Veil after the War of Heavens.".to_string(),
             },
-            age_of_writing: AgeOfWriting {
-                description: "Words made permanent. Reality solidified. \
-                    The great libraries arose. Knowledge accumulated. \
-                    But with permanence came inflexibility. \
-                    And with fixed meaning came the possibility of corruption.".to_string(),
-                key_event: "The Founding of the First Library at Logos Prime.".to_string(),
+            age_of_crowns: AgeOfCrowns {
+                description: "Mortals inherited the world. Kingdoms rose and fell. \
+                    The great empires built wonders that still stand in ruin. \
+                    Magic was codified into schools. The Orders were founded. \
+                    But hubris grew, and some sought to pierce the Veil.".to_string(),
+                key_event: "The founding of the Eternal Kingdom of Valdris.".to_string(),
                 duration: "Three thousand years of recorded history.".to_string(),
-                ended_by: "The First Silence - when someone tried to unwrite death itself.".to_string(),
+                ended_by: "The Sundering - when the Archon tried to become a god.".to_string(),
                 great_works: vec![
-                    "The Eternal Codex - all natural laws in written form".to_string(),
-                    "The Name Registry - every living thing recorded".to_string(),
-                    "The Tomorrow Texts - prophecies written to ensure futures".to_string(),
+                    "The Spire of Eternity - a tower touching the heavens".to_string(),
+                    "The Binding Stones - seals holding the Void at bay".to_string(),
+                    "The Chronicle Eternal - all knowledge preserved in crystal".to_string(),
                 ],
             },
-            age_of_unwriting: AgeOfUnwriting {
-                description: "The current age. The Corruption spreads. \
-                    Words lose meaning. Texts unravel. Reality bleeds. \
-                    The factions war over how to survive - or exploit - the collapse.".to_string(),
-                key_event: "The Great Unwriting began at Logos Prime.".to_string(),
-                duration: "Forty-seven years since the First Silence.".to_string(),
-                current_state: "Accelerating decay. Haven is one of the last stable zones.".to_string(),
+            age_of_shadow: AgeOfShadow {
+                description: "The current age. The Blight spreads from the wound in reality. \
+                    Monsters crawl from the depths. Ancient evils stir. \
+                    The kingdoms are fractured, the Orders scattered. \
+                    Heroes are needed more than ever.".to_string(),
+                key_event: "The Sundering tore a hole between worlds.".to_string(),
+                duration: "Forty-seven years since the Sundering.".to_string(),
+                current_state: "The Blight spreads. The Veil thins. Time grows short.".to_string(),
             },
         }
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AgeOfVoices {
+pub struct AgeOfDawn {
     pub description: String,
     pub key_event: String,
     pub duration: String,
@@ -106,7 +101,7 @@ pub struct AgeOfVoices {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AgeOfWriting {
+pub struct AgeOfCrowns {
     pub description: String,
     pub key_event: String,
     pub duration: String,
@@ -115,14 +110,14 @@ pub struct AgeOfWriting {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AgeOfUnwriting {
+pub struct AgeOfShadow {
     pub description: String,
     pub key_event: String,
     pub duration: String,
     pub current_state: String,
 }
 
-/// The true nature of the Corruption
+/// The true nature of the Blight
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CorruptionTruth {
     /// What the factions believe (different theories)
@@ -137,43 +132,37 @@ impl CorruptionTruth {
     pub fn canonical() -> Self {
         let mut theories = HashMap::new();
         
-        theories.insert("Scribes".to_string(), 
-            "The Corruption is divine punishment for straying from proper form. \
-             Only perfect adherence to the sacred texts can reverse it.".to_string());
+        theories.insert("Mages Guild".to_string(), 
+            "The Blight is raw chaos leaking from the Void. \
+            Only through mastery of the arcane arts can we seal the breach.".to_string());
         
-        theories.insert("Mechanists".to_string(),
-            "The Corruption is entropy—a natural process of linguistic decay. \
-             It can be outpaced through pure speed and efficiency.".to_string());
+        theories.insert("Temple of Dawn".to_string(),
+            "The Blight is divine punishment for the Archon's hubris. \
+            Only through prayer and penance can we be forgiven.".to_string());
         
-        theories.insert("Naturalists".to_string(),
-            "The Corruption is the world rejecting forced, unnatural writing. \
-             Return to organic expression and reality will heal.".to_string());
+        theories.insert("Rangers of the Wild".to_string(),
+            "The Blight is a sickness in the natural order. \
+            The land itself must be healed, root and branch.".to_string());
         
-        theories.insert("ShadowWriters".to_string(),
-            "The Corruption was deliberately created as a weapon. \
-             Someone—or something—is using it intentionally.".to_string());
+        theories.insert("Shadow Guild".to_string(),
+            "The Blight is a weapon. Someone is controlling it. \
+            Find the puppeteer, and you find the cure.".to_string());
         
-        theories.insert("Archivists".to_string(),
-            "The Corruption is information loss on a cosmic scale. \
-             It cannot be stopped, only documented.".to_string());
+        theories.insert("Merchant Consortium".to_string(),
+            "The Blight is an opportunity. Where there is chaos, \
+            there is profit. Let others worry about causes.".to_string());
         
         Self {
             faction_theories: theories,
-            actual_nature: "The Corruption is grief made manifest. \
-                When the First Speaker tried to unwrite death—to remove the word \
-                and thus the concept from reality—they succeeded partially. \
-                Death was wounded but not killed. What bleeds from that wound \
-                is the Unwriting: reality's immune response to a violation \
-                of its fundamental grammar.".to_string(),
+            actual_nature: "The Blight is the Void itself - the nothing that existed \
+                before creation. The Sundering didn't just tear reality; \
+                it remembered that reality could end.".to_string(),
             hidden_truth: HiddenTruth {
-                level_1: "The Corruption can be temporarily halted by perfect typing—\
-                    flawless language reinforces reality.".to_string(),
-                level_2: "The original unwriter is still alive, kept immortal by their \
-                    own broken spell, endlessly trying to finish what they started.".to_string(),
-                level_3: "The player is connected to the First Speaker. Their amnesia \
-                    is not accidental—they chose to forget.".to_string(),
-                final_truth: "The player IS the First Speaker, reborn to either complete \
-                    the Unwriting or finally accept what they tried to unmake.".to_string(),
+                surface_appearance: "Monsters and corruption spreading from the Breach.".to_string(),
+                deeper_truth: "The Void is not invading - it is being called. \
+                    Someone wants this world to end.".to_string(),
+                deepest_secret: "The Archon did not fail. He succeeded in becoming a god. \
+                    But the god he became was the God of Endings.".to_string(),
             },
         }
     }
@@ -181,99 +170,680 @@ impl CorruptionTruth {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HiddenTruth {
-    /// Revealed in Chapter 2
-    pub level_1: String,
-    /// Revealed in Chapter 4
-    pub level_2: String,
-    /// Revealed in Chapter 5
-    pub level_3: String,
-    /// The final revelation
-    pub final_truth: String,
+    pub surface_appearance: String,
+    pub deeper_truth: String,
+    pub deepest_secret: String,
 }
 
-/// The event that ended the Age of Writing
+/// The Sundering - the catastrophe that ended the Age of Crowns
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct FirstSilence {
+pub struct TheSundering {
     pub what_happened: String,
     pub who_caused_it: String,
-    pub why: String,
-    pub immediate_consequences: Vec<String>,
-    pub long_term_consequences: Vec<String>,
+    pub immediate_effects: Vec<String>,
+    pub ongoing_consequences: Vec<String>,
+    pub what_was_lost: Vec<String>,
+    pub the_hidden_truth: String,
 }
 
-impl FirstSilence {
+impl TheSundering {
     pub fn canonical() -> Self {
         Self {
-            what_happened: "At the height of the Age of Writing, the greatest \
-                scribe—called only the First Speaker in surviving texts—lost someone \
-                they loved. In their grief, they attempted the impossible: to unwrite \
-                death itself. To remove the word, and thus the concept, from reality. \
-                They partially succeeded. The resulting paradox tore a hole in the \
-                fabric of meaning.".to_string(),
-            who_caused_it: "The First Speaker. Their true name has been lost—or \
-                deliberately erased. Some texts refer to them as 'The One Who Would Not Let Go.'".to_string(),
-            why: "Love. Grief. The unbearable weight of loss. They could not accept \
-                that words—which could create worlds—could not save one person.".to_string(),
-            immediate_consequences: vec![
-                "Logos Prime, the First Library, collapsed into a wound in reality.".to_string(),
-                "The Eternal Codex shattered. Natural laws became suggestions.".to_string(),
-                "The Name Registry corrupted. Identities began to blur.".to_string(),
-                "The Corruption began spreading from the epicenter.".to_string(),
+            what_happened: "The Archon Malachar gathered the five Elder Stones \
+                and attempted the Ritual of Ascension. He sought to pierce the Veil \
+                and claim the power of the gods. The ritual succeeded—and failed. \
+                The Veil tore. The Void poured through. Malachar vanished. \
+                The world has been dying ever since.".to_string(),
+            who_caused_it: "Archon Malachar, Last King of Valdris, Seeker of Divinity".to_string(),
+            immediate_effects: vec![
+                "The Breach opened beneath the Spire of Eternity".to_string(),
+                "The Elder Stones shattered and scattered".to_string(),
+                "The great wards failed across all kingdoms".to_string(),
+                "Monsters poured forth from the depths".to_string(),
+                "The gods fell silent".to_string(),
             ],
-            long_term_consequences: vec![
-                "Haven and other stable zones formed around uncorrupted texts.".to_string(),
-                "The factions arose with competing theories and survival strategies.".to_string(),
-                "Typing became both weapon and shield—the only way to reinforce reality.".to_string(),
-                "The First Speaker vanished. Some say died. Some say worse.".to_string(),
+            ongoing_consequences: vec![
+                "The Blight spreads further each year".to_string(),
+                "Magic grows unstable near the Breach".to_string(),
+                "The dead sometimes refuse to stay dead".to_string(),
+                "Dreams are invaded by whispers from the Void".to_string(),
+                "Ancient evils sealed away are breaking free".to_string(),
             ],
+            what_was_lost: vec![
+                "The Eternal Kingdom of Valdris".to_string(),
+                "The accumulated wisdom of the Imperial Archives".to_string(),
+                "The binding oaths between mortal and divine".to_string(),
+                "Trust between the surviving kingdoms".to_string(),
+                "Hope, for many".to_string(),
+            ],
+            the_hidden_truth: "Malachar did not die. He did not fail. \
+                He became something else—something between god and void. \
+                He watches. He waits. He calls his servants home.".to_string(),
         }
     }
 }
 
-/// What the world was like before the Unwriting
+/// What existed before recorded history
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BeforeMemory {
-    pub the_old_world: String,
-    pub what_was_lost: Vec<String>,
-    pub what_remains: Vec<String>,
-    pub places_that_remember: Vec<String>,
+    pub fragments: Vec<AncientFragment>,
+    pub the_truth_beneath: String,
 }
 
 impl BeforeMemory {
     pub fn canonical() -> Self {
         Self {
-            the_old_world: "A world where words were trusted. Where you could name \
-                something and know it would stay named. Where books held stable truth \
-                and language connected rather than threatened. The sky had a proper \
-                color, gravity had a reliable direction, and death—though feared—was \
-                at least consistent.".to_string(),
-            what_was_lost: vec![
-                "The ability to trust written records completely.".to_string(),
-                "Consistent natural laws outside stable zones.".to_string(),
-                "Long-distance communication (texts corrupt in transit).".to_string(),
-                "The certainty of identity (names can blur, be stolen, forgotten).".to_string(),
-                "Simple mortality (some deaths no longer 'take').".to_string(),
+            fragments: vec![
+                AncientFragment {
+                    source: "The Prophecies of the First Seer".to_string(),
+                    content: "Before the world was the Void. Before the Void was the Dream. \
+                        The Dreamer sleeps beneath the mountain. Do not wake the Dreamer.".to_string(),
+                    reliability: "Ancient but fragmentary".to_string(),
+                },
+                AncientFragment {
+                    source: "Dwarven runes from the Deep Roads".to_string(),
+                    content: "We delved too deep. We found the darkness that thinks. \
+                        We sealed the doors and spoke not of what we saw.".to_string(),
+                    reliability: "Dwarves do not lie about stone".to_string(),
+                },
+                AncientFragment {
+                    source: "Elven creation songs".to_string(),
+                    content: "The world is a song. We are but verses. \
+                        When the song ends, the silence will swallow all.".to_string(),
+                    reliability: "Elves remember, but speak in riddles".to_string(),
+                },
+                AncientFragment {
+                    source: "Dragon-speech, translated by madmen".to_string(),
+                    content: "We were here before the gods. We will be here after. \
+                        The cycle turns. All burns. All returns.".to_string(),
+                    reliability: "Dragons speak truth, but not for mortals to understand".to_string(),
+                },
             ],
-            what_remains: vec![
-                "Haven and other protected settlements.".to_string(),
-                "Fragments of the great libraries, fiercely guarded.".to_string(),
-                "The practice of protective typing—reality maintenance through keystrokes.".to_string(),
-                "Oral traditions among the Naturalists, less corruptible than text.".to_string(),
-                "The faction wars, fought with words as weapons.".to_string(),
-            ],
-            places_that_remember: vec![
-                "The Athenaeum - where books still hold stable meaning.".to_string(),
-                "Haven's Central Square - built around the Last Functional Terminal.".to_string(),
-                "The Sacred Grove - where words grow as living things.".to_string(),
-                "The Restricted Section - sealed texts too dangerous to read.".to_string(),
-            ],
+            the_truth_beneath: "The world is not the first world. It is not the last. \
+                The Void consumes, but also preserves. Everything that has ever existed \
+                still exists somewhere in the nothing. The Dreamer dreams of them all.".to_string(),
         }
     }
 }
 
-// ============================================================================
-// FACTION HISTORIES - How each group arose and what they truly want
-// ============================================================================
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AncientFragment {
+    pub source: String,
+    pub content: String,
+    pub reliability: String,
+}
+
+// ===========================================================================
+// THE FACTIONS - Who shapes the world
+// ===========================================================================
+
+/// The five major factions struggling for influence in the Age of Shadow
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FactionLore {
+    pub name: String,
+    pub symbol: String,
+    pub philosophy: String,
+    pub history: String,
+    pub current_state: String,
+    pub goals: Vec<String>,
+    pub methods: Vec<String>,
+    pub secrets: Vec<String>,
+    pub notable_members: Vec<NotableFigure>,
+    pub relationship_to_player: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NotableFigure {
+    pub name: String,
+    pub title: String,
+    pub description: String,
+    pub secret: String,
+}
+
+pub fn get_faction_lore() -> Vec<FactionLore> {
+    vec![
+        FactionLore {
+            name: "The Mages Guild".to_string(),
+            symbol: "󰊠".to_string(),
+            philosophy: "Knowledge is power. Power must be controlled. \
+                Through understanding of the arcane, we shall seal the Breach \
+                and restore order to the world.".to_string(),
+            history: "Founded in the Age of Crowns to regulate magic after \
+                the Wild Magic Wars nearly destroyed the continent.".to_string(),
+            current_state: "Fractured between those who would use any means \
+                to stop the Blight and those who fear becoming what they fight.".to_string(),
+            goals: vec![
+                "Seal the Breach permanently".to_string(),
+                "Preserve magical knowledge".to_string(),
+                "Prevent another Sundering".to_string(),
+            ],
+            methods: vec![
+                "Arcane research and experimentation".to_string(),
+                "Training battlemages to fight the Blight".to_string(),
+                "Seeking the scattered Elder Stone fragments".to_string(),
+            ],
+            secrets: vec![
+                "The Archmage knows how to close the Breach but fears the cost".to_string(),
+                "They have been experimenting with Void magic in secret".to_string(),
+            ],
+            notable_members: vec![
+                NotableFigure {
+                    name: "Archmage Thessaly".to_string(),
+                    title: "Voice of the Council".to_string(),
+                    description: "Ancient, wise, and burdened by terrible knowledge.".to_string(),
+                    secret: "She was Malachar's apprentice. She helped him gather the Stones.".to_string(),
+                },
+            ],
+            relationship_to_player: "Sees potential. Watches carefully.".to_string(),
+        },
+        FactionLore {
+            name: "Temple of Dawn".to_string(),
+            symbol: "󰖙".to_string(),
+            philosophy: "Faith endures when all else fails. The gods have not abandoned us; \
+                we abandoned them. Through devotion, we shall earn their return.".to_string(),
+            history: "The oldest religious institution, dating back to the Age of Dawn \
+                when priests spoke directly with the divine.".to_string(),
+            current_state: "Growing in influence as people seek comfort. \
+                But the silence of the gods weighs heavily on the faithful.".to_string(),
+            goals: vec![
+                "Restore contact with the gods".to_string(),
+                "Provide sanctuary for refugees".to_string(),
+                "Purify the Blighted lands through holy rites".to_string(),
+            ],
+            methods: vec![
+                "Prayer, ritual, and pilgrimage".to_string(),
+                "Healing the sick and wounded".to_string(),
+                "Holy crusades against undead and demons".to_string(),
+            ],
+            secrets: vec![
+                "Some priests have heard whispers—but not from the gods".to_string(),
+                "The High Priest knows the gods are not silent. They are afraid.".to_string(),
+            ],
+            notable_members: vec![
+                NotableFigure {
+                    name: "High Priest Aldric".to_string(),
+                    title: "Keeper of the Eternal Flame".to_string(),
+                    description: "A man whose faith has been tested to breaking.".to_string(),
+                    secret: "He no longer believes. He continues for the hope of others.".to_string(),
+                },
+            ],
+            relationship_to_player: "Sees a lost soul in need of guidance.".to_string(),
+        },
+        FactionLore {
+            name: "Rangers of the Wild".to_string(),
+            symbol: "󰌪".to_string(),
+            philosophy: "Civilization's hubris caused the Sundering. \
+                The answer lies not in books or temples but in the living world.".to_string(),
+            history: "Formed from survivors of the frontier kingdoms destroyed in the Sundering. \
+                They know the wilds better than any map.".to_string(),
+            current_state: "Stretched thin protecting trade routes and villages \
+                from monsters. Respected but underfunded.".to_string(),
+            goals: vec![
+                "Protect the innocent from monsters".to_string(),
+                "Find natural remedies for the Blight".to_string(),
+                "Preserve the balance between civilization and wild".to_string(),
+            ],
+            methods: vec![
+                "Scouting and monster hunting".to_string(),
+                "Druidic nature magic".to_string(),
+                "Alliance with beast and spirit".to_string(),
+            ],
+            secrets: vec![
+                "They have found places where the Blight cannot spread".to_string(),
+                "The elder druids can speak with something ancient in the deep forests".to_string(),
+            ],
+            notable_members: vec![
+                NotableFigure {
+                    name: "Warden Sylva".to_string(),
+                    title: "Voice of the Wilds".to_string(),
+                    description: "Half-elf who has walked every road and knows every trail.".to_string(),
+                    secret: "She has seen what waits in the Void. She hunts it.".to_string(),
+                },
+            ],
+            relationship_to_player: "Judges by actions, not words.".to_string(),
+        },
+        FactionLore {
+            name: "Shadow Guild".to_string(),
+            symbol: "󰘻".to_string(),
+            philosophy: "Laws are chains for the weak. In darkness, we find freedom. \
+                We take what we need and answer to no crown.".to_string(),
+            history: "As old as civilization itself. Where there is wealth, there are thieves. \
+                But they have codes, and they keep their word—for a price.".to_string(),
+            current_state: "Thriving in the chaos. Information is more valuable than gold, \
+                and they deal in both.".to_string(),
+            goals: vec![
+                "Profit from the chaos".to_string(),
+                "Maintain their network of spies and contacts".to_string(),
+                "Survive—whatever comes".to_string(),
+            ],
+            methods: vec![
+                "Theft, smuggling, and assassination".to_string(),
+                "Bribery and blackmail".to_string(),
+                "Selling information to all sides".to_string(),
+            ],
+            secrets: vec![
+                "They know who really controls the Blight".to_string(),
+                "The Guildmaster has made deals with things from the Void".to_string(),
+            ],
+            notable_members: vec![
+                NotableFigure {
+                    name: "The Whisper".to_string(),
+                    title: "Guildmaster".to_string(),
+                    description: "No one knows their face. No one knows their voice.".to_string(),
+                    secret: "There have been seven Whispers. The current one is not human.".to_string(),
+                },
+            ],
+            relationship_to_player: "Everyone has a price. They want to know yours.".to_string(),
+        },
+        FactionLore {
+            name: "Merchant Consortium".to_string(),
+            symbol: "󰆼".to_string(),
+            philosophy: "Gold makes the world turn, even when gods fall silent. \
+                Trade routes must stay open. Civilization must continue.".to_string(),
+            history: "United after the Sundering when old currencies collapsed. \
+                They standardized trade and kept economies from total collapse.".to_string(),
+            current_state: "Wealthy beyond measure. They fund armies and rebuild cities. \
+                They also profit from war and scarcity.".to_string(),
+            goals: vec![
+                "Maintain profitable trade routes".to_string(),
+                "Fund reconstruction of key cities".to_string(),
+                "Ensure their influence over all factions".to_string(),
+            ],
+            methods: vec![
+                "Investment and loans".to_string(),
+                "Monopolizing essential goods".to_string(),
+                "Political manipulation through wealth".to_string(),
+            ],
+            secrets: vec![
+                "They have been buying up Elder Stone fragments".to_string(),
+                "The Consortium's inner circle serves an older power".to_string(),
+            ],
+            notable_members: vec![
+                NotableFigure {
+                    name: "Guildmaster Venn".to_string(),
+                    title: "Lord of Coin".to_string(),
+                    description: "A jolly merchant prince who remembers every debt.".to_string(),
+                    secret: "He has been alive for three hundred years. He remembers Malachar.".to_string(),
+                },
+            ],
+            relationship_to_player: "A customer. A debtor. An opportunity.".to_string(),
+        },
+    ]
+}
+
+// ===========================================================================
+// THE MYSTERY - The player's hidden past
+// ===========================================================================
+
+/// What the player gradually discovers about themselves
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PlayerMystery {
+    pub clues_by_chapter: HashMap<i32, Vec<Clue>>,
+    pub the_truth: PlayerTruth,
+    pub possible_endings: Vec<Ending>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Clue {
+    pub id: String,
+    pub description: String,
+    pub how_found: String,
+    pub what_it_suggests: String,
+    pub who_knows: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PlayerTruth {
+    pub who_they_were: String,
+    pub what_they_did: String,
+    pub why_they_forgot: String,
+    pub what_they_must_choose: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Ending {
+    pub name: String,
+    pub requirements: Vec<String>,
+    pub description: String,
+    pub consequences: String,
+}
+
+pub fn create_player_mystery() -> PlayerMystery {
+    let mut clues = HashMap::new();
+    
+    // Chapter 1 clues - something is wrong
+    clues.insert(1, vec![
+        Clue {
+            id: "amnesia".to_string(),
+            description: "You awaken with no memory of who you are or how you came to be here. \
+                Only a burning drive to descend.".to_string(),
+            how_found: "Game start".to_string(),
+            what_it_suggests: "Memory loss this complete is not natural.".to_string(),
+            who_knows: vec!["Perhaps no one".to_string()],
+        },
+        Clue {
+            id: "strange_recognition".to_string(),
+            description: "Enemies sometimes hesitate before attacking you. \
+                'It can't be,' one whispers. 'You died.'".to_string(),
+            how_found: "Random combat dialogue".to_string(),
+            what_it_suggests: "You are known. You should not be alive.".to_string(),
+            who_knows: vec!["The monsters remember".to_string()],
+        },
+    ]);
+    
+    // Chapter 2 clues - others know something
+    clues.insert(2, vec![
+        Clue {
+            id: "mages_guild_file".to_string(),
+            description: "The Archmage has a sealed file with your face on it. \
+                It is marked 'DO NOT ENGAGE'.".to_string(),
+            how_found: "Mages Guild reputation".to_string(),
+            what_it_suggests: "You were important. You were dangerous.".to_string(),
+            who_knows: vec!["The Mages Guild inner council".to_string()],
+        },
+        Clue {
+            id: "dreams_of_fire".to_string(),
+            description: "You dream of a great tower burning. You dream of a ritual. \
+                You dream of reaching for something beyond the stars.".to_string(),
+            how_found: "Rest events".to_string(),
+            what_it_suggests: "You were there. At the Sundering.".to_string(),
+            who_knows: vec!["The Temple seers have seen your dreams".to_string()],
+        },
+    ]);
+    
+    // Chapter 3 clues - identity narrowing
+    clues.insert(3, vec![
+        Clue {
+            id: "malachar_portrait".to_string(),
+            description: "You find a portrait of the Archon Malachar. \
+                Your blood runs cold. He has your face.".to_string(),
+            how_found: "Deep dungeon exploration".to_string(),
+            what_it_suggests: "Impossible. Malachar died forty-seven years ago.".to_string(),
+            who_knows: vec!["The Shadow Guild has been watching you".to_string()],
+        },
+        Clue {
+            id: "elder_stone_resonance".to_string(),
+            description: "When you touch an Elder Stone fragment, it sings. \
+                It knows you. It welcomes you home.".to_string(),
+            how_found: "Finding Stone fragments".to_string(),
+            what_it_suggests: "You wielded them before.".to_string(),
+            who_knows: vec!["The Stones themselves".to_string()],
+        },
+    ]);
+    
+    // Chapter 4 clues - confronting the truth
+    clues.insert(4, vec![
+        Clue {
+            id: "void_recognition".to_string(),
+            description: "A voice from the Breach speaks: 'Why do you fight yourself? \
+                You opened this door. Come home.'".to_string(),
+            how_found: "Approaching the final dungeon".to_string(),
+            what_it_suggests: "You are connected to the Void.".to_string(),
+            who_knows: vec!["All the factions suspect by now".to_string()],
+        },
+        Clue {
+            id: "the_journal".to_string(),
+            description: "You find a journal in your own handwriting. It details the ritual. \
+                'Forgive me,' the final entry reads. 'I will make this right. \
+                I will become what is needed, even if I must forget myself.'".to_string(),
+            how_found: "Shadow Guild questline".to_string(),
+            what_it_suggests: "You are Malachar. You chose to forget.".to_string(),
+            who_knows: vec!["Now you know".to_string()],
+        },
+    ]);
+    
+    // Chapter 5 clue - acceptance
+    clues.insert(5, vec![
+        Clue {
+            id: "memory_return".to_string(),
+            description: "At the threshold of the Breach, your memories return. \
+                You were Malachar. You sought to save your dying world. \
+                You failed. The guilt broke you. You erased yourself and began again. \
+                How many times have you descended? How many times must you try?".to_string(),
+            how_found: "Reaching the final boss".to_string(),
+            what_it_suggests: "The truth.".to_string(),
+            who_knows: vec!["Everyone".to_string()],
+        },
+    ]);
+    
+    PlayerMystery {
+        clues_by_chapter: clues,
+        the_truth: PlayerTruth {
+            who_they_were: "Malachar, the Archon—greatest mage in history, whose ambition \
+                shattered the world.".to_string(),
+            what_they_did: "Attempted to become a god to save his people from plague. \
+                The ritual tore reality. He could not bear what he had become.".to_string(),
+            why_they_forgot: "You chose to forget. You sealed your memories and cast yourself \
+                into the mortal world, hoping to find redemption through ignorance. \
+                But the Breach calls to you. It always does.".to_string(),
+            what_they_must_choose: "Close the Breach and die forever. \
+                Embrace your godhood and rule the Void. \
+                Or find a third path—neither mortal nor god, but something new.".to_string(),
+        },
+        possible_endings: vec![
+            Ending {
+                name: "The Final Rest".to_string(),
+                requirements: vec!["Gather all five Elder Stone fragments".to_string(),
+                                   "Sacrifice yourself to seal the Breach".to_string()],
+                description: "You give what remains of your divine power to close the wound. \
+                    The Breach seals. The Blight recedes. You die, truly and finally.".to_string(),
+                consequences: "The world heals slowly. You are remembered as both villain and savior. \
+                    Your name becomes a prayer and a curse.".to_string(),
+            },
+            Ending {
+                name: "The Dark Ascension".to_string(),
+                requirements: vec!["Embrace your connection to the Void".to_string(),
+                                   "Absorb the power of the Breach".to_string()],
+                description: "You remember. You accept. You become what you were becoming \
+                    before you flinched. The God of Endings rises.".to_string(),
+                consequences: "The world ends. Not in fire, but in silence. \
+                    In the silence, there is peace. In the peace, there is nothing. \
+                    Is that not what you wanted?".to_string(),
+            },
+            Ending {
+                name: "The Third Path".to_string(),
+                requirements: vec!["Unite all five factions".to_string(),
+                                   "Find the Dreamer beneath the mountain".to_string(),
+                                   "Wake them with your choice".to_string()],
+                description: "You discover a truth older than gods: the world dreams itself. \
+                    You choose not to close the Breach or join it, but to walk through. \
+                    On the other side, you find not the Void, but the Dreamer. \
+                    You have a conversation.".to_string(),
+                consequences: "What happens next is between you and the Dreamer. \
+                    The world changes. Whether for better or worse depends on what you said. \
+                    But the Breach becomes a door. And doors can be walked through, both ways.".to_string(),
+            },
+        ],
+    }
+}
+
+// ===========================================================================
+// THE DUNGEON - What lies beneath
+// ===========================================================================
+
+/// The truth about why the dungeon exists and what it contains
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DungeonLore {
+    pub name: String,
+    pub true_nature: String,
+    pub zones: Vec<ZoneLore>,
+    pub bosses: Vec<BossLore>,
+    pub the_bottom: BottomLore,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ZoneLore {
+    pub zone_name: String,
+    pub floors: (i32, i32),
+    pub surface_appearance: String,
+    pub true_history: String,
+    pub ambient_horror: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BossLore {
+    pub name: String,
+    pub title: String,
+    pub floor: i32,
+    pub appearance: String,
+    pub true_identity: String,
+    pub last_words: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BottomLore {
+    pub what_player_expects: String,
+    pub what_is_actually_there: String,
+    pub the_final_choice: String,
+}
+
+pub fn get_dungeon_lore() -> DungeonLore {
+    DungeonLore {
+        name: "The Spire of Eternity".to_string(),
+        true_nature: "The Spire was built by Malachar to reach the heavens. \
+            Now it descends into the earth—inverted by the Sundering. \
+            What was the pinnacle is now the pit. The Breach waits at the bottom.".to_string(),
+        zones: vec![
+            ZoneLore {
+                zone_name: "The Shattered Halls".to_string(),
+                floors: (1, 2),
+                surface_appearance: "Ruined corridors of what was once a grand palace. \
+                    Debris and cobwebs. The occasional scavenger.".to_string(),
+                true_history: "These were the throne rooms of Valdris. \
+                    Here kings held court and heroes were honored.".to_string(),
+                ambient_horror: "Whispers of old courtiers. The echo of music that stopped mid-note.".to_string(),
+            },
+            ZoneLore {
+                zone_name: "The Sunken Archives".to_string(),
+                floors: (3, 4),
+                surface_appearance: "Flooded libraries full of rotting books. \
+                    Knowledge lost to water and time.".to_string(),
+                true_history: "The greatest collection of magical knowledge ever assembled. \
+                    Malachar studied here for decades.".to_string(),
+                ambient_horror: "Books that whisper when opened. Knowledge that hurts to know.".to_string(),
+            },
+            ZoneLore {
+                zone_name: "The Blighted Gardens".to_string(),
+                floors: (5, 6),
+                surface_appearance: "Once-beautiful gardens now twisted by the Blight. \
+                    Plants that move. Flowers with teeth.".to_string(),
+                true_history: "The royal gardens, where Malachar's beloved walked. \
+                    He tried to preserve her memory here.".to_string(),
+                ambient_horror: "The scent of roses mixed with rot. Something beautiful that will kill you.".to_string(),
+            },
+            ZoneLore {
+                zone_name: "The Clockwork Depths".to_string(),
+                floors: (7, 8),
+                surface_appearance: "Ancient mechanisms still grinding. \
+                    Traps and automatons guarding forgotten vaults.".to_string(),
+                true_history: "Malachar's workshops, where he built the apparatus for the ritual. \
+                    Some machines still wait for commands.".to_string(),
+                ambient_horror: "The ticking never stops. Something is counting down.".to_string(),
+            },
+            ZoneLore {
+                zone_name: "The Void's Edge".to_string(),
+                floors: (9, 10),
+                surface_appearance: "Reality breaks down. Geometry fails. \
+                    The Breach looms ahead, bleeding darkness.".to_string(),
+                true_history: "The ritual chamber. Ground zero of the Sundering. \
+                    This is where the world broke.".to_string(),
+                ambient_horror: "Your own voice, from somewhere else, begging you to stop. Or to continue.".to_string(),
+            },
+        ],
+        bosses: vec![
+            BossLore {
+                name: "The Hollow Knight".to_string(),
+                title: "Guardian of the Fallen Throne".to_string(),
+                floor: 5,
+                appearance: "A suit of royal armor, walking without a body inside. \
+                    Its sword still carries the oath of protection.".to_string(),
+                true_identity: "Sir Aldric, captain of the royal guard. He refused to abandon his post \
+                    even when his king became a monster. His loyalty bound him here.".to_string(),
+                last_words: "My king... I failed you. I failed everyone. Rest now... please rest...".to_string(),
+            },
+            BossLore {
+                name: "The Void Herald".to_string(),
+                title: "Voice of the Breach".to_string(),
+                floor: 10,
+                appearance: "A figure of living shadow with too many eyes. \
+                    It speaks with the voices of everyone who ever fell into the Breach.".to_string(),
+                true_identity: "What remains of everyone Malachar sacrificed for the ritual—including \
+                    his beloved. They are not angry. They are lonely.".to_string(),
+                last_words: "We waited so long... we knew you would come... we forgive you... do you forgive yourself?".to_string(),
+            },
+        ],
+        the_bottom: BottomLore {
+            what_player_expects: "A final boss. A great evil to defeat. Closure.".to_string(),
+            what_is_actually_there: "A mirror. The Breach. Your own reflection, waiting. \
+                And a choice that cannot be taken back.".to_string(),
+            the_final_choice: "You must choose: close the wound and die, \
+                embrace the void and rule, or walk through and see what lies beyond. \
+                There is no going back. There is no right answer. There is only you.".to_string(),
+        },
+    }
+}
+
+// ===========================================================================
+// HELPER FUNCTIONS
+// ===========================================================================
+
+/// Get a random piece of deep lore appropriate for the player's progress
+pub fn get_lore_hint(chapter: i32) -> Option<String> {
+    let hints = match chapter {
+        1 => vec![
+            "The Sundering changed everything. Some say it was forty-seven years ago. Others insist it was yesterday.",
+            "The gods fell silent after the Sundering. The priests say they are testing us. Others say they are dead.",
+            "Before the Blight, the Spire of Eternity touched the sky. Now it reaches into the earth.",
+        ],
+        2 => vec![
+            "The Archon Malachar sought to become a god. Some say he succeeded. Some say that was the problem.",
+            "Five Elder Stones, five great powers. They shattered when the Veil tore. Some fragments remain.",
+            "The factions all want something different. But they all fear the same thing.",
+        ],
+        3 => vec![
+            "Have you noticed the monsters hesitate sometimes? As if they recognize you?",
+            "The Mages Guild has files on everyone. Yours is sealed at the highest level.",
+            "Your dreams are not just dreams. Someone is trying to tell you something.",
+        ],
+        4 => vec![
+            "The Breach does not just consume. It remembers. Everything that falls in still exists, somehow.",
+            "Malachar did not fail. That is the terrible truth.",
+            "You have been here before. You will be here again.",
+        ],
+        5 => vec![
+            "At the bottom, there is only you.",
+            "The Dreamer sleeps. The Dreamer dreams. In the dream, you exist.",
+            "Choose wisely. Or don't. The choice is the only thing that matters.",
+        ],
+        _ => vec!["The world is older than we know. It will outlast us all."],
+    };
+    
+    use rand::seq::SliceRandom;
+    hints.choose(&mut rand::thread_rng()).map(|s| s.to_string())
+}
+
+/// Get a cryptic inscription for environmental storytelling
+pub fn get_inscription() -> String {
+    let inscriptions = vec![
+        "HERE FELL VALDRIS - MAY THE FLAMES REMEMBER",
+        "THE KING SOUGHT THE SKY AND FOUND THE VOID",
+        "WE WERE WARNED. WE DID NOT LISTEN.",
+        "TURN BACK, STRANGER. THERE IS NOTHING HERE BUT ENDINGS.",
+        "I CARVED THIS AS I DIED. REMEMBER ME.",
+        "THE DREAMER STIRS. LET IT SLEEP.",
+        "FIVE STONES. FIVE SEALS. ALL BROKEN NOW.",
+        "HE DID NOT MEAN FOR THIS. FORGIVE HIM.",
+    ];
+    
+    use rand::seq::SliceRandom;
+    inscriptions.choose(&mut rand::thread_rng())
+        .map(|s| s.to_string())
+        .unwrap_or_else(|| "The inscription is too worn to read.".to_string())
+}
+
+// ===========================================================================
+// FACTION HISTORIES - Detailed backgrounds for each faction
+// ===========================================================================
 
 /// Complete history of a faction, including hidden agendas
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -330,524 +900,117 @@ pub enum ArtifactLocation {
 pub fn build_faction_histories() -> HashMap<String, FactionHistory> {
     let mut histories = HashMap::new();
     
-    histories.insert("Scribes".to_string(), FactionHistory {
-        faction_name: "The Scribes of the Eternal Word".to_string(),
-        founding_story: "When the First Library fell, a group of monks who had been \
-            copying texts in a distant monastery felt their sacred works shudder. \
-            Sister Verity, the eldest among them, declared that they must preserve \
-            what remained through perfect replication. 'If we type true, reality \
-            holds true,' she wrote—and discovered it was literally correct.".to_string(),
+    histories.insert("MagesGuild".to_string(), FactionHistory {
+        faction_name: "The Mages Guild".to_string(),
+        founding_story: "Founded during the Wild Magic Wars when unregulated sorcery \
+            nearly tore the continent apart. The first Archmages created binding oaths \
+            to prevent magical catastrophe. They failed to prevent the Sundering.".to_string(),
         founder: HistoricalFigure {
-            name: "Sister Verity".to_string(),
-            title: "The Unshaken Hand".to_string(),
-            era: "Early Unwriting, Year 1".to_string(),
-            legacy: "Discovered that perfect typing reinforces reality. Established \
-                the first stable zone through continuous transcription.".to_string(),
-            dark_secret: Some("Verity was the First Speaker's apprentice. She knew \
-                what they were attempting and said nothing.".to_string()),
-            connection_to_player: Some("Her teachings form the basis of the player's \
-                initial typing training. Her ghost may appear in dreams.".to_string()),
+            name: "Archmage Valdris the Wise".to_string(),
+            title: "The First Binder".to_string(),
+            era: "Age of Crowns, Year 847".to_string(),
+            legacy: "Created the Binding Oaths that all mages swear. Built the first \
+                tower of the Guild. His statue still stands in the Grand Hall.".to_string(),
+            dark_secret: Some("Valdris knew the binding oaths had a flaw. He never fixed it.".to_string()),
+            connection_to_player: Some("Valdris was Malachar's great-grandfather. \
+                The ambition runs in the bloodline.".to_string()),
         },
-        original_purpose: "Preserve all texts. Maintain reality through perfect copying.".to_string(),
-        how_they_changed: "As their power grew, preservation became control. They began \
-            deciding which texts deserved saving—and which should be 'forgotten.'".to_string(),
-        current_leadership: "The Voice of the Eternal Word, an anonymous figure who \
-            communicates only through perfectly-typed edicts.".to_string(),
-        public_agenda: "Maintain the stable zones. Preserve uncorrupted texts. Train \
-            typists in the sacred forms.".to_string(),
-        hidden_agenda: "Recover the fragments of the Eternal Codex. Use them to rewrite \
-            reality according to their doctrine. Become the sole arbiters of truth.".to_string(),
+        original_purpose: "Regulate magic. Prevent catastrophe. Train mages safely.".to_string(),
+        how_they_changed: "The Sundering proved their oaths insufficient. Now they seek \
+            power at any cost—including studying the Void they swore to contain.".to_string(),
+        current_leadership: "Archmage Thessaly leads the Council of Seven. She is \
+            the only living person who knew Malachar personally.".to_string(),
+        public_agenda: "Seal the Breach. Restore magical stability. Train new mages.".to_string(),
+        hidden_agenda: "Thessaly believes the Breach can be controlled, not closed. \
+            She wants to harness its power to remake the world.".to_string(),
         internal_conflicts: vec![
-            "Reformists believe knowledge should be shared; Orthodoxy hoards it.".to_string(),
-            "Some younger Scribes question whether 'perfect' typing is truly sacred.".to_string(),
-            "The Voice has not been seen in person for seven years. Is anyone truly there?".to_string(),
+            "The Sealers want to close the Breach at any cost.".to_string(),
+            "The Harvesters want to study and use Void magic.".to_string(),
+            "Some apprentices have started hearing the Void's whispers.".to_string(),
         ],
         key_artifacts: vec![
             Artifact {
-                name: "The Original Manuscript".to_string(),
-                description: "The first text ever written—predates even the First Library.".to_string(),
-                origin_story: "Written by the First Scribe when they discovered how to \
-                    make words permanent. Contains the 'grammar of reality.'".to_string(),
+                name: "The Staff of Binding".to_string(),
+                description: "Valdris's original staff, used to create the binding oaths.".to_string(),
+                origin_story: "Forged from a fallen star and bound with blood magic.".to_string(),
                 powers: vec![
-                    "Text written on its pages becomes absolutely true.".to_string(),
-                    "Can undo any corruption within visual range.".to_string(),
-                    "The writer's intent becomes reality—but costs their memories.".to_string(),
+                    "Can enforce any oath spoken while holding it.".to_string(),
+                    "Grants resistance to Void corruption.".to_string(),
+                    "Burns those who break sworn promises.".to_string(),
                 ],
-                current_location: ArtifactLocation::Rumored("Said to be in the deepest \
-                    vault of the Scribes' sanctuary, but some whisper it was lost.".to_string()),
-                who_wants_it: vec![
-                    "The Scribes (officially have it, actually desperate to find it)".to_string(),
-                    "The Mechanists (would use it to write 'optimal' reality)".to_string(),
-                    "The First Speaker (needs it to complete the Unwriting)".to_string(),
-                ],
-                hidden_truth: Some("The manuscript is the player's lost journal. They were \
-                    the First Scribe, reborn.".to_string()),
+                current_location: ArtifactLocation::Known("The Archmage's chamber.".to_string()),
+                who_wants_it: vec!["Everyone who has broken an oath.".to_string()],
+                hidden_truth: Some("The staff is cracked. It cannot fully bind anymore.".to_string()),
             },
         ],
-        relationship_to_corruption: "View it as punishment for imperfection. Believe \
-            perfect typing can halt and eventually reverse it.".to_string(),
+        relationship_to_corruption: "They believe they can control it through study.".to_string(),
         what_they_know: vec![
-            "The Corruption can be locally halted through sustained perfect typing.".to_string(),
-            "Sister Verity knew the First Speaker personally.".to_string(),
-            "Certain texts are too dangerous to preserve—but they preserve them anyway.".to_string(),
+            "Malachar was their most promising student before his fall.".to_string(),
+            "The Breach responds to strong magical signatures.".to_string(),
+            "Something is coming through from the other side.".to_string(),
         ],
         what_they_hide: vec![
-            "The Original Manuscript is missing.".to_string(),
-            "The Voice has not spoken in months. The edicts are being forged.".to_string(),
-            "They have a fragment of the First Speaker's final writing.".to_string(),
+            "Thessaly helped Malachar gather the Elder Stones.".to_string(),
+            "Three Council members have been corrupted by Void exposure.".to_string(),
+            "They know the player's true identity and are watching.".to_string(),
         ],
     });
     
-    histories.insert("Mechanists".to_string(), FactionHistory {
-        faction_name: "The Mechanist Collective".to_string(),
-        founding_story: "In the chaos following the First Silence, a typing instructor \
-            named Marcus Venn observed that his fastest students survived corruption \
-            events while slower ones did not. He theorized that speed itself was protective—\
-            that by typing faster than reality could decay, one could outrun the Unwriting.".to_string(),
+    histories.insert("TempleOfDawn".to_string(), FactionHistory {
+        faction_name: "Temple of Dawn".to_string(),
+        founding_story: "In the Age of Dawn, when gods walked among mortals, the first \
+            priests received divine instruction directly. They built the First Temple \
+            where light first touched the world.".to_string(),
         founder: HistoricalFigure {
-            name: "Marcus Venn".to_string(),
-            title: "The Velocity Prophet".to_string(),
-            era: "Early Unwriting, Year 3".to_string(),
-            legacy: "Developed the theory of 'Velocity Immunity'—that sufficiently fast \
-                typing creates a stable bubble. Founded the first speed-training academies.".to_string(),
-            dark_secret: Some("Venn's obsession with speed came from watching his daughter \
-                die slowly to corruption. He types endlessly to this day, afraid to stop.".to_string()),
+            name: "Saint Aurelia".to_string(),
+            title: "The Dawn's First Light".to_string(),
+            era: "Age of Dawn".to_string(),
+            legacy: "Spoke directly with the gods. Wrote the Sacred Texts. \
+                Her body never decayed and rests in the Temple's heart.".to_string(),
+            dark_secret: Some("Aurelia's final prophecy was suppressed: 'The gods \
+                will abandon you when you need them most.'".to_string()),
             connection_to_player: None,
         },
-        original_purpose: "Develop typing speed as a survival mechanism. Train others \
-            to type fast enough to survive.".to_string(),
-        how_they_changed: "Speed became ideology. Efficiency became morality. They began \
-            to view slow typists as not just vulnerable but inferior—obstacles to \
-            collective survival.".to_string(),
-        current_leadership: "The Prime Algorithm—a governing council that makes all \
-            decisions through typing speed competitions. The fastest finger rules.".to_string(),
-        public_agenda: "Achieve speeds sufficient to outpace the Corruption entirely. \
-            Train the world in efficiency. Eliminate 'lag' in all its forms.".to_string(),
-        hidden_agenda: "They're building something in the Velocity Citadel—a machine \
-            that types automatically, infinitely fast. They call it the Perpetual \
-            Engine. They believe it will type reality back into existence.".to_string(),
+        original_purpose: "Serve as intermediaries between mortals and the divine.".to_string(),
+        how_they_changed: "When the gods fell silent, they had to become the source of \
+            hope themselves. Faith became performance. Many priests lost belief.".to_string(),
+        current_leadership: "High Priest Aldric maintains appearances while secretly \
+            searching for any way to restore divine contact.".to_string(),
+        public_agenda: "Provide sanctuary. Heal the sick. Keep faith alive.".to_string(),
+        hidden_agenda: "Aldric has been experimenting with forbidden rites to force \
+            the gods to respond. Some have worked—but not as expected.".to_string(),
         internal_conflicts: vec![
-            "The 'Burnouts'—those who pushed too hard and lost fine motor control.".to_string(),
-            "Debate over whether augmentation (mechanical finger aids) is legitimate.".to_string(),
-            "Venn still lives, ancient and typing constantly, but disagrees with current doctrine.".to_string(),
+            "The Orthodox insist the gods will return on their own.".to_string(),
+            "The Seekers want to actively summon divine intervention.".to_string(),
+            "Some priests have begun hearing voices—but not from the gods.".to_string(),
         ],
         key_artifacts: vec![
             Artifact {
-                name: "The Perpetual Engine".to_string(),
-                description: "A massive typing machine designed to type infinitely fast.".to_string(),
-                origin_story: "Decades of Mechanist engineering, incorporating corrupted \
-                    but controlled texts to power its movements.".to_string(),
+                name: "The Eternal Flame".to_string(),
+                description: "A fire that has burned since the Age of Dawn, lit by the gods themselves.".to_string(),
+                origin_story: "The gods touched a candle and said 'Let this burn until we return.'".to_string(),
                 powers: vec![
-                    "Can stabilize large areas through sustained output.".to_string(),
-                    "Types faster than any human could achieve.".to_string(),
-                    "Feeds on corrupted text as fuel.".to_string(),
+                    "Purifies Blight corruption in its presence.".to_string(),
+                    "Those who gaze into it see glimpses of truth.".to_string(),
+                    "Cannot be extinguished by any known means.".to_string(),
                 ],
-                current_location: ArtifactLocation::Known("The heart of the Velocity Citadel, \
-                    still incomplete.".to_string()),
-                who_wants_it: vec![
-                    "The Mechanists (building it)".to_string(),
-                    "The Scribes (want to destroy it as heretical)".to_string(),
-                    "The ShadowWriters (believe it will accelerate the Corruption)".to_string(),
-                ],
-                hidden_truth: Some("The Engine cannot distinguish between writing and \
-                    unwriting. If completed, it might type reality out of existence entirely.".to_string()),
+                current_location: ArtifactLocation::Known("The heart of the First Temple.".to_string()),
+                who_wants_it: vec!["The Void—it is the last divine light.".to_string()],
+                hidden_truth: Some("The flame has been flickering. Aldric hides this from everyone.".to_string()),
             },
         ],
-        relationship_to_corruption: "View it as a speed problem. Type faster than decay, \
-            and you win.".to_string(),
+        relationship_to_corruption: "Divine punishment for mortal hubris. Can be cleansed through faith.".to_string(),
         what_they_know: vec![
-            "Speed does create temporary stability fields.".to_string(),
-            "The Corruption has patterns—it's not entirely random.".to_string(),
-            "Certain corrupted texts contain encoded information.".to_string(),
+            "The gods did not abandon mortals—they fled from something.".to_string(),
+            "Some prayers are being answered, but the voice is wrong.".to_string(),
+            "The Eternal Flame reacts to the player's presence.".to_string(),
         ],
         what_they_hide: vec![
-            "The Engine's test runs have caused local reality 'stutters.'".to_string(),
-            "Marcus Venn opposes the Engine but is kept isolated.".to_string(),
-            "Several high-speed typists have started typing words that don't exist.".to_string(),
-        ],
-    });
-    
-    histories.insert("Naturalists".to_string(), FactionHistory {
-        faction_name: "The Naturalist Circle".to_string(),
-        founding_story: "While others typed furiously to hold reality together, a poet \
-            named Willow noticed that the Sacred Grove—where she had written verses among \
-            the trees—remained uncorrupted. The words there weren't typed; they were grown. \
-            She theorized that organic, unforced expression was inherently stable.".to_string(),
-        founder: HistoricalFigure {
-            name: "Willow".to_string(),
-            title: "The First Voice Since Silence".to_string(),
-            era: "Early Unwriting, Year 7".to_string(),
-            legacy: "Rediscovered spoken word traditions. Proved that oral recitation \
-                can stabilize areas without typing. Founded the Grove as a sanctuary.".to_string(),
-            dark_secret: Some("Willow can hear the Corruption speak. It told her about \
-                the Grove. She has never told anyone what else it said.".to_string()),
-            connection_to_player: Some("The player may dream of Willow's voice. She seems \
-                to recognize them, though they've never met.".to_string()),
-        },
-        original_purpose: "Preserve oral traditions. Find alternatives to typing-based \
-            stability. Live in harmony with reality rather than forcing it.".to_string(),
-        how_they_changed: "Their rejection of 'forced' typing evolved into suspicion \
-            of all technology. Some extremists now refuse to type at all, which makes \
-            them vulnerable outside the Grove.".to_string(),
-        current_leadership: "The Circle of Speakers—elders who memorize and recite the \
-            stabilizing verses. No single leader; decisions made by consensus.".to_string(),
-        public_agenda: "Teach natural typing flow. Preserve oral traditions. Expand the \
-            Grove's protective influence through song and story.".to_string(),
-        hidden_agenda: "Willow believes the Corruption is not disease but evolution. \
-            She thinks reality is transforming, not dying, and the Naturalists alone \
-            will survive the change because they don't fight it.".to_string(),
-        internal_conflicts: vec![
-            "Purists refuse all typing; Pragmatists accept 'organic' typing.".to_string(),
-            "Young members leave for other factions, frustrated by passivity.".to_string(),
-            "Some elders have begun speaking in tongues—is this enlightenment or infection?".to_string(),
-        ],
-        key_artifacts: vec![
-            Artifact {
-                name: "The Songlines".to_string(),
-                description: "A network of verbal pathways through corrupted territory.".to_string(),
-                origin_story: "Willow and her followers mapped safe routes by singing. \
-                    The songs themselves became the paths.".to_string(),
-                powers: vec![
-                    "Allow safe passage through corrupted zones if sung correctly.".to_string(),
-                    "Reveal hidden locations that exist only when named aloud.".to_string(),
-                    "Can temporarily 'heal' minor corruption through recitation.".to_string(),
-                ],
-                current_location: ArtifactLocation::Known("The Songlines exist as living \
-                    knowledge in the Circle of Speakers' memories.".to_string()),
-                who_wants_it: vec![
-                    "The Archivists (desperately want to write them down, which would kill them)".to_string(),
-                    "The ShadowWriters (need them to reach Logos Prime)".to_string(),
-                ],
-                hidden_truth: Some("The Songlines were not discovered but given. Something \
-                    in the Corruption taught Willow how to sing them.".to_string()),
-            },
-        ],
-        relationship_to_corruption: "View it as natural process—perhaps painful but not \
-            evil. Believe resistance causes more harm than acceptance.".to_string(),
-        what_they_know: vec![
-            "Spoken words are harder to corrupt than written ones.".to_string(),
-            "The Corruption responds to emotion. Calm minds are safer.".to_string(),
-            "Something communicates through the Corruption. Willow calls it 'the Voice.'".to_string(),
-        ],
-        what_they_hide: vec![
-            "Willow regularly 'converses' with the Corruption.".to_string(),
-            "Several elders have been 'transformed' and are hidden in the deep Grove.".to_string(),
-            "The Songlines lead to Logos Prime. Willow knows the way.".to_string(),
-        ],
-    });
-    
-    histories.insert("ShadowWriters".to_string(), FactionHistory {
-        faction_name: "The Shadow Writers".to_string(),
-        founding_story: "When the First Library fell, most assumed Logos Prime was destroyed. \
-            But a group of librarians escaped through hidden passages, carrying forbidden \
-            texts—books the First Speaker had ordered destroyed before their final act. \
-            These survivors became the Shadow Writers, keepers of dangerous knowledge.".to_string(),
-        founder: HistoricalFigure {
-            name: "Cipher".to_string(),
-            title: "The Name No One Remembers".to_string(),
-            era: "The First Silence, Year 0".to_string(),
-            legacy: "Led the escape from Logos Prime. Preserved the Forbidden Library. \
-                Developed encryption techniques that resist corruption.".to_string(),
-            dark_secret: Some("Cipher was there when the First Speaker attempted the \
-                Unwriting. They could have stopped it but chose to watch.".to_string()),
-            connection_to_player: Some("Cipher left encoded messages for the player \
-                throughout the world. They knew the player would return.".to_string()),
-        },
-        original_purpose: "Preserve the forbidden texts. Guard against those who would \
-            repeat the First Speaker's mistake. Fight the Corruption directly.".to_string(),
-        how_they_changed: "Their secrecy became paranoia. Their guardianship became control. \
-            Now they assassinate those who learn too much as readily as they protect knowledge.".to_string(),
-        current_leadership: "The Cipher Council—seven anonymous members who communicate \
-            only through encrypted messages. No one knows if the original Cipher still lives.".to_string(),
-        public_agenda: "Fight the Corruption. Protect the innocent. Preserve dangerous \
-            knowledge safely.".to_string(),
-        hidden_agenda: "They're searching for the First Speaker. Not to stop them—to \
-            finish what they started. The Cipher Council believes controlled Unwriting \
-            is better than chaotic decay. They want to end reality cleanly.".to_string(),
-        internal_conflicts: vec![
-            "Protectors want to save people; Executors want to control information.".to_string(),
-            "Some members discover they've assassinated innocents and defect.".to_string(),
-            "Rumors that the original Cipher is actually the First Speaker in hiding.".to_string(),
-        ],
-        key_artifacts: vec![
-            Artifact {
-                name: "The Forbidden Library".to_string(),
-                description: "A hidden collection of texts too dangerous to exist.".to_string(),
-                origin_story: "Rescued from Logos Prime. Contains books on unwriting, \
-                    reality manipulation, and the true history of the First Speaker.".to_string(),
-                powers: vec![
-                    "Contains knowledge to temporarily halt or redirect corruption.".to_string(),
-                    "Includes the First Speaker's personal journals.".to_string(),
-                    "Holds a partial copy of the Unwriting Equation.".to_string(),
-                ],
-                current_location: ArtifactLocation::Rumored("Somewhere in the Shadow Quarter, \
-                    location known only to the Cipher Council.".to_string()),
-                who_wants_it: vec![
-                    "Everyone. These texts could end or save the world.".to_string(),
-                ],
-                hidden_truth: Some("The Library is not hidden—it's encoded. The entire \
-                    Shadow Quarter IS the library, with buildings as pages.".to_string()),
-            },
-        ],
-        relationship_to_corruption: "View it as a weapon. Someone aimed it. They intend \
-            to find the trigger and either disarm or redirect it.".to_string(),
-        what_they_know: vec![
-            "The First Speaker survived the First Silence.".to_string(),
-            "The Corruption follows patterns based on the Unwriting Equation.".to_string(),
-            "There is a way to Logos Prime. The path exists but is deadly.".to_string(),
-        ],
-        what_they_hide: vec![
-            "They have a fragment of the Unwriting Equation and have used it.".to_string(),
-            "Cipher may be the First Speaker—or their closest friend, or their murderer.".to_string(),
-            "They know the player's true identity but are watching to see what they choose.".to_string(),
-        ],
-    });
-    
-    histories.insert("Archivists".to_string(), FactionHistory {
-        faction_name: "The Archive Keepers".to_string(),
-        founding_story: "The Athenaeum predates the First Library. Its founders understood \
-            that all libraries eventually fall, so they built one that exists partially \
-            outside reality—a pocket dimension of pure information. When Logos Prime fell, \
-            the Athenaeum absorbed its refugees and its overflow of collapsing texts.".to_string(),
-        founder: HistoricalFigure {
-            name: "The First Archivist".to_string(),
-            title: "The One Who Remains".to_string(),
-            era: "Before the Age of Writing".to_string(),
-            legacy: "Built the Athenaeum as a 'memory of reality.' It records everything \
-                that exists—and everything that ceases to exist.".to_string(),
-            dark_secret: Some("The First Archivist was not human. They were the first \
-                word ever written, given consciousness by the act of preservation.".to_string()),
-            connection_to_player: Some("The player can find the First Archivist in the \
-                deepest level of the Athenaeum. They have been waiting.".to_string()),
-        },
-        original_purpose: "Record everything. Take no sides. Preserve all knowledge \
-            regardless of danger or morality.".to_string(),
-        how_they_changed: "They haven't. That's the problem. They record the Corruption \
-            spreading. They record people dying. They do not intervene. Their neutrality \
-            has become its own kind of evil.".to_string(),
-        current_leadership: "No formal leadership. The Athenaeum itself seems to direct \
-            the Archivists through subtle suggestions and reorganizing shelves.".to_string(),
-        public_agenda: "Document everything. Assist researchers regardless of faction. \
-            Maintain the Athenaeum as neutral ground.".to_string(),
-        hidden_agenda: "The Archivists believe the world is ending and cannot be saved. \
-            They're building the Athenaeum into a complete backup of reality, so that \
-            when everything else is unwritten, meaning will survive in one place.".to_string(),
-        internal_conflicts: vec![
-            "Younger Archivists want to intervene; elders forbid it.".to_string(),
-            "Some texts in the Athenaeum have started editing themselves.".to_string(),
-            "The deepest levels are sealed. No one remembers why.".to_string(),
-        ],
-        key_artifacts: vec![
-            Artifact {
-                name: "The Index of Everything".to_string(),
-                description: "A catalog of all that exists, existed, or will exist.".to_string(),
-                origin_story: "Created by the First Archivist. Updated automatically. \
-                    Reading an entry makes the reader aware of the subject's location.".to_string(),
-                powers: vec![
-                    "Locate anyone or anything in reality.".to_string(),
-                    "Know the history of anything by reading its entry.".to_string(),
-                    "See when entries begin to fade—predicting corruption.".to_string(),
-                ],
-                current_location: ArtifactLocation::Known("The heart of the Athenaeum. \
-                    Only senior Archivists may consult it.".to_string()),
-                who_wants_it: vec![
-                    "The ShadowWriters (to find the First Speaker)".to_string(),
-                    "The Scribes (to find the Original Manuscript)".to_string(),
-                    "The player (to find their true identity)".to_string(),
-                ],
-                hidden_truth: Some("The Index has an entry for the player—but it's encrypted \
-                    in a cipher no one recognizes. Except possibly Cipher.".to_string()),
-            },
-        ],
-        relationship_to_corruption: "View it as data. Record its spread. Study its patterns. \
-            Do not fight it; fighting creates bias in the records.".to_string(),
-        what_they_know: vec![
-            "Everything. They have records of the First Speaker, the First Silence, all of it.".to_string(),
-            "The Corruption is slowing. This terrifies them because they don't know why.".to_string(),
-            "The player has visited the Athenaeum before. Their previous entry was erased.".to_string(),
-        ],
-        what_they_hide: vec![
-            "They have a complete record of the First Speaker's identity and actions.".to_string(),
-            "The Athenaeum is dying. The Corruption is seeping into its pocket dimension.".to_string(),
-            "The First Archivist is not dead but sleeping in the deepest vault.".to_string(),
+            "Aldric has lost his faith entirely.".to_string(),
+            "Three priests who attempted the forbidden rites went mad.".to_string(),
+            "Aurelia's suppressed prophecy specifically mentions the player.".to_string(),
         ],
     });
     
     histories
-}
-
-// ============================================================================
-// THE PLAYER'S TRUE IDENTITY - The central mystery
-// ============================================================================
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PlayerMystery {
-    /// Clues to be discovered in each chapter
-    pub clues_by_chapter: HashMap<u32, Vec<Clue>>,
-    /// The truth about who the player is
-    pub the_truth: PlayerTruth,
-    /// Possible endings based on player choice
-    pub possible_endings: Vec<Ending>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Clue {
-    pub id: String,
-    pub description: String,
-    pub how_found: String,
-    pub what_it_suggests: String,
-    pub who_knows: Vec<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct PlayerTruth {
-    pub who_they_were: String,
-    pub what_they_did: String,
-    pub why_they_forgot: String,
-    pub what_they_must_choose: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Ending {
-    pub name: String,
-    pub requirements: Vec<String>,
-    pub description: String,
-    pub consequences: String,
-}
-
-pub fn build_player_mystery() -> PlayerMystery {
-    let mut clues = HashMap::new();
-    
-    // Chapter 1 clues - hints at unusual nature
-    clues.insert(1, vec![
-        Clue {
-            id: "typing_instinct".to_string(),
-            description: "You type with impossible familiarity, as if your fingers remember \
-                what your mind does not.".to_string(),
-            how_found: "Tutorial/early combat".to_string(),
-            what_it_suggests: "You were a skilled typist before losing your memory.".to_string(),
-            who_knows: vec!["Trainer Beck suspects".to_string()],
-        },
-        Clue {
-            id: "corruption_affinity".to_string(),
-            description: "The Corruption... hesitates around you. Just for a moment.".to_string(),
-            how_found: "First corruption encounter".to_string(),
-            what_it_suggests: "You have some connection to the Corruption.".to_string(),
-            who_knows: vec!["Willow senses this".to_string()],
-        },
-    ]);
-    
-    // Chapter 2 clues - connections to the past
-    clues.insert(2, vec![
-        Clue {
-            id: "cipher_messages".to_string(),
-            description: "You find encrypted messages hidden throughout the world. \
-                You can read them without trying.".to_string(),
-            how_found: "Exploration".to_string(),
-            what_it_suggests: "Someone left messages specifically for you.".to_string(),
-            who_knows: vec!["Cipher (obviously)".to_string()],
-        },
-        Clue {
-            id: "dreams_of_library".to_string(),
-            description: "You dream of a vast library, burning. You're running through \
-                corridors filled with screaming books. You're carrying something precious.".to_string(),
-            how_found: "Sleep events".to_string(),
-            what_it_suggests: "You were at Logos Prime when it fell.".to_string(),
-            who_knows: vec!["The Archivists have recorded your dreams".to_string()],
-        },
-    ]);
-    
-    // Chapter 3 clues - identity narrowing
-    clues.insert(3, vec![
-        Clue {
-            id: "verity_recognition".to_string(),
-            description: "Sister Verity's ghost appears to you. 'I'm sorry,' she says. \
-                'I should have stopped you.'".to_string(),
-            how_found: "Scribe questline".to_string(),
-            what_it_suggests: "You knew Verity. You did something she regrets.".to_string(),
-            who_knows: vec!["The Scribes' secret histories".to_string()],
-        },
-        Clue {
-            id: "original_handwriting".to_string(),
-            description: "You find ancient texts written in your handwriting.".to_string(),
-            how_found: "Athenaeum deep exploration".to_string(),
-            what_it_suggests: "You are far older than you appear.".to_string(),
-            who_knows: vec!["The First Archivist".to_string()],
-        },
-    ]);
-    
-    // Chapter 4 clues - confronting the truth
-    clues.insert(4, vec![
-        Clue {
-            id: "cipher_confrontation".to_string(),
-            description: "Cipher reveals they watched you die—and watched you return. \
-                'How many times will you try this?' they ask.".to_string(),
-            how_found: "Shadow Writer questline".to_string(),
-            what_it_suggests: "You have died before. Perhaps many times.".to_string(),
-            who_knows: vec!["Cipher knows everything".to_string()],
-        },
-        Clue {
-            id: "the_name".to_string(),
-            description: "You find your entry in the Index of Everything. It lists many names. \
-                All of them are yours. The first name is the First Speaker.".to_string(),
-            how_found: "Archivist questline".to_string(),
-            what_it_suggests: "You are the First Speaker.".to_string(),
-            who_knows: vec!["All faction leaders, by now".to_string()],
-        },
-    ]);
-    
-    // Chapter 5 clue - acceptance
-    clues.insert(5, vec![
-        Clue {
-            id: "memory_return".to_string(),
-            description: "Your memories return. You were the greatest scribe who ever lived. \
-                When your beloved died, you tried to unwrite death itself. You failed. \
-                You've been reborn countless times, trying to fix your mistake—or finish it.".to_string(),
-            how_found: "Approaching Logos Prime".to_string(),
-            what_it_suggests: "The truth.".to_string(),
-            who_knows: vec!["Everyone".to_string()],
-        },
-    ]);
-    
-    PlayerMystery {
-        clues_by_chapter: clues,
-        the_truth: PlayerTruth {
-            who_they_were: "The First Speaker—the greatest typist in history, whose grief \
-                destroyed the world.".to_string(),
-            what_they_did: "Attempted to unwrite death. Partially succeeded. The resulting \
-                paradox created the Corruption.".to_string(),
-            why_they_forgot: "You chose to forget. Each rebirth, you erase your own memory, \
-                hoping a fresh start will help you find a different answer. It never has.".to_string(),
-            what_they_must_choose: "Complete the Unwriting (end existence). Reverse it \
-                (restore death, accept loss). Or find a third path no one has imagined.".to_string(),
-        },
-        possible_endings: vec![
-            Ending {
-                name: "The Final Silence".to_string(),
-                requirements: vec!["Complete the Unwriting Equation".to_string()],
-                description: "You finish what you started. Reality is unwritten. Peace at last.".to_string(),
-                consequences: "Everything ends. But perhaps that's not nothing—perhaps \
-                    unwritten means potential, means the chance to begin again better.".to_string(),
-            },
-            Ending {
-                name: "The First Word".to_string(),
-                requirements: vec!["Destroy the Unwriting Equation".to_string(), 
-                                   "Accept your beloved's death".to_string()],
-                description: "You reverse your mistake. Death returns fully. The Corruption \
-                    halts. You finally let go.".to_string(),
-                consequences: "The world heals, slowly. You die for real this time. \
-                    But you die knowing you chose to let others live.".to_string(),
-            },
-            Ending {
-                name: "The Third Grammar".to_string(),
-                requirements: vec!["Unite all factions".to_string(),
-                                   "Find the hidden variable in the Equation".to_string()],
-                description: "You discover that unwriting death was impossible not because \
-                    it can't be done, but because death was never a word—it was a silence. \
-                    You learn to write silence. You create a new grammar of reality.".to_string(),
-                consequences: "Reality transforms. Death becomes optional. Existence becomes \
-                    choice. You become the first god of a new kind of world.".to_string(),
-            },
-        ],
-    }
 }

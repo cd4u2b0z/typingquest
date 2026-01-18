@@ -8,7 +8,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.70+-DEA584?style=flat&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.3.0-blue?style=flat)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.4.0-blue?style=flat)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/Status-Experimental_🧪-yellow?style=flat)]()
 [![TUI](https://img.shields.io/badge/TUI-ratatui-purple?style=flat)](https://github.com/ratatui-org/ratatui)
 
@@ -31,11 +31,14 @@ It currently exists in a *largely disconnected state*. There's ~23,000 lines of 
 - ✅ Meta-progression with Ink shop (buy permanent upgrades!)
 - ✅ Faction reputation system (displayed in Stats)
 
-### What's Dormant (~15,000 Lines)
-These systems exist but aren't connected to gameplay yet:
-- 🔸 **Deep Lore** (853 lines) — World cosmology, lore fragments
-- 🔸 **Narrative Seeds** (906 lines) — Story generation framework
-- 🔸 **Voice System** (794 lines) — NPC personality/dialogue
+### What's Dormant (~10,000 Lines)
+These systems have been written with full high-fantasy lore but aren't connected to gameplay yet:
+- 🔸 **Deep Lore** (1,016 lines) — Three Ages, The Sundering, Malachar the Archon, faction histories
+- 🔸 **Lore Fragments** (752 lines) — Discoverable pieces of world history
+- 🔸 **Narrative** (486 + 906 + 649 lines) — Story structures, seeds, integration hooks
+- 🔸 **World System** (607 + 274 + 407 lines) — Locations, simulation, zone definitions
+- 🔸 **Voice System** (794 lines) — NPC personality/dialogue for 5 factions
+- 🔸 **Characters & Quests** (329 + 368 lines) — NPCs and quest framework
 - 🔸 **Skills** (490 lines) — Active/passive skill trees
 - 🔸 **Typing Context** (754 lines) — Thematic word generation
 - 🔸 **Encounter Writing** (783 lines) — Authored events
@@ -178,7 +181,8 @@ Each floor contains rooms: combat encounters, elite enemies, shops, rest sites, 
 
 ### Dormant (written but not connected)
 
-- Deep lore system, lore fragments, world cosmology
+- Deep lore system with high fantasy cosmology (Three Ages, The Sundering, Malachar the Archon)
+- Five factions: Mages Guild, Temple of Dawn, Rangers of the Wild, Shadow Guild, Merchant Consortium
 - NPC voice/personality system
 - Authored encounter writing
 - Skill trees (active/passive)
@@ -194,48 +198,79 @@ See [Project Status](#️-project-status) for the full breakdown.
 ```
 typingquest/
 ├── src/
-│   ├── main.rs                  # Game loop, input handling (772 lines)
+│   ├── main.rs                    # Game loop, input handling (820 lines)
 │   │
-│   ├── game/                    # Core game logic (~15,000 lines)
-│   │   ├── state.rs             # Game state, scene management
-│   │   ├── combat.rs            # Combat state, spell mode
-│   │   ├── combat_engine.rs     # Damage calc, word generation
-│   │   ├── player.rs            # Player, classes, leveling
-│   │   ├── enemy.rs             # Enemy definitions
-│   │   ├── dungeon.rs           # Floor/room generation
-│   │   ├── items.rs             # Equipment, consumables
-│   │   ├── spells.rs            # Spell definitions
-│   │   ├── typing_feel.rs       # ✅ Combo, flow, rhythm (550 lines)
-│   │   ├── tutorial.rs          # ✅ 5-phase tutorial (617 lines)
-│   │   ├── help_system.rs       # ✅ Help overlay (749 lines)
-│   │   ├── faction_system.rs    # ✅ Faction rep tracking (815 lines)
-│   │   ├── meta_progression.rs  # ✅ Ink/unlocks framework (612 lines)
-│   │   ├── deep_lore.rs         # 🔸 World cosmology (853 lines)
-│   │   ├── narrative_seed.rs    # 🔸 Story generation (906 lines)
-│   │   ├── voice_system.rs      # 🔸 NPC personality (794 lines)
-│   │   ├── skills.rs            # 🔸 Skill trees (490 lines)
-│   │   ├── typing_context.rs    # 🔸 Thematic words (754 lines)
-│   │   ├── encounter_writing.rs # 🔸 Authored events (783 lines)
-│   │   └── run_modifiers.rs     # 🔸 Challenge variants (632 lines)
+│   ├── game/                      # Core game logic (~19,000 lines, 37 files)
+│   │   ├── mod.rs                 # Module exports
+│   │   │
+│   │   │ # ─── CORE SYSTEMS (wired up) ───
+│   │   ├── state.rs               # ✅ Game state, scene management (348)
+│   │   ├── combat.rs              # ✅ Combat state, spell mode (520)
+│   │   ├── combat_engine.rs       # ✅ Damage calc, word generation (510)
+│   │   ├── combat_events.rs       # ✅ Combat event handling (282)
+│   │   ├── player.rs              # ✅ Player, classes, leveling (381)
+│   │   ├── enemy.rs               # ✅ Enemy definitions (366)
+│   │   ├── dungeon.rs             # ✅ Floor/room generation (308)
+│   │   ├── items.rs               # ✅ Equipment, consumables (455)
+│   │   ├── spells.rs              # ✅ Spell definitions (281)
+│   │   ├── events.rs              # ✅ Game events system (305)
+│   │   ├── stats.rs               # ✅ Statistics tracking (559)
+│   │   │
+│   │   │ # ─── FEEL & UX (wired up) ───
+│   │   ├── typing_feel.rs         # ✅ Combo, flow, rhythm (550)
+│   │   ├── tutorial.rs            # ✅ 5-phase tutorial (617)
+│   │   ├── help_system.rs         # ✅ Help overlay (750)
+│   │   ├── config.rs              # ✅ Game configuration (434)
+│   │   │
+│   │   │ # ─── PROGRESSION (wired up) ───
+│   │   ├── faction_system.rs      # ✅ Faction reputation (815)
+│   │   ├── meta_progression.rs    # ✅ Ink/unlocks framework (612)
+│   │   ├── save.rs                # ✅ Save/load system (299)
+│   │   │
+│   │   │ # ─── WORLD & LORE (fantasy overhaul complete) ───
+│   │   ├── deep_lore.rs           # 🔸 High fantasy cosmology (1,016)
+│   │   ├── lore_fragments.rs      # 🔸 Discoverable lore pieces (752)
+│   │   ├── narrative.rs           # 🔸 Core narrative structures (486)
+│   │   ├── narrative_seed.rs      # 🔸 Story generation (906)
+│   │   ├── narrative_integration.rs # 🔸 Narrative hooks (649)
+│   │   ├── world.rs               # 🔸 World locations (607)
+│   │   ├── world_engine.rs        # 🔸 World simulation (274)
+│   │   ├── world_integration.rs   # 🔸 Zone definitions (407)
+│   │   ├── writing_guidelines.rs  # 🔸 Tone/style guide (540)
+│   │   │
+│   │   │ # ─── CHARACTERS & VOICE (dormant) ───
+│   │   ├── voice_system.rs        # 🔸 NPC personality (794)
+│   │   ├── characters.rs          # 🔸 NPC definitions (329)
+│   │   ├── quests.rs              # 🔸 Quest system (368)
+│   │   │
+│   │   │ # ─── ADVANCED SYSTEMS (dormant) ───
+│   │   ├── skills.rs              # 🔸 Skill trees (490)
+│   │   ├── typing_context.rs      # 🔸 Thematic words (754)
+│   │   ├── encounter_writing.rs   # 🔸 Authored events (783)
+│   │   ├── run_modifiers.rs       # 🔸 Challenge variants (632)
+│   │   ├── event_bus.rs           # 🔸 Event messaging (594)
+│   │   └── enemy_old.rs           # 🗑️ Legacy (240)
 │   │
-│   ├── ui/                      # Rendering (~1,900 lines)
-│   │   ├── render.rs            # All screen rendering (1,399 lines)
-│   │   └── theme.rs             # Colors, icons, styles (424 lines)
+│   ├── ui/                        # Rendering (~2,000 lines)
+│   │   ├── render.rs              # All screen rendering (1,502)
+│   │   ├── theme.rs               # Colors, icons, styles (424)
+│   │   └── lore_render.rs         # Lore display (80)
 │   │
-│   └── data/                    # Static content (~1,350 lines)
-│       ├── enemies.rs           # Enemy data (555 lines)
-│       ├── sentences.rs         # Word lists (490 lines)
-│       └── word_lists.rs        # More words (155 lines)
+│   └── data/                      # Static content (~1,350 lines)
+│       ├── enemies.rs             # Enemy templates (555)
+│       ├── sentences.rs           # Word lists (490)
+│       └── word_lists.rs          # More words (155)
 │
 ├── Cargo.toml
 ├── CHANGELOG.md
 └── README.md
 
 ✅ = Wired up and working
-🔸 = Written but dormant
+🔸 = Written, lore updated, not connected to gameplay
+🗑️ = Legacy/deprecated
 ```
 
-**~23,700 lines of Rust** across 45 source files.
+**~24,000 lines of Rust** across 48 source files.
 
 ---
 
@@ -253,8 +288,15 @@ typingquest/
 - [ ] Ink persistence between runs
 - [ ] Settings/config file
 
+### v0.4.1 — Lore Overhaul ✅
+- [x] Rewrite deep_lore.rs with high fantasy cosmology (Three Ages, The Sundering, Malachar)
+- [x] Replace all factions (MagesGuild, TempleOfDawn, RangersOfTheWild, ShadowGuild, MerchantConsortium)
+- [x] Fantasy-themed zones (ShatteredHalls, SunkenArchives, BlightedGardens, ClockworkDepths, VoidsEdge, TheBreach)
+- [x] Replace bosses (The Hollow Knight, The Void Herald)
+- [x] Fantasy enemy names and descriptions
+
 ### v0.5.0 — Connect Dormant Systems (aspirational)
-- [ ] Wire up deep lore / lore fragments
+- [ ] Wire up deep lore / lore fragments to gameplay
 - [ ] Wire up voice system for NPCs
 - [ ] Wire up skill trees
 - [ ] Wire up thematic word generation

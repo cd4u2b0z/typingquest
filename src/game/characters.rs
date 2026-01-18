@@ -88,14 +88,14 @@ impl Character {
                     text: "I seek knowledge about the corruption spreading across the land.".to_string(),
                     next_node: Some("corruption_info".to_string()),
                     requirements: vec![],
-                    effects: vec![Effect::ModifyFaction(Faction::Archivists, 5)],
+                    effects: vec![Effect::ModifyFaction(Faction::MerchantConsortium, 5)],
                     requires_typing: false,
                 },
                 DialogueResponse {
                     text: "I want to become stronger. Teach me the power of words.".to_string(),
                     next_node: Some("power_seeker".to_string()),
                     requirements: vec![],
-                    effects: vec![Effect::ModifyFaction(Faction::Archivists, -5)],
+                    effects: vec![Effect::ModifyFaction(Faction::MerchantConsortium, -5)],
                     requires_typing: false,
                 },
             ],
@@ -129,7 +129,7 @@ impl Character {
             id: "archivist_vera".to_string(),
             name: "Vera".to_string(),
             title: "Keeper of Lost Words".to_string(),
-            faction: Some(Faction::Archivists),
+            faction: Some(Faction::MerchantConsortium),
             personality: Personality {
                 traits: vec![PersonalityTrait::Wise, PersonalityTrait::Patient, PersonalityTrait::Curious],
                 values: vec![Value::Knowledge, Value::Tradition, Value::Art],
@@ -177,7 +177,7 @@ impl Character {
                     text: "I want to join the Mechanist Legion.".to_string(),
                     next_node: Some("join_mechanists".to_string()),
                     requirements: vec![],
-                    effects: vec![Effect::ModifyFaction(Faction::Mechanists, 10)],
+                    effects: vec![Effect::ModifyFaction(Faction::TempleOfDawn, 10)],
                     requires_typing: false,
                 },
             ],
@@ -187,7 +187,7 @@ impl Character {
             id: "commander_steele".to_string(),
             name: "Marcus Steele".to_string(),
             title: "Commander of the Mechanist Legion".to_string(),
-            faction: Some(Faction::Mechanists),
+            faction: Some(Faction::TempleOfDawn),
             personality: Personality {
                 traits: vec![PersonalityTrait::Brave, PersonalityTrait::Impulsive, PersonalityTrait::Arrogant],
                 values: vec![Value::Power, Value::Progress, Value::Order],
@@ -238,7 +238,7 @@ impl Character {
             id: "shadow_whisper".to_string(),
             name: "Whisper".to_string(),
             title: "Voice of the Shadow Writers".to_string(),
-            faction: Some(Faction::ShadowWriters),
+            faction: Some(Faction::ShadowGuild),
             personality: Personality {
                 traits: vec![PersonalityTrait::Deceptive, PersonalityTrait::Curious, PersonalityTrait::Cynical],
                 values: vec![Value::Freedom, Value::Knowledge, Value::Power],
@@ -262,7 +262,7 @@ impl Character {
                 id: "whisper_identity".to_string(),
                 content: "Whisper is multiple individuals sharing one identity.".to_string(),
                 revealed: false,
-                reveal_requirement: SecretRequirement::FactionStanding(Faction::ShadowWriters, 80),
+                reveal_requirement: SecretRequirement::FactionStanding(Faction::ShadowGuild, 80),
             }],
         }
     }
@@ -279,7 +279,7 @@ impl Character {
                     text: "I seek harmony between typing and nature.".to_string(),
                     next_node: Some("seeker".to_string()),
                     requirements: vec![],
-                    effects: vec![Effect::ModifyFaction(Faction::Naturalists, 10)],
+                    effects: vec![Effect::ModifyFaction(Faction::RangersOfTheWild, 10)],
                     requires_typing: false,
                 },
             ],
@@ -289,7 +289,7 @@ impl Character {
             id: "elder_root".to_string(),
             name: "Elder Root".to_string(),
             title: "Voice of the Green Word".to_string(),
-            faction: Some(Faction::Naturalists),
+            faction: Some(Faction::RangersOfTheWild),
             personality: Personality {
                 traits: vec![PersonalityTrait::Wise, PersonalityTrait::Patient, PersonalityTrait::Kind],
                 values: vec![Value::Nature, Value::Tradition, Value::Faith],
@@ -313,7 +313,7 @@ impl Character {
                 id: "root_origin".to_string(),
                 content: "Elder Root is a nature spirit in human form.".to_string(),
                 revealed: false,
-                reveal_requirement: SecretRequirement::FactionStanding(Faction::Naturalists, 90),
+                reveal_requirement: SecretRequirement::FactionStanding(Faction::RangersOfTheWild, 90),
             }],
         }
     }

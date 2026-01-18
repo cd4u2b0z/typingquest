@@ -36,11 +36,11 @@ impl FactionRelations {
     pub fn new() -> Self {
         let mut standings = HashMap::new();
         for faction in &[
-            Faction::Scribes,
-            Faction::Mechanists,
-            Faction::Naturalists,
-            Faction::ShadowWriters,
-            Faction::Archivists,
+            Faction::MagesGuild,
+            Faction::TempleOfDawn,
+            Faction::RangersOfTheWild,
+            Faction::ShadowGuild,
+            Faction::MerchantConsortium,
         ] {
             standings.insert(*faction, 0);
         }
@@ -295,45 +295,45 @@ impl FactionRank {
     
     pub fn title(&self, faction: &Faction) -> &'static str {
         match (faction, self) {
-            (Faction::Scribes, Self::Initiate) => "Novice Scribe",
-            (Faction::Scribes, Self::Member) => "Scribe",
-            (Faction::Scribes, Self::Trusted) => "Senior Scribe",
-            (Faction::Scribes, Self::Veteran) => "Master Scribe",
-            (Faction::Scribes, Self::Elite) => "Arch-Scribe",
-            (Faction::Scribes, Self::InnerCircle) => "Keeper of Words",
-            (Faction::Scribes, Self::Champion) => "Voice of the Eternal Word",
+            (Faction::MagesGuild, Self::Initiate) => "Novice Scribe",
+            (Faction::MagesGuild, Self::Member) => "Scribe",
+            (Faction::MagesGuild, Self::Trusted) => "Senior Scribe",
+            (Faction::MagesGuild, Self::Veteran) => "Master Scribe",
+            (Faction::MagesGuild, Self::Elite) => "Arch-Scribe",
+            (Faction::MagesGuild, Self::InnerCircle) => "Keeper of Words",
+            (Faction::MagesGuild, Self::Champion) => "Voice of the Eternal Word",
             
-            (Faction::Mechanists, Self::Initiate) => "Input Device",
-            (Faction::Mechanists, Self::Member) => "Processor",
-            (Faction::Mechanists, Self::Trusted) => "Subroutine",
-            (Faction::Mechanists, Self::Veteran) => "Function",
-            (Faction::Mechanists, Self::Elite) => "Module",
-            (Faction::Mechanists, Self::InnerCircle) => "Core Process",
-            (Faction::Mechanists, Self::Champion) => "Prime Algorithm",
+            (Faction::TempleOfDawn, Self::Initiate) => "Input Device",
+            (Faction::TempleOfDawn, Self::Member) => "Processor",
+            (Faction::TempleOfDawn, Self::Trusted) => "Subroutine",
+            (Faction::TempleOfDawn, Self::Veteran) => "Function",
+            (Faction::TempleOfDawn, Self::Elite) => "Module",
+            (Faction::TempleOfDawn, Self::InnerCircle) => "Core Process",
+            (Faction::TempleOfDawn, Self::Champion) => "Prime Algorithm",
             
-            (Faction::Naturalists, Self::Initiate) => "Seedling",
-            (Faction::Naturalists, Self::Member) => "Sapling",
-            (Faction::Naturalists, Self::Trusted) => "Branch",
-            (Faction::Naturalists, Self::Veteran) => "Tree",
-            (Faction::Naturalists, Self::Elite) => "Grove Keeper",
-            (Faction::Naturalists, Self::InnerCircle) => "Forest Voice",
-            (Faction::Naturalists, Self::Champion) => "Ancient Oak",
+            (Faction::RangersOfTheWild, Self::Initiate) => "Seedling",
+            (Faction::RangersOfTheWild, Self::Member) => "Sapling",
+            (Faction::RangersOfTheWild, Self::Trusted) => "Branch",
+            (Faction::RangersOfTheWild, Self::Veteran) => "Tree",
+            (Faction::RangersOfTheWild, Self::Elite) => "Grove Keeper",
+            (Faction::RangersOfTheWild, Self::InnerCircle) => "Forest Voice",
+            (Faction::RangersOfTheWild, Self::Champion) => "Ancient Oak",
             
-            (Faction::ShadowWriters, Self::Initiate) => "Whisper",
-            (Faction::ShadowWriters, Self::Member) => "Shadow",
-            (Faction::ShadowWriters, Self::Trusted) => "Cipher",
-            (Faction::ShadowWriters, Self::Veteran) => "Ghost Writer",
-            (Faction::ShadowWriters, Self::Elite) => "Phantom",
-            (Faction::ShadowWriters, Self::InnerCircle) => "Specter",
-            (Faction::ShadowWriters, Self::Champion) => "The Unseen Pen",
+            (Faction::ShadowGuild, Self::Initiate) => "Whisper",
+            (Faction::ShadowGuild, Self::Member) => "Shadow",
+            (Faction::ShadowGuild, Self::Trusted) => "Cipher",
+            (Faction::ShadowGuild, Self::Veteran) => "Ghost Writer",
+            (Faction::ShadowGuild, Self::Elite) => "Phantom",
+            (Faction::ShadowGuild, Self::InnerCircle) => "Specter",
+            (Faction::ShadowGuild, Self::Champion) => "The Unseen Pen",
             
-            (Faction::Archivists, Self::Initiate) => "Page",
-            (Faction::Archivists, Self::Member) => "Cataloger",
-            (Faction::Archivists, Self::Trusted) => "Librarian",
-            (Faction::Archivists, Self::Veteran) => "Curator",
-            (Faction::Archivists, Self::Elite) => "Archivist",
-            (Faction::Archivists, Self::InnerCircle) => "Lorekeeper",
-            (Faction::Archivists, Self::Champion) => "Grand Chronicler",
+            (Faction::MerchantConsortium, Self::Initiate) => "Page",
+            (Faction::MerchantConsortium, Self::Member) => "Cataloger",
+            (Faction::MerchantConsortium, Self::Trusted) => "Librarian",
+            (Faction::MerchantConsortium, Self::Veteran) => "Curator",
+            (Faction::MerchantConsortium, Self::Elite) => "Archivist",
+            (Faction::MerchantConsortium, Self::InnerCircle) => "Lorekeeper",
+            (Faction::MerchantConsortium, Self::Champion) => "Grand Chronicler",
         }
     }
 }
@@ -472,7 +472,7 @@ pub fn get_faction_benefits(faction: &Faction, rank: FactionRank) -> Vec<Faction
     benefits.push(FactionBenefit::RestAccess);
     
     match faction {
-        Faction::Scribes => {
+        Faction::MagesGuild => {
             benefits.push(FactionBenefit::SafePassage { 
                 regions: vec!["haven".to_string(), "athenaeum".to_string()] 
             });
@@ -500,7 +500,7 @@ pub fn get_faction_benefits(faction: &Faction, rank: FactionRank) -> Vec<Faction
             }
         }
         
-        Faction::Mechanists => {
+        Faction::TempleOfDawn => {
             benefits.push(FactionBenefit::SafePassage { 
                 regions: vec!["mechanist_fortress".to_string()] 
             });
@@ -528,7 +528,7 @@ pub fn get_faction_benefits(faction: &Faction, rank: FactionRank) -> Vec<Faction
             }
         }
         
-        Faction::Naturalists => {
+        Faction::RangersOfTheWild => {
             benefits.push(FactionBenefit::SafePassage { 
                 regions: vec!["sacred_grove".to_string()] 
             });
@@ -556,7 +556,7 @@ pub fn get_faction_benefits(faction: &Faction, rank: FactionRank) -> Vec<Faction
             }
         }
         
-        Faction::ShadowWriters => {
+        Faction::ShadowGuild => {
             benefits.push(FactionBenefit::SafePassage { 
                 regions: vec!["shadow_quarter".to_string()] 
             });
@@ -581,7 +581,7 @@ pub fn get_faction_benefits(faction: &Faction, rank: FactionRank) -> Vec<Faction
             }
         }
         
-        Faction::Archivists => {
+        Faction::MerchantConsortium => {
             benefits.push(FactionBenefit::SafePassage { 
                 regions: vec!["athenaeum".to_string(), "first_library".to_string()] 
             });
@@ -665,33 +665,33 @@ pub fn get_faction_penalties(faction: &Faction, standing: i32) -> Vec<FactionPen
 /// Get regions controlled by a faction
 pub fn get_faction_regions(faction: &Faction) -> Vec<String> {
     match faction {
-        Faction::Scribes => vec!["haven".to_string()],
-        Faction::Mechanists => vec!["mechanist_fortress".to_string()],
-        Faction::Naturalists => vec!["sacred_grove".to_string()],
-        Faction::ShadowWriters => vec!["shadow_quarter".to_string()],
-        Faction::Archivists => vec!["athenaeum".to_string(), "first_library".to_string()],
+        Faction::MagesGuild => vec!["haven".to_string()],
+        Faction::TempleOfDawn => vec!["mechanist_fortress".to_string()],
+        Faction::RangersOfTheWild => vec!["sacred_grove".to_string()],
+        Faction::ShadowGuild => vec!["shadow_quarter".to_string()],
+        Faction::MerchantConsortium => vec!["athenaeum".to_string(), "first_library".to_string()],
     }
 }
 
 /// Get factions that are enemies of this one
 pub fn get_enemy_factions(faction: &Faction) -> Vec<Faction> {
     match faction {
-        Faction::Scribes => vec![Faction::Mechanists], // Traditional vs Modern
-        Faction::Mechanists => vec![Faction::Scribes, Faction::Naturalists], // Efficiency vs others
-        Faction::Naturalists => vec![Faction::Mechanists], // Organic vs Mechanical
-        Faction::ShadowWriters => vec![], // Enemies with none officially (underground)
-        Faction::Archivists => vec![], // Neutral to all
+        Faction::MagesGuild => vec![Faction::TempleOfDawn], // Traditional vs Modern
+        Faction::TempleOfDawn => vec![Faction::MagesGuild, Faction::RangersOfTheWild], // Efficiency vs others
+        Faction::RangersOfTheWild => vec![Faction::TempleOfDawn], // Organic vs Mechanical
+        Faction::ShadowGuild => vec![], // Enemies with none officially (underground)
+        Faction::MerchantConsortium => vec![], // Neutral to all
     }
 }
 
 /// Get factions allied to this one
 pub fn get_allied_factions(faction: &Faction) -> Vec<Faction> {
     match faction {
-        Faction::Scribes => vec![Faction::Naturalists], // Both value tradition
-        Faction::Mechanists => vec![], // Too cold for allies
-        Faction::Naturalists => vec![Faction::Scribes],
-        Faction::ShadowWriters => vec![], // Trust no one
-        Faction::Archivists => vec![], // Neutral
+        Faction::MagesGuild => vec![Faction::RangersOfTheWild], // Both value tradition
+        Faction::TempleOfDawn => vec![], // Too cold for allies
+        Faction::RangersOfTheWild => vec![Faction::MagesGuild],
+        Faction::ShadowGuild => vec![], // Trust no one
+        Faction::MerchantConsortium => vec![], // Neutral
     }
 }
 
@@ -704,43 +704,43 @@ pub fn get_interfaction_relations() -> HashMap<Faction, HashMap<Faction, f32>> {
     
     // Scribes relations
     let mut scribe_relations = HashMap::new();
-    scribe_relations.insert(Faction::Mechanists, -0.3); // Helping scribes hurts mechanist rep
-    scribe_relations.insert(Faction::Naturalists, 0.2);  // Helping scribes helps naturalist rep
-    scribe_relations.insert(Faction::Archivists, 0.1);
-    scribe_relations.insert(Faction::ShadowWriters, 0.0);
-    relations.insert(Faction::Scribes, scribe_relations);
+    scribe_relations.insert(Faction::TempleOfDawn, -0.3); // Helping scribes hurts mechanist rep
+    scribe_relations.insert(Faction::RangersOfTheWild, 0.2);  // Helping scribes helps naturalist rep
+    scribe_relations.insert(Faction::MerchantConsortium, 0.1);
+    scribe_relations.insert(Faction::ShadowGuild, 0.0);
+    relations.insert(Faction::MagesGuild, scribe_relations);
     
     // Mechanists relations
     let mut mech_relations = HashMap::new();
-    mech_relations.insert(Faction::Scribes, -0.3);
-    mech_relations.insert(Faction::Naturalists, -0.4); // Strong opposition
-    mech_relations.insert(Faction::Archivists, 0.0);
-    mech_relations.insert(Faction::ShadowWriters, -0.1);
-    relations.insert(Faction::Mechanists, mech_relations);
+    mech_relations.insert(Faction::MagesGuild, -0.3);
+    mech_relations.insert(Faction::RangersOfTheWild, -0.4); // Strong opposition
+    mech_relations.insert(Faction::MerchantConsortium, 0.0);
+    mech_relations.insert(Faction::ShadowGuild, -0.1);
+    relations.insert(Faction::TempleOfDawn, mech_relations);
     
     // Naturalists relations  
     let mut nat_relations = HashMap::new();
-    nat_relations.insert(Faction::Scribes, 0.2);
-    nat_relations.insert(Faction::Mechanists, -0.4);
-    nat_relations.insert(Faction::Archivists, 0.1);
-    nat_relations.insert(Faction::ShadowWriters, 0.1);
-    relations.insert(Faction::Naturalists, nat_relations);
+    nat_relations.insert(Faction::MagesGuild, 0.2);
+    nat_relations.insert(Faction::TempleOfDawn, -0.4);
+    nat_relations.insert(Faction::MerchantConsortium, 0.1);
+    nat_relations.insert(Faction::ShadowGuild, 0.1);
+    relations.insert(Faction::RangersOfTheWild, nat_relations);
     
     // Shadow Writers relations
     let mut shadow_relations = HashMap::new();
-    shadow_relations.insert(Faction::Scribes, 0.0);
-    shadow_relations.insert(Faction::Mechanists, -0.1);
-    shadow_relations.insert(Faction::Naturalists, 0.1);
-    shadow_relations.insert(Faction::Archivists, 0.0);
-    relations.insert(Faction::ShadowWriters, shadow_relations);
+    shadow_relations.insert(Faction::MagesGuild, 0.0);
+    shadow_relations.insert(Faction::TempleOfDawn, -0.1);
+    shadow_relations.insert(Faction::RangersOfTheWild, 0.1);
+    shadow_relations.insert(Faction::MerchantConsortium, 0.0);
+    relations.insert(Faction::ShadowGuild, shadow_relations);
     
     // Archivists relations - mostly neutral
     let mut arch_relations = HashMap::new();
-    arch_relations.insert(Faction::Scribes, 0.1);
-    arch_relations.insert(Faction::Mechanists, 0.0);
-    arch_relations.insert(Faction::Naturalists, 0.1);
-    arch_relations.insert(Faction::ShadowWriters, 0.0);
-    relations.insert(Faction::Archivists, arch_relations);
+    arch_relations.insert(Faction::MagesGuild, 0.1);
+    arch_relations.insert(Faction::TempleOfDawn, 0.0);
+    arch_relations.insert(Faction::RangersOfTheWild, 0.1);
+    arch_relations.insert(Faction::ShadowGuild, 0.0);
+    relations.insert(Faction::MerchantConsortium, arch_relations);
     
     relations
 }
@@ -750,7 +750,7 @@ pub fn get_faction_spell(faction: &Faction, rank: FactionRank) -> Option<Spell> 
     use super::spells::{SpellEffect, SpellElement, SpellTarget};
     
     match (faction, rank) {
-        (Faction::Scribes, FactionRank::Trusted) => Some(Spell {
+        (Faction::MagesGuild, FactionRank::Trusted) => Some(Spell {
             name: "Word of Power".to_string(),
             description: "Speak a word of ancient power. Damage scales with word length.".to_string(),
             element: SpellElement::Arcane,
@@ -762,7 +762,7 @@ pub fn get_faction_spell(faction: &Faction, rank: FactionRank) -> Option<Spell> 
             effect: SpellEffect::Damage(25),
         }),
         
-        (Faction::Mechanists, FactionRank::Trusted) => Some(Spell {
+        (Faction::TempleOfDawn, FactionRank::Trusted) => Some(Spell {
             name: "Overclock".to_string(),
             description: "Push beyond limits. +50% typing speed for one challenge.".to_string(),
             element: SpellElement::Lightning,
@@ -774,7 +774,7 @@ pub fn get_faction_spell(faction: &Faction, rank: FactionRank) -> Option<Spell> 
             effect: SpellEffect::Buff { stat: "speed".to_string(), amount: 50, duration: 1 },
         }),
         
-        (Faction::Naturalists, FactionRank::Trusted) => Some(Spell {
+        (Faction::RangersOfTheWild, FactionRank::Trusted) => Some(Spell {
             name: "Natural Flow".to_string(),
             description: "Enter a state of flow. Typos don't break combo.".to_string(),
             element: SpellElement::Nature,
@@ -786,7 +786,7 @@ pub fn get_faction_spell(faction: &Faction, rank: FactionRank) -> Option<Spell> 
             effect: SpellEffect::Buff { stat: "flow".to_string(), amount: 100, duration: 3 },
         }),
         
-        (Faction::ShadowWriters, FactionRank::Trusted) => Some(Spell {
+        (Faction::ShadowGuild, FactionRank::Trusted) => Some(Spell {
             name: "Cipher Strike".to_string(),
             description: "Attack with encrypted words. Enemy can't predict your next move.".to_string(),
             element: SpellElement::Dark,
@@ -798,7 +798,7 @@ pub fn get_faction_spell(faction: &Faction, rank: FactionRank) -> Option<Spell> 
             effect: SpellEffect::Multi { hits: 3, damage_per_hit: 10 },
         }),
         
-        (Faction::Archivists, FactionRank::Trusted) => Some(Spell {
+        (Faction::MerchantConsortium, FactionRank::Trusted) => Some(Spell {
             name: "Recall".to_string(),
             description: "Remember perfectly. See the next word before it appears.".to_string(),
             element: SpellElement::Arcane,

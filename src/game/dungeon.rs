@@ -186,8 +186,8 @@ impl Dungeon {
 
     fn get_boss_room_description(&self) -> String {
         match self.current_floor {
-            5 => "THE GREAT QWERTY awaits in their throne room...".to_string(),
-            10 => "CLIPPY THE FALLEN lurks in the corrupted office...".to_string(),
+            5 => "The Hollow Knight stands eternal guard...".to_string(),
+            10 => "The Void Herald speaks with the voices of the lost...".to_string(),
             _ => "A powerful boss blocks your path!".to_string(),
         }
     }
@@ -233,12 +233,12 @@ impl Dungeon {
 
     pub fn get_floor_name(&self) -> &'static str {
         match self.current_floor {
-            1..=2 => "Tutorial",
-            3..=4 => "Mechanical",
-            5 => "QWERTY Domain",
-            6..=7 => "Digital",
-            8..=9 => "Legacy Code",
-            10 => "Clippy's Lair",
+            1..=2 => "Shattered Halls",
+            3..=4 => "Sunken Archives",
+            5 => "Guardian Chamber",
+            6..=7 => "Blighted Gardens",
+            8..=9 => "Clockwork Depths",
+            10 => "The Breach Threshold",
             _ => "Unknown",
         }
     }

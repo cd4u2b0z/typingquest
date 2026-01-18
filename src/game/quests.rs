@@ -301,8 +301,8 @@ pub fn get_main_quests() -> Vec<Quest> {
                     }
                 ],
                 affects_factions: vec![
-                    (Faction::Archivists, 20, -30),
-                    (Faction::ShadowWriters, 15, -10),
+                    (Faction::MerchantConsortium, 20, -30),
+                    (Faction::ShadowGuild, 15, -10),
                 ],
             },
             is_main_quest: true,

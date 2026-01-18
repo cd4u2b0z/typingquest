@@ -221,8 +221,8 @@ pub fn build_faction_voices() -> HashMap<Faction, FactionVoice> {
     let mut voices = HashMap::new();
     
     // Scribes of the Eternal Word
-    voices.insert(Faction::Scribes, FactionVoice {
-        faction: Faction::Scribes,
+    voices.insert(Faction::MagesGuild, FactionVoice {
+        faction: Faction::MagesGuild,
         vocabulary: VocabularySet {
             nouns: vec![
                 "text", "scroll", "knowledge", "wisdom", "archive", "tome",
@@ -309,8 +309,8 @@ pub fn build_faction_voices() -> HashMap<Faction, FactionVoice> {
     });
     
     // Mechanist Syndicate
-    voices.insert(Faction::Mechanists, FactionVoice {
-        faction: Faction::Mechanists,
+    voices.insert(Faction::TempleOfDawn, FactionVoice {
+        faction: Faction::TempleOfDawn,
         vocabulary: VocabularySet {
             nouns: vec![
                 "system", "algorithm", "process", "efficiency", "output",
@@ -397,8 +397,8 @@ pub fn build_faction_voices() -> HashMap<Faction, FactionVoice> {
     });
     
     // Naturalist Circle
-    voices.insert(Faction::Naturalists, FactionVoice {
-        faction: Faction::Naturalists,
+    voices.insert(Faction::RangersOfTheWild, FactionVoice {
+        faction: Faction::RangersOfTheWild,
         vocabulary: VocabularySet {
             nouns: vec![
                 "flow", "rhythm", "nature", "balance", "harmony",
@@ -485,8 +485,8 @@ pub fn build_faction_voices() -> HashMap<Faction, FactionVoice> {
     });
     
     // Shadow Writers Guild
-    voices.insert(Faction::ShadowWriters, FactionVoice {
-        faction: Faction::ShadowWriters,
+    voices.insert(Faction::ShadowGuild, FactionVoice {
+        faction: Faction::ShadowGuild,
         vocabulary: VocabularySet {
             nouns: vec![
                 "shadow", "secret", "cipher", "code", "silence",
@@ -573,8 +573,8 @@ pub fn build_faction_voices() -> HashMap<Faction, FactionVoice> {
     });
     
     // Archivists of the Lost
-    voices.insert(Faction::Archivists, FactionVoice {
-        faction: Faction::Archivists,
+    voices.insert(Faction::MerchantConsortium, FactionVoice {
+        faction: Faction::MerchantConsortium,
         vocabulary: VocabularySet {
             nouns: vec![
                 "memory", "loss", "fragment", "echo", "remnant",
@@ -723,7 +723,7 @@ pub fn generate_faction_dialogue<R: Rng>(
 /// Dr. Baklava's unique voice (easter egg)
 pub fn dr_baklava_voice() -> FactionVoice {
     FactionVoice {
-        faction: Faction::Scribes, // Default, doesn't really matter
+        faction: Faction::MagesGuild, // Default, doesn't really matter
         vocabulary: VocabularySet {
             nouns: vec![
                 "pastry", "honey", "phyllo", "baklava", "sweetness",

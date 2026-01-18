@@ -32,11 +32,11 @@ impl Default for WorldState {
 impl WorldState {
     pub fn new() -> Self {
         let mut faction_standing = HashMap::new();
-        faction_standing.insert(Faction::Scribes, 0);
-        faction_standing.insert(Faction::Mechanists, 0);
-        faction_standing.insert(Faction::Naturalists, 0);
-        faction_standing.insert(Faction::ShadowWriters, 0);
-        faction_standing.insert(Faction::Archivists, 0);
+        faction_standing.insert(Faction::MagesGuild, 0);
+        faction_standing.insert(Faction::TempleOfDawn, 0);
+        faction_standing.insert(Faction::RangersOfTheWild, 0);
+        faction_standing.insert(Faction::ShadowGuild, 0);
+        faction_standing.insert(Faction::MerchantConsortium, 0);
         
         Self {
             flags: HashMap::new(),
@@ -79,36 +79,36 @@ impl WorldState {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Faction {
-    /// The Scribes of the Eternal Word - keepers of language and meaning
-    Scribes,
-    /// The Mechanists - believe in efficiency, speed, cold precision
-    Mechanists,
-    /// The Naturalists - organic typing, flow over speed, meaning over metrics  
-    Naturalists,
-    /// The Shadow Writers - underground resistance, fight the Corruption
-    ShadowWriters,
-    /// The Archivists - neutral scholars, collect all knowledge
-    Archivists,
+    /// The Mages Guild - arcane scholars seeking to seal the Breach
+    MagesGuild,
+    /// The Temple of Dawn - faithful servants of the silent gods
+    TempleOfDawn,
+    /// The Rangers of the Wild - protectors of the frontier
+    RangersOfTheWild,
+    /// The Shadow Guild - information brokers and assassins
+    ShadowGuild,
+    /// The Merchant Consortium - traders who profit from chaos
+    MerchantConsortium,
 }
 
 impl Faction {
     pub fn name(&self) -> &'static str {
         match self {
-            Faction::Scribes => "The Scribes of the Eternal Word",
-            Faction::Mechanists => "The Mechanist Collective",
-            Faction::Naturalists => "The Naturalist Circle",
-            Faction::ShadowWriters => "The Shadow Writers",
-            Faction::Archivists => "The Archive Keepers",
+            Faction::MagesGuild => "The Mages Guild",
+            Faction::TempleOfDawn => "The Temple of Dawn",
+            Faction::RangersOfTheWild => "The Rangers of the Wild",
+            Faction::ShadowGuild => "The Shadow Guild",
+            Faction::MerchantConsortium => "The Merchant Consortium",
         }
     }
     
     pub fn philosophy(&self) -> &'static str {
         match self {
-            Faction::Scribes => "Words are sacred. Every keystroke is a prayer to meaning itself. We preserve the old ways, the poetry, the beauty of language crafted with intention.",
-            Faction::Mechanists => "Efficiency is truth. The fastest path between thought and text is the only path worth taking. Hesitation is failure. Precision is victory.",
-            Faction::Naturalists => "Let the words flow like water. Do not force, do not strain. The greatest typists are those who become one with their keyboards, who type as naturally as breathing.",
-            Faction::ShadowWriters => "The Corruption spreads through careless words. We fight in shadows, preserving forbidden texts, teaching the old resistance. Some knowledge must be protected at any cost.",
-            Faction::Archivists => "All words have value. We take no sides, only record. History will judge; we merely preserve. Every text, every scroll, every keystroke - archived forever.",
+            Faction::MagesGuild => "Knowledge is power. Power must be controlled. Through understanding of the arcane arts, we shall seal the Breach and restore order to the world.",
+            Faction::TempleOfDawn => "Faith endures when all else fails. The gods have not abandoned us; we abandoned them. Through devotion, we shall earn their return.",
+            Faction::RangersOfTheWild => "Civilization's hubris caused the Sundering. The answer lies not in books or temples but in the living world itself.",
+            Faction::ShadowGuild => "Laws are chains for the weak. In darkness, we find freedom. Information is more valuable than gold, and we deal in both.",
+            Faction::MerchantConsortium => "Gold makes the world turn, even when gods fall silent. Trade routes must stay open. Civilization must continue.",
         }
     }
 }
@@ -143,11 +143,11 @@ impl Chapter {
     pub fn name(&self) -> &'static str {
         match self {
             Chapter::Awakening => "Chapter I: The Awakening",
-            Chapter::Discovery => "Chapter II: Words Unspoken",
-            Chapter::Revelation => "Chapter III: The Corruption",
-            Chapter::Allegiance => "Chapter IV: Choosing Your Words",
-            Chapter::Conflict => "Chapter V: The War of Letters",
-            Chapter::Reckoning => "Chapter VI: The Final Sentence",
+            Chapter::Discovery => "Chapter II: The Sundered World",
+            Chapter::Revelation => "Chapter III: The Blight Spreads",
+            Chapter::Allegiance => "Chapter IV: Choosing Allies",
+            Chapter::Conflict => "Chapter V: The War for the World",
+            Chapter::Reckoning => "Chapter VI: The Final Choice",
         }
     }
 }

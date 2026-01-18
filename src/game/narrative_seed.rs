@@ -118,11 +118,11 @@ pub struct WorldSeedState {
 impl WorldSeedState {
     pub fn generate<R: Rng>(rng: &mut R) -> Self {
         let factions = [
-            Faction::Scribes,
-            Faction::Mechanists,
-            Faction::Naturalists,
-            Faction::ShadowWriters,
-            Faction::Archivists,
+            Faction::MagesGuild,
+            Faction::TempleOfDawn,
+            Faction::RangersOfTheWild,
+            Faction::ShadowGuild,
+            Faction::MerchantConsortium,
         ];
         
         let dominant_idx = rng.gen_range(0..factions.len());
@@ -260,11 +260,11 @@ pub enum IncitingIncident {
 impl IncitingIncident {
     pub fn random<R: Rng>(rng: &mut R) -> Self {
         let factions = [
-            Faction::Scribes,
-            Faction::Mechanists,
-            Faction::Naturalists,
-            Faction::ShadowWriters,
-            Faction::Archivists,
+            Faction::MagesGuild,
+            Faction::TempleOfDawn,
+            Faction::RangersOfTheWild,
+            Faction::ShadowGuild,
+            Faction::MerchantConsortium,
         ];
         
         match rng.gen_range(0..6) {
@@ -346,8 +346,8 @@ impl FactionCrisis {
             },
             1 => {
                 let other_factions: Vec<_> = [
-                    Faction::Scribes, Faction::Mechanists, Faction::Naturalists,
-                    Faction::ShadowWriters, Faction::Archivists,
+                    Faction::MagesGuild, Faction::TempleOfDawn, Faction::RangersOfTheWild,
+                    Faction::ShadowGuild, Faction::MerchantConsortium,
                 ].into_iter().filter(|f| *f != affected).collect();
                 
                 Self::InternalBetrayal {
@@ -562,8 +562,8 @@ pub enum ArtifactHolder {
 impl ArtifactHolder {
     pub fn random<R: Rng>(rng: &mut R) -> Self {
         match rng.gen_range(0..5) {
-            0 => Self::Faction(Faction::Scribes),
-            1 => Self::Faction(Faction::Archivists),
+            0 => Self::Faction(Faction::MagesGuild),
+            1 => Self::Faction(Faction::MerchantConsortium),
             2 => Self::Individual(random_name(rng)),
             3 => Self::Lost,
             _ => Self::Contested,
@@ -623,8 +623,8 @@ impl HiddenAgenda {
         match rng.gen_range(0..8) {
             0 => Self::PowerHungry,
             1 => Self::DoubleAgent { 
-                true_loyalty: [Faction::Scribes, Faction::Mechanists, Faction::Naturalists,
-                               Faction::ShadowWriters, Faction::Archivists][rng.gen_range(0..5)]
+                true_loyalty: [Faction::MagesGuild, Faction::TempleOfDawn, Faction::RangersOfTheWild,
+                               Faction::ShadowGuild, Faction::MerchantConsortium][rng.gen_range(0..5)]
             },
             2 => Self::Protector { protecting: random_name(rng) },
             3 => Self::Vengeance { against: random_name(rng) },
