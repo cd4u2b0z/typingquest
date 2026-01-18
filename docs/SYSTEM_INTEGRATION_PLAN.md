@@ -4,6 +4,38 @@
 
 ---
 
+## ✅ COMPLETED - v0.5.0 (2026-01-18)
+
+**All six phases have been implemented!** The dormant systems are now alive.
+
+### Completion Summary
+
+| Phase | System | Status | Commit |
+|-------|--------|--------|--------|
+| 1 | EventBus | ✅ Complete | 2c4507b |
+| 2 | NarrativeSeed + Corruption | ✅ Complete | 2c4507b |
+| 3 | SkillTree → Combat | ✅ Complete | 99f540d |
+| 4 | VoiceSystem | ✅ Complete | daa18ea |
+| 5 | EncounterWriting | ✅ Complete | bfa9ace |
+| 6 | RunModifiers | ✅ Complete | f12b3de |
+
+### What Was Wired
+- **EventBus**: 60+ event types, central nervous system
+- **NarrativeSeed**: Corruption effects modify typing patterns
+- **SkillTree**: 10+ helper methods, combat damage/crit/evasion/reduction
+- **VoiceSystem**: Faction-specific NPC dialogue in shops and rest sites
+- **EncounterWriting**: Authored events trigger during exploration
+- **RunModifiers**: Enemy scaling and reward multipliers
+
+### Files Modified
+- `src/game/state.rs` - Major hub for all integrations
+- `src/game/combat.rs` - Skills and corruption integration
+- `src/game/skills.rs` - 10+ new helper methods
+
+---
+
+## Original Plan (Reference)
+
 ## Executive Summary
 
 You have **~24,500 lines of Rust** across 49 files. Roughly **40% is dormant** - beautifully designed systems that compile but never execute. This document provides a concrete plan to wire everything together.

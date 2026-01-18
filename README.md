@@ -10,7 +10,7 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.70+-DEA584?style=flat&logo=rust&logoColor=white)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-0.4.1-blue?style=flat)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.5.0-blue?style=flat)](CHANGELOG.md)
 [![Status](https://img.shields.io/badge/Status-Active_Development_🔥-orange?style=flat)]()
 [![TUI](https://img.shields.io/badge/TUI-ratatui-purple?style=flat)](https://github.com/ratatui-org/ratatui)
 
@@ -20,34 +20,40 @@
 
 **This is a personal hobby project — a fun "fuck around and find out" experiment in terminal game development.**
 
-It currently exists in a *largely disconnected state*. There's ~24,000 lines of code across 48 modules, but honestly? About 40% of that is dormant scaffolding waiting to be wired up. The vision is grand. The reality is messier.
-
-### What Actually Works (v0.4.1)
+### What Actually Works (v0.5.0)
 - ✅ Full 10-floor dungeon progression with zone-themed encounters
 - ✅ Combat with typing, combos, and flow states
 - ✅ **Lore-integrated typing** — words match the zone, enemy, and story
+- ✅ **Corruption effects on typing** — narrative state warps your words
 - ✅ 5 playable classes with distinct stats
+- ✅ **Skill tree combat integration** — damage, crits, evasion, damage reduction
 - ✅ Basic spellcasting (Tab to toggle, 1-9 to select)
 - ✅ Items, shops, rest sites, treasure rooms
+- ✅ **Faction-voiced NPCs** — merchants and healers speak with personality
+- ✅ **Authored encounters** — scripted narrative moments during exploration
+- ✅ **Run modifiers** — difficulty scaling for challenge modes
 - ✅ Tutorial system (5 phases)
 - ✅ Help overlay (press `?`)
 - ✅ Meta-progression with Ink shop (buy permanent upgrades!)
 - ✅ Faction reputation system (displayed in Stats)
 - ✅ Boss-specific dialogue during boss fights
 - ✅ Narrative progression through typed sentences
+- ✅ **EventBus architecture** — systems communicate dynamically
 
-### What's Dormant (~9,000 Lines)
-These systems have been written with full high-fantasy lore but aren't connected to gameplay yet:
-- 🔸 **Deep Lore** (1,016 lines) — Three Ages, The Sundering, Malachar the Archon, faction histories
+### Recently Integrated (v0.5.0) 🔗
+These dormant systems are now ACTIVE and affecting gameplay:
+- ✅ **EventBus** (60+ event types) — central nervous system for game events
+- ✅ **NarrativeSeed** — corruption types that modify typing patterns
+- ✅ **SkillTree** (5 trees, 25+ skills) — combat modifiers actually apply
+- ✅ **VoiceSystem** (794 lines) — faction NPCs have dialogue
+- ✅ **EncounterWriting** (783 lines) — authored events trigger
+- ✅ **RunModifiers** (632 lines, 50+ modifiers) — difficulty scaling works
+
+### Still Dormant (~5,000 Lines)
+- 🔸 **Deep Lore** (1,016 lines) — Three Ages, The Sundering, full histories
 - 🔸 **Lore Fragments** (752 lines) — Discoverable pieces of world history
-- 🔸 **Narrative** (486 + 906 + 649 lines) — Story structures, seeds, integration hooks
-- 🔸 **World System** (607 + 274 + 407 lines) — Locations, simulation, zone definitions
-- 🔸 **Voice System** (794 lines) — NPC personality/dialogue for 5 factions
-- 🔸 **Characters & Quests** (329 + 368 lines) — NPCs and quest framework
-- 🔸 **Skills** (490 lines) — Active/passive skill trees
-- ~~🔸 **Typing Context** (754 lines) — Thematic word generation~~ ✅ **Now wired via lore_words.rs!**
-- 🔸 **Encounter Writing** (783 lines) — Authored events
-- 🔸 **Run Modifiers** (632 lines) — Challenge variants
+- 🔸 **World System** (607 + 274 + 407 lines) — Location simulation
+- 🔸 **Characters & Quests** (329 + 368 lines) — NPC relationships, quest chains
 
 ### Known Issues
 - 🐛 Balance is completely untested — you might breeze or get wrecked

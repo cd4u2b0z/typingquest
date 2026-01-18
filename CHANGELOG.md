@@ -16,6 +16,106 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.0] - 2026-01-18
+
+### 🔗 Deep System Integration
+
+**The Great Awakening** — ~4,000+ lines of dormant code now actively wired into gameplay. Six major systems that existed in isolation now communicate through a unified event architecture.
+
+### Added - EventBus System (Phase 1)
+- **Central Event Architecture**: All game systems now communicate through a unified EventBus
+- **60+ Event Types**: PlayerDamaged, EnemyDefeated, ItemAcquired, FloorChanged, SpellCast, ComboAchieved, etc.
+- **Event Processing Pipeline**: `process_events()` and `handle_event()` in GameState
+- Events trigger narrative responses, faction changes, and skill effects
+
+### Added - NarrativeSeed & Corruption Effects (Phase 2)
+- **Corruption-based Typing Modifiers**: Your narrative corruption now affects combat typing
+  - Temporal Stutter: Words echo (h-h-hello w-w-world)
+  - Void Whispers: Spaces become underscores (hello_world)
+  - Reality Fracture: Characters scatter (hlelo wrold)
+  - Memory Decay: Vowels fade (h.ll. w.rld)
+  - Name Erosion: Corrupted player name echoes
+- **Active Typing Modifier Field**: GameState tracks current corruption effect
+- Combat word generation passes corruption state to typing engine
+
+### Added - SkillTree Combat Integration (Phase 3)
+- **10+ Helper Methods** on SkillTree:
+  - `get_active_effects()` — returns all unlocked skill effects
+  - `get_damage_multiplier()` — combines all damage bonuses
+  - `get_crit_chance()` / `get_crit_multiplier()` — critical hit mechanics
+  - `get_damage_reduction()` / `get_evasion_chance()` — defensive stats
+  - `is_transcendent()` — checks for transcendence state
+  - `get_max_hp_multiplier()` / `get_xp_multiplier()` — scaling bonuses
+- **CombatState Skill Integration**:
+  - Constructor accepts skill tree reference
+  - Computes and stores skill modifiers at combat start
+  - `calculate_damage()` applies multipliers, transcendence bonuses, critical hits
+  - Enemy attacks check evasion chance and apply damage reduction
+
+### Added - VoiceSystem for NPC Dialogue (Phase 4)
+- **Faction-based Dialogue Generation**: NPCs speak according to their faction personality
+- **5 Faction Voices** (794 lines):
+  - Mages Guild: Scholarly, arcane terminology
+  - Temple of Dawn: Reverent, light metaphors
+  - Rangers of the Wild: Nature-focused, practical
+  - Shadow Guild: Cryptic, information-as-currency
+  - Merchant Consortium: Transactional, pragmatic
+- **Shop Integration**: Merchant Consortium greeting when entering shops
+- **Rest Site Integration**: Temple of Dawn healer dialogue at rest sites
+- **Dynamic Dialogue**: `generate_npc_dialogue()` and `get_merchant_greeting()` methods
+
+### Added - EncounterWriting for Authored Events (Phase 5)
+- **783 Lines of Encounters** now triggerable during exploration
+- **Encounter Tracking**: Prevents repeat encounters via `encounter_tracker` HashMap
+- **Trigger Conditions**: Floor requirements, faction reputation, item possession
+- **Consequence System**: `resolve_encounter()` applies:
+  - Gold rewards/costs
+  - Health changes
+  - Item grants
+  - Faction reputation shifts
+- **`try_trigger_encounter()`**: Scans for valid encounters each floor
+
+### Added - RunModifiers for Difficulty Scaling (Phase 6)
+- **50+ Modifiers** (632 lines) now affect gameplay
+- **Enemy Scaling Methods**:
+  - `get_enemy_health_multiplier()` — scales enemy HP
+  - `get_enemy_damage_multiplier()` — scales enemy damage
+- **Reward Scaling**:
+  - `get_gold_multiplier()` — affects all gold rewards (combat, treasure, encounters)
+- **Run Configuration**:
+  - `set_run_type()` — configure challenge modes
+  - `get_heat_level()` — retrieve current difficulty tier
+- **Applied to**: Enemy stats at combat start, gold from victories, treasure rewards
+
+### Changed - Combat System
+- CombatState now initializes with corruption and skill modifiers
+- Damage calculation incorporates skill tree bonuses
+- Critical hits roll against skill-based crit chance
+- Transcendence state grants bonus damage at low HP
+- Evasion rolls occur before damage application
+- Damage reduction applies after evasion check fails
+
+### Changed - Exploration Flow
+- Entering shops triggers Merchant Consortium voice lines
+- Rest sites feature Temple of Dawn healer dialogue
+- Floor transitions check for authored encounters
+- Gold rewards apply run modifier multipliers
+
+### Technical Details
+- **Files Modified**: state.rs, combat.rs, skills.rs
+- **New Imports**: event_bus, narrative_seed, voice_system, encounter_writing, run_modifiers
+- **New GameState Fields**: event_bus, narrative_seed, active_typing_modifier, skill_tree, faction_voices, current_npc_dialogue, encounters, encounter_tracker, current_encounter, run_modifiers
+- **Build Status**: Release build passing
+
+### Impact
+- Game systems now react to player actions dynamically
+- Combat feels more responsive with skill-based modifiers
+- NPCs have personality through faction-specific dialogue
+- Exploration has authored narrative moments
+- Difficulty scaling works for challenge runs
+
+---
+
 ## [0.4.1] - 2026-01-17
 
 ### 🎮 Lore-Integrated Typing System
